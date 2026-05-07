@@ -1,0 +1,194 @@
+HYPERTENSION (HIGH BLOOD PRESSURE)
+
+Definition: Hypertension is a chronic medical condition in which blood pressure in the arteries is persistently elevated. It is defined as a systolic blood pressure of 130 mmHg or higher, or a diastolic blood pressure of 80 mmHg or higher.
+
+Symptoms: Most people with hypertension have no symptoms. When symptoms occur, they may include headaches (particularly in the morning), nosebleeds, dizziness, chest pain, shortness of breath, visual changes, and blood in urine. Severe cases may present with confusion, fatigue, and nausea.
+
+Risk Factors: Age over 65, family history, obesity (BMI > 30), high sodium diet, physical inactivity, excessive alcohol consumption, smoking, stress, chronic kidney disease, diabetes, and sleep apnea.
+
+Diagnosis: Blood pressure should be measured on at least 2-3 separate occasions. Ambulatory blood pressure monitoring (ABPM) or home blood pressure monitoring (HBPM) is recommended for confirmation. Stage 1: 130-139/80-89 mmHg. Stage 2: ≥140/≥90 mmHg. Hypertensive crisis: >180/>120 mmHg.
+
+Treatment Guidelines: Lifestyle modifications include dietary changes (DASH diet), sodium restriction (<2.3g/day), regular exercise (150 min/week moderate-intensity), weight management, limiting alcohol, and smoking cessation. First-line medications: ACE inhibitors, ARBs, calcium channel blockers, or thiazide diuretics. Target: <130/80 mmHg for most adults.
+
+DIABETES MELLITUS
+
+Definition: Diabetes mellitus is a group of metabolic diseases characterized by hyperglycemia resulting from defects in insulin secretion, insulin action, or both. Type 1 is an autoimmune condition. Type 2 is characterized by insulin resistance and relative insulin deficiency.
+
+Symptoms: Classic symptoms include polyuria (frequent urination), polydipsia (excessive thirst), polyphagia (excessive hunger), unexplained weight loss, fatigue, blurred vision, slow-healing sores, frequent infections, numbness or tingling in hands or feet, and darkened skin patches (acanthosis nigricans).
+
+Diagnostic Criteria: Fasting plasma glucose ≥126 mg/dL (7.0 mmol/L). 2-hour plasma glucose ≥200 mg/dL during OGTT. HbA1c ≥6.5%. Random plasma glucose ≥200 mg/dL with classic symptoms. Pre-diabetes: FPG 100-125 mg/dL, 2h OGTT 140-199 mg/dL, or HbA1c 5.7-6.4%.
+
+Treatment Guidelines: Type 1: Insulin therapy (basal-bolus regimen or insulin pump). Type 2: Lifestyle modifications (weight loss of 5-7% body weight, 150 min/week exercise, medical nutrition therapy). First-line medication: Metformin. Second-line options based on comorbidities: SGLT2 inhibitors (for heart failure/CKD), GLP-1 receptor agonists (for cardiovascular disease/obesity). Target HbA1c: <7% for most adults, individualized based on patient factors.
+
+PNEUMONIA
+
+Definition: Pneumonia is an infection that inflames the air sacs in one or both lungs. The air sacs may fill with fluid or pus, causing cough with phlegm, fever, chills, and difficulty breathing.
+
+Symptoms: Common symptoms include cough (often producing mucus), fever and sweating with shaking chills, shortness of breath, chest pain that worsens with breathing or coughing, fatigue, nausea, vomiting, diarrhea, and confusion (especially in older adults).
+
+Types: Community-acquired pneumonia (CAP) is the most common type. Hospital-acquired pneumonia (HAP) develops 48+ hours after hospital admission. Aspiration pneumonia occurs from inhaling food, drink, or vomit. Viral pneumonia can be caused by influenza, RSV, or SARS-CoV-2.
+
+Diagnosis: Chest X-ray is the primary diagnostic tool showing infiltrates or consolidation. CT scan for complicated cases. Sputum culture and Gram stain. Blood cultures if bacteremia suspected. CBC showing leukocytosis. Procalcitonin levels to differentiate bacterial from viral. CURB-65 score for severity assessment.
+
+Treatment: Mild CAP (outpatient): Amoxicillin or doxycycline or macrolide. Moderate CAP: Beta-lactam plus macrolide, or respiratory fluoroquinolone. Severe CAP (ICU): Beta-lactam plus macrolide, or beta-lactam plus respiratory fluoroquinolone. Supportive care: oxygen therapy, IV fluids, antipyretics. Duration: typically 5-7 days for uncomplicated cases.
+
+COVID-19
+
+Definition: COVID-19 is an infectious disease caused by the SARS-CoV-2 virus. It primarily affects the respiratory system but can impact multiple organ systems.
+
+Symptoms: Common symptoms include fever or chills, cough, shortness of breath, fatigue, muscle or body aches, headache, new loss of taste or smell, sore throat, congestion, nausea, vomiting, and diarrhea. Severe cases may present with pneumonia, ARDS, multi-organ failure, and septic shock.
+
+Diagnosis: RT-PCR (gold standard) from nasopharyngeal swab. Rapid antigen tests (lower sensitivity). Chest CT showing ground-glass opacities. Blood tests may show lymphopenia, elevated CRP, D-dimer, ferritin, and LDH.
+
+Treatment: Mild/moderate: Supportive care, antipyretics, adequate hydration. Moderate with risk factors: Antiviral therapy (nirmatrelvir/ritonavir or remdesivir) within 5 days of symptom onset. Severe: Dexamethasone, remdesivir, tocilizumab or baricitinib for hyperinflammation. Critical: ICU care with mechanical ventilation, prone positioning, ECMO if necessary.
+
+TUBERCULOSIS
+
+Definition: Tuberculosis (TB) is an infectious disease caused by Mycobacterium tuberculosis. It primarily affects the lungs (pulmonary TB) but can affect other parts of the body (extrapulmonary TB).
+
+Symptoms: Persistent cough lasting 3+ weeks, hemoptysis (coughing up blood), chest pain, unintentional weight loss, fatigue, fever, night sweats, chills, and loss of appetite. Latent TB has no symptoms.
+
+Diagnosis: Tuberculin skin test (Mantoux test): ≥5mm for HIV+/immunocompromised, ≥10mm for high-risk groups, ≥15mm for low-risk. Interferon-gamma release assays (IGRA). Chest X-ray showing upper lobe infiltrates, cavitation, or miliary pattern. Sputum smear microscopy for acid-fast bacilli. Sputum culture (gold standard, 2-8 weeks). GeneXpert MTB/RIF for rapid diagnosis and rifampicin resistance detection.
+
+Treatment: Standard regimen (drug-susceptible TB): Intensive phase (2 months): Isoniazid + Rifampicin + Pyrazinamide + Ethambutol (HRZE). Continuation phase (4 months): Isoniazid + Rifampicin (HR). Total duration: 6 months minimum. MDR-TB requires 9-20 months of treatment with second-line drugs. Directly Observed Therapy (DOT) is recommended.
+
+SKIN CONDITIONS — DERMATOLOGICAL ASSESSMENT
+
+Common Conditions: Eczema (atopic dermatitis) presents with dry, itchy, inflamed skin patches. Psoriasis shows thick, red patches with silvery scales. Contact dermatitis results from allergen or irritant exposure. Cellulitis presents as a warm, red, swollen area indicating bacterial infection. Melanoma warning signs (ABCDE): Asymmetry, Border irregularity, Color variation, Diameter >6mm, Evolution/change.
+
+Diagnosis: Visual inspection and clinical history are primary diagnostic tools. Dermoscopy for pigmented lesions. Skin biopsy for definitive diagnosis. Patch testing for contact dermatitis. KOH preparation for fungal infections. Wood's lamp examination for certain conditions.
+
+CHEST X-RAY INTERPRETATION GUIDELINES
+
+Normal Findings: Clear lung fields bilaterally, normal cardiac silhouette (cardiothoracic ratio <0.5), normal mediastinal contours, intact bony structures, clear costophrenic angles.
+
+Abnormal Findings: Consolidation (air-space opacity) suggests pneumonia or hemorrhage. Ground-glass opacity may indicate viral pneumonia, pulmonary edema, or interstitial lung disease. Pleural effusion shows blunting of costophrenic angles. Pneumothorax shows absent lung markings with visible pleural line. Cardiomegaly (CTR >0.5) suggests heart failure. Hilar lymphadenopathy may indicate sarcoidosis, lymphoma, or infection.
+
+Pattern Recognition: Lobar consolidation → bacterial pneumonia. Bilateral diffuse infiltrates → viral pneumonia, ARDS, or pulmonary edema. Upper lobe cavitation → tuberculosis or lung cancer. Miliary pattern (tiny nodules) → miliary TB or metastatic disease.
+ASTHMA
+
+Definition: Asthma is a chronic inflammatory disease of the airways characterized by variable airflow obstruction and bronchial hyperresponsiveness.
+
+Symptoms: Episodic wheezing, shortness of breath, chest tightness, and cough (often worse at night or early morning).
+
+Triggers: Allergens, cold air, exercise, respiratory infections, smoke, stress.
+
+Diagnosis: Spirometry showing reversible airflow obstruction (FEV1 increase ≥12% after bronchodilator). Peak expiratory flow variability.
+
+Treatment: Stepwise approach. SABA for relief. ICS (inhaled corticosteroids) as first-line controller. LABA + ICS for moderate/severe. Severe: biologics (omalizumab, mepolizumab).
+
+CHRONIC OBSTRUCTIVE PULMONARY DISEASE (COPD)
+
+Definition: Progressive lung disease characterized by persistent airflow limitation due to chronic bronchitis and/or emphysema.
+
+Symptoms: Chronic cough, sputum production, dyspnea, reduced exercise tolerance.
+
+Risk Factors: Smoking (primary), air pollution, occupational exposure.
+
+Diagnosis: Spirometry: FEV1/FVC < 0.70 post-bronchodilator.
+
+Treatment: Smoking cessation (most important). Bronchodilators (LABA, LAMA). ICS in selected cases. Oxygen therapy if hypoxic.
+
+ACUTE CORONARY SYNDROME (ACS)
+
+Definition: Spectrum of conditions due to reduced blood flow to the heart (unstable angina, NSTEMI, STEMI).
+
+Symptoms: Chest pain (pressure-like), radiating to arm/jaw, sweating, nausea, shortness of breath.
+
+Diagnosis: ECG changes (ST elevation/depression), cardiac biomarkers (troponin).
+
+Treatment: MONA (Morphine, Oxygen, Nitrates, Aspirin). Reperfusion therapy (PCI preferred). Antiplatelets + anticoagulation.
+
+HEART FAILURE
+
+Definition: Condition where the heart cannot pump sufficient blood to meet the body’s needs.
+
+Symptoms: Dyspnea, orthopnea, edema, fatigue, weight gain.
+
+Diagnosis: Echocardiography (EF measurement). BNP elevated. Chest X-ray: cardiomegaly, pulmonary edema.
+
+Treatment: ACE inhibitors/ARBs, beta-blockers, diuretics. Severe: devices (ICD, CRT).
+
+STROKE (CVA)
+
+Definition: Sudden neurological deficit due to interruption of blood supply to the brain.
+
+Symptoms: Facial droop, arm weakness, speech difficulty (FAST).
+
+Types: Ischemic (most common), hemorrhagic.
+
+Diagnosis: CT scan (rule out bleed), MRI.
+
+Treatment: Ischemic: thrombolysis (tPA within 4.5h). Mechanical thrombectomy. Antiplatelets. Hemorrhagic: BP control, surgery.
+
+CHRONIC KIDNEY DISEASE (CKD)
+
+Definition: Progressive loss of kidney function over ≥3 months.
+
+Symptoms: Often asymptomatic early. Later: fatigue, edema, uremia.
+
+Diagnosis: eGFR <60 ml/min/1.73m², albuminuria.
+
+Treatment: Control BP (ACEi/ARB), diabetes management, dialysis in ESRD.
+
+URINARY TRACT INFECTION (UTI)
+
+Definition: Infection of urinary system (bladder, urethra, kidneys).
+
+Symptoms: Dysuria, urgency, frequency, suprapubic pain. Pyelonephritis: fever, flank pain.
+
+Diagnosis: Urinalysis (leukocytes, nitrites), urine culture.
+
+Treatment: Antibiotics (nitrofurantoin, TMP-SMX). Severe: IV antibiotics.
+
+ANEMIA
+
+Definition: Decrease in hemoglobin or red blood cells.
+
+Symptoms: Fatigue, pallor, dizziness, shortness of breath.
+
+Types: Iron deficiency, B12 deficiency, anemia of chronic disease.
+
+Diagnosis: CBC, iron studies, B12 levels.
+
+Treatment: Depends on cause (iron supplements, B12, transfusion if severe).
+
+HYPERTHYROIDISM
+
+Definition: Excess thyroid hormone production.
+
+Symptoms: Weight loss, heat intolerance, tremor, palpitations, anxiety.
+
+Diagnosis: Low TSH, high T3/T4.
+
+Treatment: Beta-blockers, antithyroid drugs (methimazole), radioactive iodine.
+
+HYPOTHYROIDISM
+
+Definition: Deficiency of thyroid hormones.
+
+Symptoms: Fatigue, weight gain, cold intolerance, constipation.
+
+Diagnosis: High TSH, low T4.
+
+Treatment: Levothyroxine.
+
+GASTROESOPHAGEAL REFLUX DISEASE (GERD)
+
+Definition: Chronic reflux of stomach acid into esophagus.
+
+Symptoms: Heartburn, regurgitation, chest discomfort.
+
+Diagnosis: Clinical, endoscopy if severe.
+
+Treatment: Lifestyle changes, PPIs.
+
+ACUTE APPENDICITIS
+
+Definition: Inflammation of the appendix.
+
+Symptoms: Right lower quadrant pain, nausea, fever.
+
+Diagnosis: CT scan, ultrasound.
+
+Treatment: Surgical removal (appendectomy).
