@@ -87,6 +87,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
     def ensure_directories(self):
         """Create all required directories if they don't exist."""

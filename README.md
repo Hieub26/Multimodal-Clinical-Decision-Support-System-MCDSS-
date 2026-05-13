@@ -71,6 +71,54 @@ python -m uvicorn app.main:app --host 0.0.0.0 --port 8008 --reload
 streamlit run streamlit_app/app.py --server.port 8501 --theme.base dark
 ```
 
+## 🐳 Docker Deployment
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) & [Docker Compose](https://docs.docker.com/compose/install/) v2+
+
+### Quick Start
+
+```bash
+# 1. Configure environment
+cp .env.example .env
+# Edit .env — set GEMINI_API_KEY, POSTGRES_PASSWORD, etc.
+
+# 2. Build and start all services
+docker compose up --build -d
+
+# 3. Check status
+docker compose ps
+docker compose logs -f
+```
+
+### Services
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| **backend** | http://localhost:8008 | FastAPI API (docs at `/docs`) |
+| **frontend** | http://localhost:8501 | Streamlit web interface |
+| **db** | localhost:5432 | PostgreSQL database |
+
+### Useful Commands
+
+```bash
+# Stop all services
+docker compose down
+
+# Stop and remove data volumes
+docker compose down -v
+
+# Rebuild a specific service
+docker compose build backend
+docker compose up -d backend
+
+# View logs for a specific service
+docker compose logs -f backend
+```
+
+> **Note**: Model weights (`models/*.pth`) are mounted from the host via volume. Make sure the model file exists before starting.
+
 ## 📁 Project Structure
 
 ```

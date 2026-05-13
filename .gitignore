@@ -37,6 +37,13 @@ models/*.onnx
 *.db
 *.sqlite
 
+# Docker
+postgres_data/
+
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Caches
+data/huggingface_cache/
+

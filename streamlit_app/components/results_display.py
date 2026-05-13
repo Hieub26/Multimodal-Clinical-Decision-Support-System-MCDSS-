@@ -227,7 +227,7 @@ def render_results(response: dict, gradcam_path: str = None):
                 st.image(
                     gradcam_image,
                     caption="Original | Grad-CAM Heatmap | Overlay",
-                    use_container_width=True,
+                    use_column_width=True,
                 )
 
     # === Validation Details ===

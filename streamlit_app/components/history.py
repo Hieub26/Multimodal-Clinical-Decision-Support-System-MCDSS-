@@ -2,12 +2,13 @@
 Case history viewer component.
 """
 
+import os
 import streamlit as st
 import httpx
 import json
 
 
-API_BASE = "http://localhost:8008/api"
+API_BASE = os.environ.get("API_BASE_URL", "http://localhost:8008/api")
 
 
 def render_history():

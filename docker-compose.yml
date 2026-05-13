@@ -1,0 +1,82 @@
+# ==============================================================
+# Multimodal Clinical Decision Support System — Docker Compose
+# Services: db (PostgreSQL), backend (FastAPI), frontend (Streamlit)
+# ==============================================================
+
+services:
+  # ---- PostgreSQL Database ----
+  db:
+    image: postgres:16-alpine
+    container_name: mcdss-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: clinical_dss
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hieu2611}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d clinical_dss"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - mcdss-network
+
+  # ---- FastAPI Backend ----
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend
+    container_name: mcdss-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Override DATABASE_URL to point to the Docker db service
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-hieu2611}@db:5432/clinical_dss
+      # Persist HuggingFace models in the mounted data volume
+      HF_HOME: /app/data/huggingface_cache
+    ports:
+      - "8008:8008"
+    volumes:
+      - ./models:/app/models:ro
+      - ./data:/app/data
+      - ./storage:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - mcdss-network
+
+  # ---- Streamlit Frontend ----
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
+    container_name: mcdss-frontend
+    restart: unless-stopped
+    environment:
+      API_BASE_URL: http://backend:8008/api
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./storage:/app/storage:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - mcdss-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  mcdss-network:
+    driver: bridge

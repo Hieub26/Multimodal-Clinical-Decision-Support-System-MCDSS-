@@ -1,0 +1,40 @@
+# Version control
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+venv/
+env/
+.eggs/
+*.egg-info/
+
+# Environment (secrets — injected via env_file)
+.env
+
+# Model weights (mounted via volume)
+models/*.pth
+models/*.pt
+models/*.bin
+models/*.onnx
+
+# Runtime data (mounted via volumes)
+storage/
+data/chroma_db/
+
+# Docker
+docker-compose.yml
+Dockerfile
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -37,8 +37,8 @@ from components.results_display import render_results
 from components.gradcam_viewer import render_gradcam
 from components.history import render_history
 
-# Constants
-API_BASE = "http://localhost:8008/api"
+# Constants — API_BASE_URL env var is set by Docker; fallback to localhost for local dev
+API_BASE = os.environ.get("API_BASE_URL", "http://localhost:8008/api")
 
 
 def main():
@@ -131,7 +131,7 @@ def run_diagnosis(symptoms: str, question: str, uploaded_file, mode: str) -> dic
                     "symptoms_text": symptoms or None,
                     "clinical_question": question or None,
                 },
-                timeout=180,
+                timeout=600,
             )
         elif uploaded_file:
             # Image or multimodal diagnosis
@@ -146,7 +146,7 @@ def run_diagnosis(symptoms: str, question: str, uploaded_file, mode: str) -> dic
                 f"{API_BASE}/cv/diagnose",
                 files=files,
                 data=data,
-                timeout=180,
+                timeout=600,
             )
         else:
             return None

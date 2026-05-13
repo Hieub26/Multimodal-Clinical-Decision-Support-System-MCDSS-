@@ -33,5 +33,5 @@ def render_gradcam(gradcam_path: str):
     st.image(
         gradcam_image,
         caption="Original | Grad-CAM Heatmap | Overlay",
-        use_container_width=True,
+        use_column_width=True,
     )
