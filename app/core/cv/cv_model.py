@@ -218,31 +218,60 @@ class MedicalCVModel:
         max_probability = float(np.max(probs))
         top_class_idx = int(np.argmax(probs))
         top_class_threshold = float(self.class_thresholds[top_class_idx])
+        threshold_ratios = probs / np.maximum(np.array(self.class_thresholds), 1e-6)
+        max_threshold_ratio = float(np.max(threshold_ratios))
 
         # Multi-label formatting. This model has disease labels only, so a low
         # score across all classes is not the same thing as a calibrated
         # "normal" diagnosis.
         if len(predictions) == 0:
-            predicted_class_name = "No confident CV finding"
-            confidence = max_probability
             detected_predictions = []
             finding_detected = False
-            severity = "unknown"
-            urgency = "routine"
-            explanation = (
-                "The CV model did not produce any class probability above the "
-                "configured decision threshold. This should be treated as an "
-                "uncertain image-only result, not as a confirmed normal finding."
+            negative_screen = (
+                max_threshold_ratio <= settings.cv_negative_screen_ratio_threshold
             )
+            if negative_screen:
+                predicted_class_name = "No confident abnormal finding detected"
+                confidence = min(0.95, max(0.0, 1.0 - max_threshold_ratio))
+                severity = "low"
+                explanation = (
+                    "The image model did not find any of its monitored disease "
+                    "classes near the validated decision thresholds. This is a "
+                    "negative screening result for the modeled conditions, not a "
+                    "guarantee that the chest X-ray is completely normal."
+                )
+                recommended_actions = [
+                    "Correlate with symptoms and clinical history",
+                    "Seek medical care if symptoms are present, persistent, or worsening",
+                ]
+            else:
+                predicted_class_name = "No confident CV finding"
+                confidence = max_probability
+                severity = "unknown"
+                explanation = (
+                    "The CV model did not produce any class probability above the "
+                    "configured decision threshold, but at least one class is close "
+                    "enough to require cautious review. Treat this as an uncertain "
+                    "image-only result, not as a confirmed normal finding."
+                )
+                recommended_actions = [
+                    "Consider clinician review or repeat imaging if clinically indicated",
+                    "Correlate with symptoms and clinical history",
+                ]
+            urgency = "routine"
         else:
             predictions.sort(key=lambda x: x["probability"], reverse=True)
             predicted_class_name = ", ".join([p["class"] for p in predictions])
             confidence = predictions[0]["probability"]
             detected_predictions = predictions
             finding_detected = True
-            severity = "moderate"
-            urgency = "routine"
+            negative_screen = False
+
+            # Derive severity/urgency from detected findings dynamically
+            severity, urgency = self._severity_from_findings(predictions)
+
             explanation = "Image analysis detected one or more modeled findings above the decision threshold."
+            recommended_actions = []
 
         # Generate Grad-CAM only for a positive finding. Showing Grad-CAM for a
         # below-threshold class makes the heatmap look like a false diagnosis.
@@ -254,21 +283,31 @@ class MedicalCVModel:
         else:
             gradcam_path = ""
 
+        # Compute uncertainty analysis
+        uncertainty = self._compute_uncertainty(probs)
+
         result = {
             "predicted_class": predicted_class_name,
             "confidence": confidence,
             "top_predictions": top_predictions,
             "detected_predictions": detected_predictions,
             "finding_detected": finding_detected,
+            "negative_screen": negative_screen,
             "abnormality_score": max_probability,
-            "decision_threshold": top_class_threshold,
+            "max_threshold_ratio": max_threshold_ratio,
+            "decision_threshold": (
+                settings.safety_threshold if negative_screen else top_class_threshold
+            ),
+            "positive_decision_threshold": top_class_threshold,
             "class_thresholds": {
                 self.class_names[i]: float(self.class_thresholds[i])
                 for i in range(self.num_classes)
             },
+            "uncertainty": uncertainty,
             "explanation": explanation,
             "severity": severity,
             "urgency": urgency,
+            "recommended_actions": recommended_actions,
             "gradcam_path": gradcam_path,
             "image_metadata": preprocessed["metadata"],
             "input_type": "image",
@@ -337,3 +376,148 @@ class MedicalCVModel:
         except Exception as e:
             cv_logger.error(f"Grad-CAM generation failed: {e}")
             return ""
+
+    def _compute_uncertainty(self, probs: np.ndarray) -> dict:
+        """Compute prediction uncertainty via margin-to-threshold + entropy analysis.
+
+        Combines two complementary uncertainty signals:
+        - Margin-to-threshold: clinically meaningful per-class decision proximity
+        - Entropy: information-theoretic measure of prediction diffuseness
+
+        entropy_mean captures overall model confusion.
+        entropy_max captures worst-case class ambiguity.
+        """
+        margins = []
+        near_threshold_classes = []
+
+        for i, prob in enumerate(probs):
+            threshold = self.class_thresholds[i]
+            margin = float(prob) - float(threshold)  # positive = above threshold
+            margins.append({
+                "class": self.class_names[i],
+                "probability": round(float(prob), 4),
+                "threshold": round(float(threshold), 4),
+                "margin": round(margin, 4),
+            })
+            # Near-threshold = within ±0.10 of decision boundary
+            if abs(margin) < 0.10:
+                near_threshold_classes.append(self.class_names[i])
+
+        # Min absolute margin = most uncertain prediction
+        abs_margins = [abs(m["margin"]) for m in margins]
+        min_margin = float(min(abs_margins)) if abs_margins else 1.0
+
+        # Entropy computation (per-class binary entropy, then aggregate)
+        # For multi-label sigmoid outputs, each class is an independent
+        # Bernoulli, so we compute binary entropy per class.
+        eps = 1e-7
+        binary_entropies = []
+        for p in probs:
+            p_clamped = float(np.clip(p, eps, 1 - eps))
+            h = -(p_clamped * np.log2(p_clamped)
+                  + (1 - p_clamped) * np.log2(1 - p_clamped))
+            binary_entropies.append(float(h))
+
+        entropy_mean = float(np.mean(binary_entropies)) if binary_entropies else 0.0
+        entropy_max = float(np.max(binary_entropies)) if binary_entropies else 0.0
+
+        # Granular entropy: separate positive (above-threshold) classes
+        # from overall entropy for clinical usefulness.
+        # entropy_mean_all may be inflated by irrelevant classes near 0.5,
+        # but entropy_positive tells you how confident the *detected* findings are.
+        positive_entropies = [
+            binary_entropies[i] for i, prob in enumerate(probs)
+            if float(prob) >= float(self.class_thresholds[i])
+        ]
+        entropy_positive = (
+            float(np.mean(positive_entropies)) if positive_entropies else 0.0
+        )
+
+        # Uncertainty level: combine margin + entropy for robust assessment
+        # entropy_max near 1.0 means a class is at ~0.5 probability (maximum confusion)
+        uncertainty_level = self._classify_uncertainty(
+            min_margin, near_threshold_classes, entropy_mean, entropy_max
+        )
+
+        uncertainty = {
+            "min_margin": round(min_margin, 4),
+            "near_threshold_classes": near_threshold_classes,
+            "near_threshold_count": len(near_threshold_classes),
+            "entropy_mean": round(entropy_mean, 4),
+            "entropy_max": round(entropy_max, 4),
+            "entropy_positive": round(entropy_positive, 4),
+            "uncertainty_level": uncertainty_level,
+            "class_margins": margins,
+        }
+
+        cv_logger.info(
+            f"Uncertainty analysis: level={uncertainty_level}, "
+            f"min_margin={min_margin:.4f}, "
+            f"entropy_mean={entropy_mean:.4f}, entropy_max={entropy_max:.4f}, "
+            f"entropy_positive={entropy_positive:.4f}, "
+            f"near_threshold={near_threshold_classes}"
+        )
+        return uncertainty
+
+    @staticmethod
+    def _classify_uncertainty(
+        min_margin: float,
+        near_threshold_classes: list,
+        entropy_mean: float,
+        entropy_max: float,
+    ) -> str:
+        """Classify uncertainty level using both margin and entropy signals."""
+        # High: very close to decision boundary OR high entropy
+        if (min_margin < 0.05 or len(near_threshold_classes) >= 3
+                or entropy_max > 0.90 or entropy_mean > 0.60):
+            return "high"
+        # Moderate: somewhat close to boundary OR moderate entropy
+        if (min_margin < 0.10 or len(near_threshold_classes) >= 1
+                or entropy_max > 0.70 or entropy_mean > 0.40):
+            return "moderate"
+        return "low"
+
+    # Clinically-grounded risk map for CXR findings
+    # Maps finding class names to (severity, urgency) tuples.
+    # Any finding not listed defaults to ("moderate", "routine").
+    FINDING_RISK_MAP = {
+        "Pneumonia":          ("high",     "urgent"),
+        "Consolidation":      ("high",     "urgent"),
+        "Infiltration":       ("moderate", "urgent"),
+        "Pneumothorax":       ("critical", "emergency"),
+        "Edema":              ("critical", "emergency"),
+        "Pleural_Thickening": ("moderate", "routine"),
+        "Effusion":           ("high",     "urgent"),
+        "Atelectasis":        ("moderate", "routine"),
+        "Cardiomegaly":       ("high",     "urgent"),
+        "Mass":               ("high",     "urgent"),
+        "Nodule":             ("moderate", "routine"),
+        "Hernia":             ("moderate", "routine"),
+        "Emphysema":          ("moderate", "urgent"),
+        "Fibrosis":           ("moderate", "routine"),
+    }
+
+    # Ranking order: higher index = more severe
+    _SEVERITY_RANK = {"low": 0, "moderate": 1, "high": 2, "critical": 3}
+    _URGENCY_RANK = {"routine": 0, "urgent": 1, "emergency": 2}
+
+    def _severity_from_findings(
+        self, predictions: list[dict]
+    ) -> tuple[str, str]:
+        """Derive severity and urgency from the detected CV findings.
+
+        Uses the highest-risk finding across all detected classes.
+        Falls back to ("moderate", "routine") when no mapping is found.
+        """
+        best_severity = "moderate"
+        best_urgency = "routine"
+
+        for pred in predictions:
+            cls_name = pred.get("class", "")
+            sev, urg = self.FINDING_RISK_MAP.get(cls_name, ("moderate", "routine"))
+            if self._SEVERITY_RANK.get(sev, 0) > self._SEVERITY_RANK.get(best_severity, 0):
+                best_severity = sev
+            if self._URGENCY_RANK.get(urg, 0) > self._URGENCY_RANK.get(best_urgency, 0):
+                best_urgency = urg
+
+        return best_severity, best_urgency

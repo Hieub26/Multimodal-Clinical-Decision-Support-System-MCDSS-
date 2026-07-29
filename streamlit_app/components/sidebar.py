@@ -43,28 +43,6 @@ def render_sidebar():
 
         st.divider()
 
-        # System status
-        st.markdown("##### 📡 System Status")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown("""
-            <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);
-                        border-radius: 8px; padding: 8px; text-align: center;">
-                <div style="font-size: 0.7rem; color: #64748b;">API</div>
-                <div style="font-size: 0.8rem; color: #22c55e; font-weight: 600;">● Online</div>
-            </div>
-            """, unsafe_allow_html=True)
-        with col2:
-            st.markdown("""
-            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);
-                        border-radius: 8px; padding: 8px; text-align: center;">
-                <div style="font-size: 0.7rem; color: #64748b;">Model</div>
-                <div style="font-size: 0.8rem; color: #3b82f6; font-weight: 600;">● Ready</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        st.divider()
-
         # Disclaimer
         st.markdown("""
         <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2);

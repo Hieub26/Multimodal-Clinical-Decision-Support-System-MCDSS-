@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 
 from app.config import settings
-from app.db.database import init_db
+from app.db.database import init_db, close_db
 from app.api.endpoints.nlp_router import router as nlp_router
 from app.api.endpoints.cv_router import router as cv_router
 from app.api.endpoints.report_router import router as report_router
@@ -19,53 +19,66 @@ from app.utils.logger import api_logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application startup and shutdown events."""
+    """Application startup and shutdown events with critical & non-critical error handling."""
     api_logger.info("=" * 60)
-    api_logger.info("Starting Multimodal Clinical Decision Support System")
+    api_logger.info(f"Starting {settings.app_title} (v{settings.app_version})")
+    api_logger.info(f"Environment: {settings.environment}")
     api_logger.info("=" * 60)
 
-    # Initialize database
-    await init_db()
-    api_logger.info("Database initialized")
+    # --- Critical Startup Tasks ---
+    # Failures here stop the application startup immediately.
+    try:
+        settings.ensure_directories()
+        api_logger.info("Storage directories verified")
 
-    # Initialize guidelines on first run
+        await init_db()
+        api_logger.info("Database initialized successfully")
+    except Exception as e:
+        api_logger.critical(f"Critical startup failure: {e}", exc_info=True)
+        raise RuntimeError(f"Application startup aborted due to critical error: {e}") from e
+
+    # --- Non-Critical Startup Tasks ---
+    # Failures here log a warning and allow application startup to continue.
     try:
         from app.api.dependencies import get_rag_engine
         rag = get_rag_engine()
         rag.initialize_guidelines()
-        api_logger.info("Clinical guidelines loaded")
+        api_logger.info("Clinical guidelines loaded successfully")
     except Exception as e:
-        api_logger.warning(f"Guideline initialization skipped: {e}")
+        api_logger.warning(f"Non-critical startup warning (Guideline initialization skipped): {e}")
 
-    # Ensure storage directories exist
-    settings.ensure_directories()
+    try:
+        from app.api.dependencies import get_cv_model
+        cv = get_cv_model()
+        _ = cv.model  # trigger lazy-load now, not on first request
+        api_logger.info("CV model preloaded into memory successfully")
+    except Exception as e:
+        api_logger.warning(f"Non-critical startup warning (CV model preload skipped): {e}")
 
     api_logger.info(f"Server ready on http://{settings.fastapi_host}:{settings.fastapi_port}")
-    api_logger.info(f"API docs at http://localhost:{settings.fastapi_port}/docs")
+    api_logger.info(f"API docs at http://localhost:{settings.fastapi_port}{settings.docs_url}")
 
     yield
 
-    api_logger.info("Shutting down Clinical DSS")
+    # Graceful shutdown
+    await close_db()
+    api_logger.info(f"Shutting down {settings.app_title}")
 
 
-# Create FastAPI application
+# Create FastAPI application using settings
 app = FastAPI(
-    title="Multimodal Clinical Decision Support System",
-    description=(
-        "An AI-powered clinical decision support system combining NLP-based "
-        "symptom analysis (RAG with ChromaDB) and medical image classification "
-        "(PyTorch + Grad-CAM) for comprehensive diagnostic suggestions."
-    ),
-    version="1.0.0",
+    title=settings.app_title,
+    description=settings.app_description,
+    version=settings.app_version,
     lifespan=lifespan,
-    docs_url="/docs",
-    redoc_url="/redoc",
+    docs_url=settings.docs_url,
+    redoc_url=settings.redoc_url,
 )
 
-# CORS middleware
+# CORS middleware configured via environment settings
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -76,23 +89,24 @@ images_dir = Path(settings.image_storage_dir)
 images_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/static/images", StaticFiles(directory=str(images_dir)), name="images")
 
-# Include routers
-app.include_router(nlp_router, prefix="/api")
-app.include_router(cv_router, prefix="/api")
-app.include_router(report_router, prefix="/api")
+# Include routers using configurable API prefix
+app.include_router(nlp_router, prefix=settings.api_prefix)
+app.include_router(cv_router, prefix=settings.api_prefix)
+app.include_router(report_router, prefix=settings.api_prefix)
 
 
 @app.get("/")
 async def root():
     """Root endpoint."""
     return {
-        "system": "Multimodal Clinical Decision Support System",
-        "version": "1.0.0",
-        "docs": "/docs",
+        "system": settings.app_title,
+        "version": settings.app_version,
+        "environment": settings.environment,
+        "docs": settings.docs_url,
         "endpoints": {
-            "text_diagnosis": "/api/nlp/diagnose",
-            "image_diagnosis": "/api/cv/diagnose",
-            "history": "/api/reports/history",
-            "health": "/api/reports/health",
+            "text_diagnosis": f"{settings.api_prefix}/nlp/diagnose",
+            "image_diagnosis": f"{settings.api_prefix}/cv/diagnose",
+            "history": f"{settings.api_prefix}/reports/history",
+            "health": f"{settings.api_prefix}/reports/health",
         },
     }

@@ -8,6 +8,27 @@ from PIL import Image
 from pathlib import Path
 
 
+def _build_clinical_explanation(base_explanation: str, vlm_review: dict | None) -> str:
+    """Append structured VLM safety reasoning to the clinical explanation."""
+    sections = [base_explanation] if base_explanation else []
+    if not vlm_review:
+        return "\n\n".join(sections)
+
+    vlm_lines = []
+    risk_level = vlm_review.get("risk_level")
+    if risk_level:
+        vlm_lines.append(f"Risk level: {risk_level}")
+
+    reasoning = vlm_review.get("reasoning")
+    if reasoning:
+        vlm_lines.append(f"VLM reasoning: {reasoning}")
+
+    if vlm_lines:
+        sections.append("VLM safety review:\n" + "\n".join(f"- {line}" for line in vlm_lines))
+
+    return "\n\n".join(sections)
+
+
 def render_results(response: dict, gradcam_path: str = None):
     """Render the full diagnosis results."""
     if not response:
@@ -134,7 +155,10 @@ def render_results(response: dict, gradcam_path: str = None):
         """, unsafe_allow_html=True)
 
     # === Clinical Explanation ===
-    explanation = diagnosis.get("explanation", "")
+    explanation = _build_clinical_explanation(
+        diagnosis.get("explanation", ""),
+        response.get("vlm_safety_review"),
+    )
     if explanation:
         st.markdown("---")
         st.markdown("#### 📋 Clinical Explanation")
@@ -160,6 +184,11 @@ def render_results(response: dict, gradcam_path: str = None):
         with st.expander("🧠 NLP Analysis Details", expanded=False):
             st.markdown(f"**Primary Diagnosis:** {nlp.get('primary_diagnosis', 'N/A')}")
             st.markdown(f"**Confidence:** {nlp.get('confidence', 0):.0%}")
+
+            nlp_explanation = nlp.get("explanation", "")
+            if nlp_explanation:
+                st.markdown("**Explanation:**")
+                st.info(nlp_explanation)
 
             # Differential diagnoses
             diffs = nlp.get("differential_diagnoses", [])
@@ -227,7 +256,7 @@ def render_results(response: dict, gradcam_path: str = None):
                 st.image(
                     gradcam_image,
                     caption="Original | Grad-CAM Heatmap | Overlay",
-                    use_column_width=True,
+                    width="stretch",
                 )
 
     # === Validation Details ===

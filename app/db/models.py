@@ -2,22 +2,22 @@
 Database models / type definitions for the case history system.
 """
 
-from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
+from typing import Any
+from pydantic import BaseModel, Field
 
 
 class CaseRecord(BaseModel):
-    """Represents a stored diagnosis case."""
-    id: Optional[int] = None
-    case_id: str
-    created_at: str
-    input_type: str
-    symptoms_text: Optional[str] = None
-    clinical_question: Optional[str] = None
-    image_path: Optional[str] = None
-    diagnosis_json: Optional[str] = None
-    primary_diagnosis: Optional[str] = None
-    confidence: Optional[float] = None
-    safety_status: Optional[str] = None
-    report_path: Optional[str] = None
+    """Represents a stored diagnosis case in PostgreSQL."""
+    id: int | None = None
+    case_id: str = Field(..., description="Unique case identifier")
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="Case creation timestamp")
+    input_type: str = Field("unknown", description="Modality type (text, image, multimodal)")
+    symptoms_text: str | None = None
+    clinical_question: str | None = None
+    image_path: str | None = None
+    diagnosis_json: dict[str, Any] | str | None = None
+    primary_diagnosis: str = ""
+    confidence: float = 0.0
+    safety_status: str = "unknown"
+    report_path: str | None = None

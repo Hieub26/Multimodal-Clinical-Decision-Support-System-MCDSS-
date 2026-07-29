@@ -13,6 +13,50 @@ class FusionEngine:
     NLP_WEIGHT = 0.3
     CV_WEIGHT = 0.7
 
+    # Concordant fusion confidence cap — prevents overconfidence in medical AI
+    CONCORDANT_CONFIDENCE_CAP = 0.95
+
+    # Uncertainty penalty: reduce confidence when CV entropy is high.
+    # Resolves the contradiction of "94% confidence + entropy_mean=0.77".
+    # penalty = entropy_mean * UNCERTAINTY_PENALTY_FACTOR
+    UNCERTAINTY_PENALTY_FACTOR = 0.08
+
+    # Severity formula weights — configurable instead of hardcoded.
+    # Recruiter question: "why symptom 50%?" → because symptom presentation
+    # is the primary clinical driver, imaging confirms/refines.
+    SEVERITY_FORMULA_WEIGHTS = {
+        "symptom": 0.5,
+        "image": 0.3,
+        "risk": 0.2,
+    }
+
+    # Severity scoring: maps NLP severity labels to numeric weights
+    SEVERITY_WEIGHT_MAP = {
+        "critical": 1.0,
+        "high": 0.75,
+        "moderate": 0.50,
+        "low": 0.25,
+        "unknown": 0.35,
+    }
+
+    # Risk finding bonuses: high-risk radiological findings
+    RISK_FINDING_BONUSES = {
+        "pneumothorax": 0.30,
+        "mass": 0.25,
+        "nodule": 0.25,
+        "effusion": 0.20,
+        "edema": 0.20,
+        "cardiomegaly": 0.15,
+        "pneumonia": 0.15,
+        "consolidation": 0.15,
+        "atelectasis": 0.10,
+        "emphysema": 0.10,
+        "fibrosis": 0.10,
+        "infiltration": 0.10,
+        "pleural_thickening": 0.05,
+        "hernia": 0.05,
+    }
+
     # Ontology mapping for more robust concordant matching
     ONTOLOGY_MAPPING = {
         "pneumonia": ["infiltration", "consolidation", "pneumonia", "lung infection"],
@@ -141,17 +185,27 @@ class FusionEngine:
             nlp_diag.get("question_answer", "")
         )
 
-        # Boost confidence safely without breaking calibration
-        combined_conf = min(1.0, max(nlp_conf, cv_conf) + 0.05)
+        # Calibrated fusion: weighted average + dynamic concordance bonus
+        base = nlp_conf * 0.4 + cv_conf * 0.6
+        agreement = 1 - abs(nlp_conf - cv_conf)
+        concordance_bonus = 0.03 * agreement
+        combined_conf = min(self.CONCORDANT_CONFIDENCE_CAP, base + concordance_bonus)
+
+        # Uncertainty penalty: penalize high confidence when CV entropy is high
+        combined_conf = self._apply_uncertainty_penalty(combined_conf, cv_diag)
+
+        # Explainable severity scoring
+        severity_result = self._compute_severity_score(nlp_diag, cv_diag)
+
         explanation = (
             f"Both text analysis and image analysis agree. "
             f"NLP suggests '{nlp_diag.get('primary_diagnosis', '')}' "
             f"(confidence: {nlp_conf:.0%}), "
             f"CV confirms '{cv_diag.get('predicted_class', '')}' "
             f"(confidence: {cv_conf:.0%}). "
-            f"Combined confidence is boosted due to agreement."
+            f"Calibrated combined confidence: {combined_conf:.0%} "
+            f"(agreement factor: {agreement:.2f})."
         )
-
         return {
             "primary_diagnosis": nlp_diag.get("primary_diagnosis", ""),
             "combined_confidence": combined_conf,
@@ -160,8 +214,10 @@ class FusionEngine:
             "question_answer": question_answer,
             "supporting_evidence": nlp_diag.get("supporting_evidence", []),
             "recommended_actions": nlp_diag.get("recommended_actions", []),
-            "severity": nlp_diag.get("severity", "moderate"),
-            "urgency": nlp_diag.get("urgency", "routine"),
+            "severity": severity_result["severity"],
+            "urgency": severity_result["urgency"],
+            "severity_score": severity_result["severity_score"],
+            "severity_breakdown": severity_result["breakdown"],
         }
 
     def _fuse_complementary(self, nlp_diag: dict, cv_diag: dict) -> dict:
@@ -173,13 +229,19 @@ class FusionEngine:
         )
 
         combined_conf = nlp_conf * self.NLP_WEIGHT + cv_conf * self.CV_WEIGHT
+
+        # Uncertainty penalty: penalize high confidence when CV entropy is high
+        combined_conf = self._apply_uncertainty_penalty(combined_conf, cv_diag)
+
+        # Explainable severity scoring
+        severity_result = self._compute_severity_score(nlp_diag, cv_diag)
+
         explanation = (
             f"Text and image analyses provide complementary insights. "
             f"NLP analysis: '{nlp_diag.get('primary_diagnosis', '')}' ({nlp_conf:.0%}). "
             f"Image analysis: '{cv_diag.get('predicted_class', '')}' ({cv_conf:.0%}). "
             f"Both perspectives are considered in the combined assessment."
         )
-
         return {
             "primary_diagnosis": (
                 nlp_diag.get("primary_diagnosis", "")
@@ -192,8 +254,10 @@ class FusionEngine:
             "question_answer": question_answer,
             "supporting_evidence": nlp_diag.get("supporting_evidence", []),
             "recommended_actions": nlp_diag.get("recommended_actions", []),
-            "severity": nlp_diag.get("severity", "moderate"),
-            "urgency": nlp_diag.get("urgency", "routine"),
+            "severity": severity_result["severity"],
+            "urgency": severity_result["urgency"],
+            "severity_score": severity_result["severity_score"],
+            "severity_breakdown": severity_result["breakdown"],
         }
 
     def _fuse_discordant(self, nlp_diag: dict, cv_diag: dict) -> dict:
@@ -206,13 +270,16 @@ class FusionEngine:
 
         # Industry-style handling: Retain the strongest signal with a slight penalty
         combined_conf = max(nlp_conf, cv_conf) * 0.85
-        explanation = (
-            "CONFLICT DETECTED: Text analysis suggests "
-            f"'{nlp_diag.get('primary_diagnosis', '')}' ({nlp_conf:.0%}), "
-            f"but image analysis suggests '{cv_diag.get('predicted_class', '')}' "
-            f"({cv_conf:.0%}). Professional review is recommended to resolve "
-            "the discrepancy."
-        )
+
+        # Uncertainty penalty: penalize high confidence when CV entropy is high
+        combined_conf = self._apply_uncertainty_penalty(combined_conf, cv_diag)
+
+        # Severity scoring — conservative for conflicts
+        severity_result = self._compute_severity_score(nlp_diag, cv_diag)
+        # Conflicts always escalate to at least "moderate" / "follow_up"
+        if severity_result["severity"] == "low":
+            severity_result["severity"] = "moderate"
+            severity_result["urgency"] = "follow_up"
 
         return {
             "primary_diagnosis": (
@@ -232,8 +299,10 @@ class FusionEngine:
             "conflict_flag": True,
             "supporting_evidence": nlp_diag.get("supporting_evidence", []),
             "recommended_actions": nlp_diag.get("recommended_actions", []),
-            "severity": "moderate",
-            "urgency": "follow_up",
+            "severity": severity_result["severity"],
+            "urgency": severity_result["urgency"],
+            "severity_score": severity_result["severity_score"],
+            "severity_breakdown": severity_result["breakdown"],
         }
 
     def _single_modality_result(self, diagnosis: dict, modality: str) -> dict:
@@ -259,10 +328,139 @@ class FusionEngine:
             "recommended_actions": diagnosis.get("recommended_actions", []),
             "nlp_diagnosis": diagnosis if modality == "nlp" else None,
             "cv_diagnosis": diagnosis if modality == "cv" else None,
+            "finding_detected": diagnosis.get("finding_detected"),
+            "negative_screen": diagnosis.get("negative_screen", False),
+            "abnormality_score": diagnosis.get("abnormality_score"),
+            "max_threshold_ratio": diagnosis.get("max_threshold_ratio"),
             "modality": modality,
             "severity": diagnosis.get("severity", "moderate"),
             "urgency": diagnosis.get("urgency", "routine"),
         }
+
+    def _compute_severity_score(
+        self, nlp_diag: dict, cv_diag: dict
+    ) -> dict:
+        """
+        Compute explainable severity score based on clinical factors.
+
+        Formula: 0.5 * symptom_weight + 0.3 * image_burden + 0.2 * risk_bonus
+        Does NOT use confidence — confidence ≠ severity.
+        """
+        # 1. Symptom severity weight (from NLP)
+        nlp_severity = nlp_diag.get("severity", "moderate").lower()
+        symptom_weight = self.SEVERITY_WEIGHT_MAP.get(nlp_severity, 0.35)
+
+        # 2. Image burden: normalized count of detected CV findings
+        detected = cv_diag.get("detected_predictions", [])
+        num_detected = len(detected)
+        # Normalize: 1 finding = 0.3, 2 = 0.5, 3+ = 0.7, 5+ = 1.0
+        if num_detected == 0:
+            image_burden = 0.1
+        elif num_detected == 1:
+            image_burden = 0.3
+        elif num_detected == 2:
+            image_burden = 0.5
+        elif num_detected <= 4:
+            image_burden = 0.7
+        else:
+            image_burden = 1.0
+
+        # 3. Risk finding bonus: check for high-risk radiological findings
+        risk_bonus = 0.0
+        risk_findings_found = []
+        all_cv_classes = [
+            p.get("class", "").lower().replace(" ", "_")
+            for p in detected
+        ]
+        for finding, bonus in self.RISK_FINDING_BONUSES.items():
+            if finding in all_cv_classes:
+                risk_bonus = max(risk_bonus, bonus)
+                risk_findings_found.append(finding)
+
+        # Also check NLP primary for risk keywords
+        nlp_primary = nlp_diag.get("primary_diagnosis", "").lower()
+        for finding, bonus in self.RISK_FINDING_BONUSES.items():
+            if finding in nlp_primary and finding not in risk_findings_found:
+                risk_bonus = max(risk_bonus, bonus)
+                risk_findings_found.append(finding)
+
+        # Composite score (configurable weights)
+        w = self.SEVERITY_FORMULA_WEIGHTS
+        severity_score = (
+            w["symptom"] * symptom_weight
+            + w["image"] * image_burden
+            + w["risk"] * risk_bonus
+        )
+        severity_score = min(1.0, severity_score)
+
+        # Map to labels
+        if severity_score >= 0.75:
+            severity = "critical"
+            urgency = "emergency"
+        elif severity_score >= 0.60:
+            severity = "high"
+            urgency = "urgent"
+        elif severity_score >= 0.40:
+            severity = "moderate"
+            urgency = "routine"
+        else:
+            severity = "low"
+            urgency = "routine"
+
+        return {
+            "severity": severity,
+            "urgency": urgency,
+            "severity_score": round(severity_score, 4),
+            "breakdown": {
+                "symptom_weight": round(symptom_weight, 2),
+                "image_burden": round(image_burden, 2),
+                "risk_finding_bonus": round(risk_bonus, 2),
+                "risk_findings_found": risk_findings_found,
+                "weights": self.SEVERITY_FORMULA_WEIGHTS,
+                "formula": (
+                    f"{w['symptom']}*symptom + "
+                    f"{w['image']}*image_burden + "
+                    f"{w['risk']}*risk_findings"
+                ),
+            },
+        }
+
+    def _apply_uncertainty_penalty(
+        self, combined_conf: float, cv_diag: dict
+    ) -> float:
+        """Reduce fusion confidence when CV model reports high uncertainty.
+
+        Uses two complementary signals:
+        - entropy_positive: entropy of detected (above-threshold) findings only
+          — more clinically relevant than entropy_mean (all 14 classes)
+        - near_threshold_count: number of classes near decision boundary
+          — indicates how many predictions are borderline
+
+        penalty = entropy_positive * 0.08 + near_threshold_count * 0.03
+        final_conf *= (1 - penalty)
+        """
+        uncertainty = cv_diag.get("uncertainty", {})
+        entropy_pos = uncertainty.get("entropy_positive", 0.0)
+        near_count = uncertainty.get("near_threshold_count", 0)
+
+        if entropy_pos <= 0 and near_count == 0:
+            return combined_conf
+
+        penalty_rate = (
+            entropy_pos * self.UNCERTAINTY_PENALTY_FACTOR
+            + near_count * 0.03
+        )
+        # Cap total penalty rate at 20% to prevent over-correction
+        penalty_rate = min(penalty_rate, 0.20)
+        adjusted = combined_conf * (1 - penalty_rate)
+
+        if penalty_rate > 0.01:
+            fusion_logger.info(
+                f"Uncertainty penalty: entropy_pos={entropy_pos:.3f}, "
+                f"near_threshold={near_count}, penalty_rate={penalty_rate:.3f}, "
+                f"conf {combined_conf:.3f} -> {adjusted:.3f}"
+            )
+        return round(adjusted, 4)
 
     def _clean_question_answer(self, answer: str) -> str:
         """Return a display-worthy clinical question answer."""
