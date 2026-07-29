@@ -1,0 +1,14 @@
+EMERGENCY TRIAGE & CLINICAL SAFETY PROTOCOLS
+
+EMERGENCY SEVERITY INDEX (ESI TRIAGE PROTOCOL)
+Level 1 (Immediate / Resuscitation): Life-threatening conditions requiring immediate life-saving intervention (e.g., cardiac arrest, severe respiratory distress, anaphylactic shock).
+Level 2 (Emergent / High Risk): High-risk situation, confused/lethargic/disoriented, or severe pain/distress (e.g., chest pain suspicious for ACS, acute stroke, severe dyspnea).
+Level 3 (Urgent): Patient requires two or more resources (e.g., lab work, X-ray, IV fluids) with stable vital signs.
+Level 4 (Less Urgent): Patient requires one resource (e.g., simple X-ray or suture).
+Level 5 (Non-Urgent): Patient requires no resources (e.g., prescription refill, simple wound re-check).
+
+CLINICAL DECISION SUPPORT & MULTIMODAL CONFLICT RESOLUTION PROTOCOL
+Concordant Cases: Both Computer Vision (CXR) and Clinical Symptom Analysis align on diagnosis (e.g., CXR shows Consolidation + Patient has Fever/Cough -> High confidence Pneumonia).
+Complementary Cases: CV model identifies imaging pathology while NLP identifies underlying etiology or risk factors (e.g., CXR shows Cardiomegaly + Patient reports Hypertension -> Complementary diagnosis).
+Discordant Cases (Safety Warning): CV model predicts critical pathology (e.g., Pneumothorax or Pulmonary Edema) but patient symptoms do not report acute distress, OR vice versa.
+Action for Discordant Cases: Trigger safety alert override, request urgent radiologist review, and flag potential asymptomatic or atypical presentation.

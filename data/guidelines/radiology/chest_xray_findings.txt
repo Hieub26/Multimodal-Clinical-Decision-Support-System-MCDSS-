@@ -1,0 +1,79 @@
+CHEST X-RAY PATHOLOGIES & RADIOLOGICAL FINDINGS
+
+ATELECTASIS
+Definition: Atelectasis is the collapse or closure of a lung resulting in reduced or absent gas exchange. It may affect part or all of a lung and is typically caused by airway obstruction, lung compression, or loss of surfactant.
+Symptoms: Small areas of atelectasis may be asymptomatic. Larger areas can cause dyspnea, rapid and shallow breathing, coughing, and low-grade fever.
+Diagnosis: Chest X-ray showing displacement of interlobar fissures, increased lung opacity, or elevation of the hemidiaphragm. CT scan for detailed assessment.
+Treatment Guidelines: Deep breathing exercises, incentive spirometry, early ambulation, and coughing. Bronchoscopy may be used to remove obstructions. Positive end-expiratory pressure (PEEP) or CPAP can help keep airways open.
+
+CARDIOMEGALY
+Definition: Cardiomegaly is an enlarged heart, often a sign of an underlying condition such as heart failure, hypertension, or valvular heart disease.
+Symptoms: Shortness of breath, dizziness, arrhythmias, edema (swelling) in the legs, and fatigue.
+Diagnosis: Chest X-ray reveals a cardiothoracic ratio (CTR) > 0.5. Echocardiogram is essential to determine the underlying cause and assess cardiac function.
+Treatment Guidelines: Management targets the underlying cause. Medications may include diuretics, ACE inhibitors, ARBs, and beta-blockers. Lifestyle changes such as sodium restriction and weight management are recommended.
+
+PLEURAL EFFUSION
+Definition: Pleural effusion is the abnormal accumulation of fluid in the pleural space between the lungs and the chest wall.
+Symptoms: Chest pain (pleuritic), dry nonproductive cough, dyspnea, and orthopnea.
+Diagnosis: Chest X-ray shows blunting of the costophrenic angle or a meniscus sign. Ultrasound or CT scan can detect smaller effusions. Thoracentesis is used for fluid analysis (transudate vs. exudate).
+Treatment Guidelines: Treatment depends on the cause (e.g., diuretics for heart failure, antibiotics for infection). Therapeutic thoracentesis or chest tube drainage may be required for symptomatic relief.
+
+INFILTRATION
+Definition: Pulmonary infiltration refers to the filling of lung air spaces with fluid, pus, blood, or cells, indicating an active pathological process such as infection or inflammation.
+Symptoms: Cough, fever, dyspnea, and sputum production depending on the underlying etiology.
+Diagnosis: Chest X-ray shows ill-defined opacities without volume loss. Clinical correlation and further imaging or lab tests are needed to determine the specific cause.
+Treatment Guidelines: Directed at the underlying cause. Bacterial infiltrates (pneumonia) require antibiotics; inflammatory causes may require corticosteroids.
+
+PULMONARY MASS
+Definition: A pulmonary mass is a localized lesion in the lung measuring greater than 3 cm in diameter. It is often suspicious for malignancy (lung cancer) but can be benign.
+Symptoms: Often asymptomatic early on. Later symptoms may include chronic cough, hemoptysis, weight loss, chest pain, and dyspnea.
+Diagnosis: Chest X-ray identifies the mass. A contrast-enhanced CT scan, PET scan, and tissue biopsy (bronchoscopy or needle biopsy) are required to determine malignancy.
+Treatment Guidelines: Management depends on the biopsy results. Malignant masses may require surgery, chemotherapy, radiation therapy, or targeted therapy.
+
+PULMONARY NODULE
+Definition: A pulmonary nodule is a small, well-defined lesion in the lung measuring less than 3 cm in diameter. Most are benign (e.g., granulomas, hamartomas), but some may be early-stage cancer.
+Symptoms: Usually asymptomatic and discovered incidentally on imaging.
+Diagnosis: Chest X-ray or CT scan. Serial CT scans are often used to monitor for growth over time (Fleischner Society Guidelines).
+Treatment Guidelines: Benign-appearing or stable nodules may just be monitored. Suspicious or growing nodules require biopsy or surgical resection.
+
+PNEUMOTHORAX
+Definition: Pneumothorax is the presence of air or gas in the pleural cavity, leading to a collapsed lung. It can be spontaneous or traumatic.
+Symptoms: Sudden onset of sharp chest pain and shortness of breath.
+Diagnosis: Chest X-ray showing a visible pleural line with absent lung markings peripheral to the line. Upright imaging is preferred.
+Treatment Guidelines: Small pneumothoraces may resolve spontaneously with oxygen therapy. Larger or symptomatic ones require needle aspiration or chest tube placement.
+
+CONSOLIDATION
+Definition: Lung consolidation occurs when the air that usually fills the small airways in your lungs is replaced with something else, like fluid, pus, blood, or water.
+Symptoms: Dyspnea, cough, and hypoxemia.
+Diagnosis: Chest X-ray showing a dense, homogeneous opacity with air bronchograms.
+Treatment Guidelines: Treatment is directed at the underlying cause (e.g., antibiotics for pneumonia, diuretics for pulmonary edema).
+
+PULMONARY EDEMA
+Definition: Pulmonary edema is the accumulation of excess fluid in the lungs, usually due to heart failure (cardiogenic) but can be non-cardiogenic (e.g., ARDS).
+Symptoms: Extreme shortness of breath, wheezing, feeling of suffocating, and frothy, blood-tinged sputum.
+Diagnosis: Chest X-ray showing bilateral symmetric opacities, Kerley B lines, cephalization of pulmonary vessels, and often cardiomegaly.
+Treatment Guidelines: Diuretics (e.g., furosemide), vasodilators (e.g., nitroglycerin), and oxygen therapy. Non-invasive ventilation (BiPAP/CPAP) may be necessary.
+
+EMPHYSEMA
+Definition: Emphysema is a form of COPD characterized by the destruction of the alveoli, leading to enlarged air spaces and loss of lung elasticity.
+Symptoms: Chronic, progressive dyspnea, especially with exertion, and a barrel chest.
+Diagnosis: Chest X-ray showing hyperinflated lungs, flattened diaphragm, and increased radiolucency. Spirometry confirms the diagnosis.
+Treatment Guidelines: Smoking cessation, bronchodilators, inhaled corticosteroids, pulmonary rehabilitation, and supplemental oxygen if hypoxic.
+
+PULMONARY FIBROSIS
+Definition: Pulmonary fibrosis is a condition where lung tissue becomes damaged and scarred, making it difficult for the lungs to function properly.
+Symptoms: Progressive shortness of breath, dry cough, fatigue, and clubbing of fingers.
+Diagnosis: Chest X-ray showing reticular or reticulonodular opacities, primarily in the lower lung zones. High-resolution CT (HRCT) shows "honeycombing."
+Treatment Guidelines: Antifibrotic medications (pirfenidone, nintedanib), oxygen therapy, and pulmonary rehabilitation. Lung transplantation may be considered in advanced cases.
+
+PLEURAL THICKENING
+Definition: Pleural thickening is a scarring or calcification of the pleura, often due to past inflammation, infection, asbestos exposure, or trauma.
+Symptoms: Often asymptomatic. Extensive thickening can restrict lung expansion, causing dyspnea.
+Diagnosis: Chest X-ray or CT scan showing irregular thickening or calcified plaques along the chest wall.
+Treatment Guidelines: Usually requires no specific treatment unless it causes severe restrictive lung disease.
+
+HIATAL / DIAPHRAGMATIC HERNIA
+Definition: Protrusion of abdominal organs (like the stomach) into the chest cavity through the diaphragm.
+Symptoms: Heartburn, chest pain, difficulty swallowing, or asymptomatic.
+Diagnosis: Chest X-ray showing a retrocardiac mass, sometimes with an air-fluid level.
+Treatment Guidelines: Asymptomatic cases require no treatment. Symptomatic ones are treated with acid-suppressing medications (PPIs) or surgical repair if severe.

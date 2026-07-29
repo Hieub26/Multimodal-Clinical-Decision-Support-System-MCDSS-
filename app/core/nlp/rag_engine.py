@@ -315,6 +315,6 @@ class RAGEngine:
         """Load sample guidelines into ChromaDB if empty."""
         if self.vector_store.get_document_count() == 0:
             guidelines_dir = settings.data_dir / "guidelines"
-            for file_path in guidelines_dir.glob("*.txt"):
+            for file_path in guidelines_dir.rglob("*.txt"):
                 count = self.vector_store.ingest_from_file(str(file_path))
                 nlp_logger.info(f"Ingested {count} chunks from {file_path.name}")

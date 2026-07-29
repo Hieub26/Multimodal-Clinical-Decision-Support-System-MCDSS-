@@ -1,0 +1,34 @@
+PULMONOLOGY & RESPIRATORY DISEASES GUIDELINES
+
+PNEUMONIA (COMMUNITY-ACQUIRED & HOSPITAL-ACQUIRED)
+Definition: Pneumonia is an infection that inflames the air sacs in one or both lungs. The air sacs may fill with fluid or pus, causing cough with phlegm, fever, chills, and difficulty breathing.
+Symptoms: Common symptoms include cough (often producing mucus), fever and sweating with shaking chills, shortness of breath, chest pain that worsens with breathing or coughing, fatigue, nausea, vomiting, diarrhea, and confusion.
+Types: Community-acquired pneumonia (CAP) is the most common type. Hospital-acquired pneumonia (HAP) develops 48+ hours after hospital admission. Aspiration pneumonia occurs from inhaling food, drink, or vomit.
+Diagnosis: Chest X-ray is the primary diagnostic tool showing infiltrates or consolidation. CT scan for complicated cases. Sputum culture and Gram stain. Blood cultures if bacteremia suspected. Procalcitonin levels to differentiate bacterial from viral. CURB-65 score for severity assessment.
+Treatment Guidelines: Mild CAP (outpatient): Amoxicillin or doxycycline or macrolide. Moderate CAP: Beta-lactam plus macrolide, or respiratory fluoroquinolone. Severe CAP (ICU): Beta-lactam plus macrolide, or beta-lactam plus respiratory fluoroquinolone. Supportive care: oxygen therapy, IV fluids, antipyretics.
+
+COVID-19 (SARS-CoV-2 RESPIRATORY INFECTION)
+Definition: COVID-19 is an infectious disease caused by the SARS-CoV-2 virus. It primarily affects the respiratory system but can impact multiple organ systems.
+Symptoms: Common symptoms include fever or chills, cough, shortness of breath, fatigue, muscle or body aches, headache, new loss of taste or smell, sore throat, congestion, nausea, vomiting, and diarrhea.
+Diagnosis: RT-PCR (gold standard) from nasopharyngeal swab. Rapid antigen tests. Chest CT showing ground-glass opacities. Blood tests may show lymphopenia, elevated CRP, D-dimer, ferritin, and LDH.
+Treatment Guidelines: Mild/moderate: Supportive care, antipyretics, adequate hydration. Moderate with risk factors: Antiviral therapy (nirmatrelvir/ritonavir or remdesivir) within 5 days of symptom onset. Severe: Dexamethasone, remdesivir, tocilizumab or baricitinib for hyperinflammation. Critical: ICU care with mechanical ventilation.
+
+TUBERCULOSIS (PULMONARY & EXTRAPULMONARY)
+Definition: Tuberculosis (TB) is an infectious disease caused by Mycobacterium tuberculosis. It primarily affects the lungs (pulmonary TB) but can affect other parts of the body.
+Symptoms: Persistent cough lasting 3+ weeks, hemoptysis (coughing up blood), chest pain, unintentional weight loss, fatigue, fever, night sweats, chills, and loss of appetite.
+Diagnosis: Tuberculin skin test (Mantoux test). Interferon-gamma release assays (IGRA). Chest X-ray showing upper lobe infiltrates, cavitation, or miliary pattern. Sputum smear microscopy for acid-fast bacilli. GeneXpert MTB/RIF for rapid diagnosis and rifampicin resistance detection.
+Treatment Guidelines: Standard regimen (drug-susceptible TB): Intensive phase (2 months): Isoniazid + Rifampicin + Pyrazinamide + Ethambutol (HRZE). Continuation phase (4 months): Isoniazid + Rifampicin (HR). Total duration: 6 months minimum. Directly Observed Therapy (DOT) is recommended.
+
+ASTHMA (GINA GUIDELINES)
+Definition: Asthma is a chronic inflammatory disease of the airways characterized by variable airflow obstruction and bronchial hyperresponsiveness.
+Symptoms: Episodic wheezing, shortness of breath, chest tightness, and cough (often worse at night or early morning).
+Triggers: Allergens, cold air, exercise, respiratory infections, smoke, stress.
+Diagnosis: Spirometry showing reversible airflow obstruction (FEV1 increase ≥12% after bronchodilator). Peak expiratory flow variability.
+Treatment Guidelines: Stepwise approach per GINA guidelines. SABA for relief. ICS (inhaled corticosteroids) as first-line controller. LABA + ICS for moderate/severe. Severe: biologics (omalizumab, mepolizumab).
+
+CHRONIC OBSTRUCTIVE PULMONARY DISEASE (COPD - GOLD GUIDELINES)
+Definition: Progressive lung disease characterized by persistent airflow limitation due to chronic bronchitis and/or emphysema.
+Symptoms: Chronic cough, sputum production, dyspnea, reduced exercise tolerance.
+Risk Factors: Smoking (primary), air pollution, occupational exposure.
+Diagnosis: Spirometry: FEV1/FVC < 0.70 post-bronchodilator.
+Treatment Guidelines: Smoking cessation (most important). Bronchodilators (LABA, LAMA). ICS in selected cases with high eosinophil counts. Supplemental oxygen therapy if hypoxic.

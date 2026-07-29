@@ -1,0 +1,30 @@
+GENERAL INTERNAL MEDICINE GUIDELINES
+
+DIABETES MELLITUS (TYPE 1 & TYPE 2 - ADA GUIDELINES)
+Definition: Metabolic disorder characterized by persistent hyperglycemia resulting from defects in insulin secretion, insulin action, or both.
+Symptoms: Polyuria, polydipsia, polyphagia, unexplained weight loss, fatigue, blurred vision, slow-healing wounds.
+Diagnostic Criteria: Fasting Plasma Glucose ≥126 mg/dL. 2-hour OGTT ≥200 mg/dL. HbA1c ≥6.5%. Random glucose ≥200 mg/dL with classic symptoms.
+Treatment Guidelines: Type 1: Basal-bolus insulin therapy. Type 2: Lifestyle management + Metformin first-line. Add SGLT2 inhibitors or GLP-1 RAs for high CV/CKD risk. Target HbA1c <7.0%.
+
+STROKE (CEREBROVASCULAR ACCIDENT - ASA GUIDELINES)
+Definition: Sudden focal neurological deficit caused by cerebrovascular cause (ischemic stroke 85%, hemorrhagic stroke 15%).
+Symptoms: Sudden facial droop, arm weakness, speech difficulty (FAST protocol), acute severe headache, loss of balance.
+Diagnosis: Immediate Non-contrast Brain CT to rule out intracranial hemorrhage. Brain MRI for early ischemic changes.
+Treatment Guidelines: Ischemic stroke: IV Thrombolysis (tPA/Alteplase) within 4.5 hours of symptom onset. Endovascular Thrombectomy (EVT) for large vessel occlusion up to 24 hours. Hemorrhagic: BP management, neurosurgical intervention.
+
+CHRONIC KIDNEY DISEASE (CKD - KDIGO GUIDELINES)
+Definition: Abnormalities of kidney structure or function present for >3 months with implications for health.
+Symptoms: Asymptomatic early; later fatigue, peripheral edema, pruritus, uremic symptoms.
+Diagnosis: eGFR <60 mL/min/1.73m² or persistent albuminuria (ACR ≥30 mg/g).
+Treatment Guidelines: SBP control <120 mmHg using ACEi or ARBs. SGLT2 inhibitors to slow CKD progression. Dialysis or kidney transplantation for Stage 5 ESRD.
+
+URINARY TRACT INFECTION (UTI & PYELONEPHRITIS)
+Definition: Bacterial infection of the urinary system (cystitis vs pyelonephritis).
+Symptoms: Dysuria, frequency, urgency, suprapubic pain. Pyelonephritis adds fever, chills, flank pain, CVA tenderness.
+Diagnosis: Urinalysis (leukocyte esterase, nitrites), Urine Culture & Sensitivity.
+Treatment Guidelines: Uncomplicated cystitis: Nitrofurantoin or TMP-SMX or Fosfomycin. Pyelonephritis: Fluoroquinolones or IV Ceftriaxone.
+
+DERMATOLOGICAL CONDITIONS ASSESSMENT
+Common Conditions: Atopic dermatitis (eczema), Psoriasis (silvery scale plaques), Contact dermatitis, Cellulitis (bacterial skin infection with warmth/erythema).
+Melanoma Warning Signs (ABCDE): Asymmetry, Border irregularity, Color variation, Diameter >6mm, Evolving lesion.
+Diagnosis & Treatment: Visual inspection, dermoscopy, KOH prep for fungal, skin biopsy. Topical corticosteroids for inflammatory skin conditions; systemic antibiotics for cellulitis.
