@@ -6,6 +6,9 @@ and common service instances.
 from functools import lru_cache
 from app.core.nlp.vector_store import VectorStore
 from app.core.nlp.rag_engine import RAGEngine
+from app.core.nlp.text_preprocessor import TextPreprocessor
+from app.core.nlp.question_understanding import QuestionUnderstanding
+from app.core.nlp.clinical_fallback import ClinicalFallbackEngine
 from app.core.cv.cv_model import MedicalCVModel
 from app.core.fusion.fusion_engine import FusionEngine
 from app.core.validation.guideline_validator import GuidelineValidator
@@ -21,9 +24,32 @@ def get_vector_store() -> VectorStore:
 
 
 @lru_cache()
+def get_text_preprocessor() -> TextPreprocessor:
+    """Singleton TextPreprocessor instance."""
+    return TextPreprocessor()
+
+
+@lru_cache()
+def get_question_understanding() -> QuestionUnderstanding:
+    """Singleton QuestionUnderstanding instance."""
+    return QuestionUnderstanding()
+
+
+@lru_cache()
+def get_clinical_fallback_engine() -> ClinicalFallbackEngine:
+    """Singleton ClinicalFallbackEngine instance."""
+    return ClinicalFallbackEngine()
+
+
+@lru_cache()
 def get_rag_engine() -> RAGEngine:
-    """Singleton RAG engine instance."""
-    return RAGEngine(vector_store=get_vector_store())
+    """Singleton RAG engine instance using Dependency Injection."""
+    return RAGEngine(
+        vector_store=get_vector_store(),
+        text_preprocessor=get_text_preprocessor(),
+        question_understanding=get_question_understanding(),
+        fallback_engine=get_clinical_fallback_engine(),
+    )
 
 
 @lru_cache()

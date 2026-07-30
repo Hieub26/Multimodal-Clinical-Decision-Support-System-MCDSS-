@@ -3,7 +3,6 @@ Embedding Engine wrapper around sentence-transformers.
 Provides lazy-loaded embedding model for text-to-vector conversion.
 """
 
-import numpy as np
 from sentence_transformers import SentenceTransformer
 from app.config import settings
 from app.utils.logger import nlp_logger

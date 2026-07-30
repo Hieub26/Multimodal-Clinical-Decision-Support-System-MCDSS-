@@ -59,12 +59,19 @@ IMPORTANT:
 class RAGEngine:
     """RAG pipeline combining ChromaDB retrieval with LLM generation."""
 
-    def __init__(self, vector_store: VectorStore = None):
+    def __init__(
+        self,
+        vector_store: VectorStore | None = None,
+        text_preprocessor: TextPreprocessor | None = None,
+        question_understanding: QuestionUnderstanding | None = None,
+        fallback_engine: ClinicalFallbackEngine | None = None,
+    ):
+        """Initialize RAGEngine using Dependency Injection for all core NLP components."""
         self.vector_store = vector_store or VectorStore()
-        self.text_preprocessor = TextPreprocessor()
-        self.question_understanding = QuestionUnderstanding()
+        self.text_preprocessor = text_preprocessor or TextPreprocessor()
+        self.question_understanding = question_understanding or QuestionUnderstanding()
+        self._fallback = fallback_engine or ClinicalFallbackEngine()
         self._client = None
-        self._fallback = ClinicalFallbackEngine()
         nlp_logger.info("RAGEngine initialized")
 
     def _ensure_llm(self):
