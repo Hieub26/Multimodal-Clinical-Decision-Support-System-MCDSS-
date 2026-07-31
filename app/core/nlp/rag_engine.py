@@ -140,9 +140,7 @@ class RAGEngine:
                             retrieved_docs: list[dict] = None) -> dict:
         """Call LLM to generate diagnosis from context and input.
 
-        Falls back to ClinicalFallbackEngine (4-layer pipeline) when
-        LLM is unavailable, passing through retrieved_docs so that
-        the retrieval boost layer can leverage ChromaDB results.
+        Falls back to ClinicalFallbackEngine when LLM is unavailable
         """
         self._ensure_llm()
 

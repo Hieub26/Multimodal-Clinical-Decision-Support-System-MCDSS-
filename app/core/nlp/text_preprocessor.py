@@ -136,7 +136,7 @@ class TextPreprocessor:
         self.synonyms = SYNONYM_MAP
         self.symptom_keywords = set(SYMPTOM_KEYWORDS)
         self._spacy_nlp = None
-        nlp_logger.info("TextPreprocessor initialized with bi-directional NegEx & non-overlapping matcher")
+        nlp_logger.info("TextPreprocessor initialized")
 
     def preprocess(self, text: str) -> dict[str, Any]:
         """
@@ -228,7 +228,7 @@ class TextPreprocessor:
         return found
 
     def _extract_durations(self, text: str) -> list[str]:
-        """Extract duration expressions (e.g., '3 days', 'for 2 weeks', 'since yesterday')."""
+        """Extract duration expressions"""
         pattern = r"\b(?:for\s+)?(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:day|days|week|weeks|month|months|hour|hours|year|years)\b|\bsince\s+\w+\b"
         matches = re.findall(pattern, text, re.IGNORECASE)
         return list(dict.fromkeys(matches))

@@ -25,12 +25,15 @@ class UrgencyLevel(str, Enum):
     ROUTINE = "routine"
     URGENT = "urgent"
     EMERGENT = "emergent"
+    EMERGENCY = "emergency"
 
 
 class ModalityType(str, Enum):
     """Diagnostic input modality types."""
     NLP = "nlp"
     CV = "cv"
+    TEXT = "text"
+    IMAGE = "image"
     MULTIMODAL = "multimodal"
     UNKNOWN = "unknown"
 
@@ -40,6 +43,7 @@ class SafetyStatus(str, Enum):
     APPROVED = "approved"
     NEEDS_REVIEW = "needs_review"
     REJECTED = "rejected"
+    FALLBACK = "fallback"
     UNKNOWN = "unknown"
 
 

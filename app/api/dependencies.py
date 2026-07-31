@@ -10,6 +10,9 @@ from app.core.nlp.text_preprocessor import TextPreprocessor
 from app.core.nlp.question_understanding import QuestionUnderstanding
 from app.core.nlp.clinical_fallback import ClinicalFallbackEngine
 from app.core.cv.cv_model import MedicalCVModel
+from app.core.cv.image_preprocessor import ImagePreprocessor
+from app.core.cv.cv_postprocessor import CVPostprocessor
+from app.core.cv.uncertainty_analyzer import UncertaintyAnalyzer
 from app.core.fusion.fusion_engine import FusionEngine
 from app.core.validation.guideline_validator import GuidelineValidator
 from app.core.safety.safety_controller import SafetyController
@@ -53,9 +56,31 @@ def get_rag_engine() -> RAGEngine:
 
 
 @lru_cache()
+def get_image_preprocessor() -> ImagePreprocessor:
+    """Singleton ImagePreprocessor instance."""
+    return ImagePreprocessor()
+
+
+@lru_cache()
+def get_cv_postprocessor() -> CVPostprocessor:
+    """Singleton CVPostprocessor instance."""
+    return CVPostprocessor()
+
+
+@lru_cache()
+def get_uncertainty_analyzer() -> UncertaintyAnalyzer:
+    """Singleton UncertaintyAnalyzer instance."""
+    return UncertaintyAnalyzer()
+
+
+@lru_cache()
 def get_cv_model() -> MedicalCVModel:
-    """Singleton CV model instance."""
-    return MedicalCVModel()
+    """Singleton CV model instance using Dependency Injection."""
+    return MedicalCVModel(
+        image_preprocessor=get_image_preprocessor(),
+        postprocessor=get_cv_postprocessor(),
+        uncertainty_analyzer=get_uncertainty_analyzer(),
+    )
 
 
 @lru_cache()
