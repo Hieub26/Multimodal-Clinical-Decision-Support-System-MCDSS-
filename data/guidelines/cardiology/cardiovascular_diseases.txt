@@ -1,0 +1,19 @@
+CARDIOLOGY & CARDIOVASCULAR DISEASES GUIDELINES
+
+HYPERTENSION (HIGH BLOOD PRESSURE)
+Definition: Hypertension is a chronic medical condition in which blood pressure in the arteries is persistently elevated. Defined as SBP ≥130 mmHg or DBP ≥80 mmHg.
+Symptoms: Most people with hypertension have no symptoms. Severe cases may include headaches, nosebleeds, dizziness, chest pain, shortness of breath, and visual changes.
+Diagnosis: Blood pressure measured on at least 2-3 separate occasions. Ambulatory blood pressure monitoring (ABPM) recommended. Stage 1: 130-139/80-89 mmHg. Stage 2: ≥140/≥90 mmHg. Hypertensive crisis: >180/>120 mmHg.
+Treatment Guidelines: Lifestyle modifications (DASH diet, sodium restriction <2.3g/day, exercise 150 min/week). First-line medications: ACE inhibitors, ARBs, calcium channel blockers, or thiazide diuretics. Target BP: <130/80 mmHg.
+
+ACUTE CORONARY SYNDROME (ACS)
+Definition: Spectrum of conditions due to reduced blood flow to the heart muscle (unstable angina, NSTEMI, STEMI).
+Symptoms: Chest pain (retrosternal pressure/heaviness), radiating to left arm or jaw, diaphoresis (sweating), nausea, shortness of breath.
+Diagnosis: 12-lead ECG changes (ST elevation for STEMI, ST depression/T-wave inversion for NSTEMI), cardiac biomarkers (high-sensitivity Troponin I/T).
+Treatment Guidelines: Initial emergency management: Oxygen if hypoxic, Sublingual Nitroglycerin, Aspirin (300mg chewable), Morphine for severe pain. Reperfusion therapy via Primary PCI within 90 minutes for STEMI. Dual Antiplatelet Therapy (DAPT) + Anticoagulation.
+
+HEART FAILURE (AHA/ACC GUIDELINES)
+Definition: Clinical syndrome where the heart cannot pump sufficient blood to meet metabolic demands of the body.
+Symptoms: Progressive dyspnea, orthopnea (shortness of breath when lying flat), paroxysmal nocturnal dyspnea, lower extremity edema, fatigue, sudden weight gain.
+Diagnosis: Echocardiography to measure Ejection Fraction (HFrEF vs HFpEF). Elevated NT-proBNP or BNP. Chest X-ray showing cardiomegaly (CTR >0.5), pulmonary edema, Kerley B lines.
+Treatment Guidelines: HFrEF quadruple therapy: ARNI/ACEi/ARB, Beta-blocker, MRA (spironolactone), SGLT2 inhibitor. Loop diuretics (furosemide) for volume overload symptom relief.

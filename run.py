@@ -1,6 +1,3 @@
-"""
-Launcher script: Starts both FastAPI backend and Streamlit frontend.
-"""
 
 import subprocess
 import sys
@@ -14,7 +11,6 @@ STREAMLIT_PORT = 8501
 
 
 def main():
-    """Launch both FastAPI and Streamlit servers."""
     print("=" * 60)
     print("  Multimodal Clinical Decision Support System")
     print("=" * 60)

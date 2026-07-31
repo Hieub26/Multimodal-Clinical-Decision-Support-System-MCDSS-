@@ -5,15 +5,18 @@ for clinical diagnosis generation.
 
 import json
 try:
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import types
     HAS_GENAI = True
 except ImportError:
     HAS_GENAI = False
     genai = None
+    types = None
 from app.config import settings
 from app.core.nlp.vector_store import VectorStore
 from app.core.nlp.text_preprocessor import TextPreprocessor
 from app.core.nlp.question_understanding import QuestionUnderstanding
+from app.core.nlp.clinical_fallback import ClinicalFallbackEngine
 from app.utils.logger import nlp_logger
 
 
@@ -56,18 +59,25 @@ IMPORTANT:
 class RAGEngine:
     """RAG pipeline combining ChromaDB retrieval with LLM generation."""
 
-    def __init__(self):
-        self.vector_store = VectorStore()
-        self.text_preprocessor = TextPreprocessor()
-        self.question_understanding = QuestionUnderstanding()
-        self._llm_configured = False
+    def __init__(
+        self,
+        vector_store: VectorStore | None = None,
+        text_preprocessor: TextPreprocessor | None = None,
+        question_understanding: QuestionUnderstanding | None = None,
+        fallback_engine: ClinicalFallbackEngine | None = None,
+    ):
+        """Initialize RAGEngine using Dependency Injection for all core NLP components."""
+        self.vector_store = vector_store or VectorStore()
+        self.text_preprocessor = text_preprocessor or TextPreprocessor()
+        self.question_understanding = question_understanding or QuestionUnderstanding()
+        self._fallback = fallback_engine or ClinicalFallbackEngine()
+        self._client = None
         nlp_logger.info("RAGEngine initialized")
 
     def _ensure_llm(self):
-        """Configure the LLM on first use."""
-        if not self._llm_configured and settings.gemini_api_key and HAS_GENAI:
-            genai.configure(api_key=settings.gemini_api_key)
-            self._llm_configured = True
+        """Configure the LLM client on first use."""
+        if self._client is None and settings.gemini_api_key_str and HAS_GENAI:
+            self._client = genai.Client(api_key=settings.gemini_api_key_str)
             nlp_logger.info(f"LLM configured: {settings.llm_model_name}")
 
     def diagnose_from_text(self, symptoms_text: str = None,
@@ -115,8 +125,8 @@ class RAGEngine:
             for doc in retrieved_docs
         ])
 
-        # Generate diagnosis using LLM
-        diagnosis = self._generate_diagnosis(context, processed_input)
+        # Generate diagnosis using LLM (pass retrieved_docs for fallback)
+        diagnosis = self._generate_diagnosis(context, processed_input, retrieved_docs)
         diagnosis["retrieved_documents"] = [
             {"text": d["text"][:200], "distance": d["distance"]}
             for d in retrieved_docs
@@ -126,23 +136,33 @@ class RAGEngine:
         nlp_logger.info(f"NLP diagnosis complete: {diagnosis.get('primary_diagnosis', 'N/A')}")
         return diagnosis
 
-    def _generate_diagnosis(self, context: str, user_input: str) -> dict:
-        """Call LLM to generate diagnosis from context and input."""
+    def _generate_diagnosis(self, context: str, user_input: str,
+                            retrieved_docs: list[dict] = None) -> dict:
+        """Call LLM to generate diagnosis from context and input.
+
+        Falls back to ClinicalFallbackEngine when LLM is unavailable
+        """
         self._ensure_llm()
 
         prompt = RAG_PROMPT_TEMPLATE.format(context=context, user_input=user_input)
 
         try:
-            if settings.gemini_api_key and HAS_GENAI:
-                model = genai.GenerativeModel(settings.llm_model_name)
-                response = model.generate_content(prompt)
-                return self._parse_llm_response(response.text)
+            if self._client and HAS_GENAI:
+                response = self._client.models.generate_content(
+                    model=settings.llm_model_name,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                    ),
+                )
+                result = self._parse_llm_response(response.text)
+                return self._normalize_urgency(result)
             else:
-                nlp_logger.warning("No API key — using rule-based fallback")
-                return self._rule_based_diagnosis(user_input, context)
+                nlp_logger.warning("No API key — using clinical fallback engine")
+                return self._fallback.diagnose(user_input, retrieved_docs or [])
         except Exception as e:
             nlp_logger.error(f"LLM generation failed: {e}")
-            return self._rule_based_diagnosis(user_input, context)
+            return self._fallback.diagnose(user_input, retrieved_docs or [])
 
     def _parse_llm_response(self, response_text: str) -> dict:
         """Parse the JSON response from the LLM."""
@@ -236,51 +256,50 @@ class RAGEngine:
             "urgency": "routine",
         }
 
-    def _rule_based_diagnosis(self, user_input: str, context: str) -> dict:
-        """Fallback rule-based diagnosis when LLM is unavailable."""
-        preprocessed = self.text_preprocessor.preprocess(user_input)
-        symptoms = preprocessed["extracted_symptoms"]
+    # Severity -> maximum allowed urgency mapping.
+    # Prevents LLM from over-escalating urgency beyond severity justification.
+    # E.g. severity="high" + urgency="emergency" -> clamped to "urgent"
+    SEVERITY_URGENCY_MAP = {
+        "critical": "emergency",
+        "high": "urgent",
+        "moderate": "routine",
+        "low": "routine",
+        "unknown": "routine",
+    }
 
-        diagnosis_map = {
-            "chest pain": ("Possible cardiac condition", 0.6, "high", "urgent"),
-            "fever": ("Possible infection", 0.55, "moderate", "routine"),
-            "cough": ("Respiratory condition", 0.5, "moderate", "routine"),
-            "headache": ("Tension headache / Migraine", 0.5, "low", "routine"),
-            "shortness of breath": ("Respiratory distress", 0.6, "high", "urgent"),
-            "abdominal pain": ("Gastrointestinal condition", 0.5, "moderate", "routine"),
-            "rash": ("Dermatological condition", 0.45, "low", "routine"),
-            "joint pain": ("Musculoskeletal condition", 0.45, "moderate", "routine"),
-            "nausea": ("Gastrointestinal disturbance", 0.45, "low", "routine"),
-            "dizziness": ("Vestibular / neurological condition", 0.5, "moderate", "routine"),
-        }
+    # Urgency rank for comparison
+    _URGENCY_RANK = {"routine": 0, "urgent": 1, "emergency": 2}
 
-        primary = "General clinical assessment needed"
-        confidence = 0.4
-        severity = "moderate"
-        urgency = "routine"
+    def _normalize_urgency(self, result: dict) -> dict:
+        """Clamp LLM urgency to severity-appropriate maximum.
 
-        for symptom in symptoms:
-            if symptom in diagnosis_map:
-                primary, confidence, severity, urgency = diagnosis_map[symptom]
-                break
+        Clinical guideline:
+          critical -> emergency
+          high     -> urgent
+          moderate -> routine
+          low      -> routine
 
-        return {
-            "primary_diagnosis": primary,
-            "confidence": confidence,
-            "differential_diagnoses": [{"condition": "Requires further evaluation", "probability": 0.3}],
-            "explanation": f"Based on reported symptoms ({', '.join(symptoms) if symptoms else 'general complaint'}), "
-                           f"a preliminary assessment suggests {primary}. This is based on pattern matching with "
-                           f"available clinical guidelines. Context from {len(context)} chars of guidelines was considered.",
-            "question_answer": "",
-            "supporting_evidence": [f"Symptom: {s}" for s in symptoms[:5]],
-            "recommended_actions": [
-                "Consult a healthcare professional for proper evaluation",
-                "Provide detailed medical history",
-                "Consider relevant diagnostic tests",
-            ],
-            "severity": severity,
-            "urgency": urgency,
-        }
+        If LLM returns urgency that exceeds the severity-appropriate
+        level, clamp it down. This prevents over-escalation.
+        """
+        severity = result.get("severity", "moderate").lower()
+        urgency = result.get("urgency", "routine").lower()
+
+        max_urgency = self.SEVERITY_URGENCY_MAP.get(severity, "routine")
+        max_rank = self._URGENCY_RANK.get(max_urgency, 0)
+        current_rank = self._URGENCY_RANK.get(urgency, 0)
+
+        if current_rank > max_rank:
+            nlp_logger.info(
+                f"Urgency clamped: severity={severity} allows max "
+                f"urgency={max_urgency}, LLM returned {urgency} -> {max_urgency}"
+            )
+            result["urgency"] = max_urgency
+            result["_urgency_clamped"] = True
+
+        return result
+
+
 
     def _empty_diagnosis(self, reason: str) -> dict:
         return {
@@ -301,6 +320,6 @@ class RAGEngine:
         """Load sample guidelines into ChromaDB if empty."""
         if self.vector_store.get_document_count() == 0:
             guidelines_dir = settings.data_dir / "guidelines"
-            for file_path in guidelines_dir.glob("*.txt"):
+            for file_path in guidelines_dir.rglob("*.txt"):
                 count = self.vector_store.ingest_from_file(str(file_path))
                 nlp_logger.info(f"Ingested {count} chunks from {file_path.name}")

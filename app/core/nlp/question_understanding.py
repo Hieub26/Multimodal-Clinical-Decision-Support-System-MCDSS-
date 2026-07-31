@@ -125,7 +125,6 @@ class QuestionUnderstanding:
         """Extract medical entities from the question."""
         entities = {
             "body_parts": [],
-            "conditions": [],
             "keywords": [],
         }
 

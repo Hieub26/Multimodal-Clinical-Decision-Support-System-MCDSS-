@@ -45,13 +45,18 @@ async def get_case_detail(case_id: str):
     if not case:
         raise HTTPException(404, f"Case {case_id} not found")
 
-    # Parse diagnosis JSON
+    # Safely handle diagnosis JSON whether it's already a dict or string
     result = dict(case)
-    if result.get("diagnosis_json"):
+    diag_json = result.get("diagnosis_json")
+    if isinstance(diag_json, dict):
+        result["diagnosis_detail"] = diag_json
+    elif isinstance(diag_json, str):
         try:
-            result["diagnosis_detail"] = json.loads(result["diagnosis_json"])
-        except json.JSONDecodeError:
+            result["diagnosis_detail"] = json.loads(diag_json)
+        except (json.JSONDecodeError, TypeError):
             result["diagnosis_detail"] = {}
+    else:
+        result["diagnosis_detail"] = {}
 
     return result
 

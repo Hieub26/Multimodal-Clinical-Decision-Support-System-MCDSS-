@@ -69,7 +69,12 @@ async def diagnose_image(
 
     # Safety check
     safety = get_safety_controller()
-    safe_result = safety.evaluate(validated)
+    safe_result = safety.evaluate(
+        validated,
+        image_path=image_path,
+        symptoms_text=symptoms_text,
+        clinical_question=clinical_question,
+    )
 
     # Generate report
     report_gen = get_report_generator()
@@ -104,6 +109,10 @@ async def diagnose_image(
         ),
         nlp_details=nlp_result,
         cv_details=cv_result,
+        vlm_safety_review=safe_result.get("vlm_safety_review"),
+        uncertainty=cv_result.get("uncertainty"),
+        severity_score=safe_result.get("severity_score"),
+        severity_breakdown=safe_result.get("severity_breakdown"),
         report_path=report_path,
         gradcam_path=cv_result.get("gradcam_path", ""),
         disclaimer="This is an AI-generated analysis for educational purposes only.",

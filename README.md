@@ -168,3 +168,15 @@ docker compose logs -f backend
 | GET | `/api/reports/history/{id}` | Case details |
 | GET | `/api/reports/health` | Health check |
 | POST | `/api/nlp/ingest-guidelines` | Ingest guidelines |
+
+## 🌳 Git Branching Strategy
+
+To maintain a professional development workflow, this project follows a structured branching strategy:
+
+- **`main`**: Stable, production-ready code. No direct development here.
+- **`develop`**: Integration branch for new features and bug fixes.
+- **`feature/*`**: Dedicated branches for new features (e.g., `feature/ui-update`).
+- **`bugfix/*`**: Dedicated branches for fixing issues (e.g., `bugfix/api-fix`).
+
+All changes should be submitted via **Pull Requests** from `feature/*` or `bugfix/*` branches into `develop`. Once `develop` is stable, it is merged into `main` for release.
+
