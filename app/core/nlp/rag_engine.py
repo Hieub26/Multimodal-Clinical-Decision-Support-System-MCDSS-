@@ -281,9 +281,30 @@ class RAGEngine:
 
         If LLM returns urgency that exceeds the severity-appropriate
         level, clamp it down. This prevents over-escalation.
+
+        Also sanitizes invalid values (e.g. 'N/A') from LLM output.
         """
-        severity = result.get("severity", "moderate").lower()
-        urgency = result.get("urgency", "routine").lower()
+        # Sanitize: coerce invalid severity/urgency to safe defaults
+        VALID_SEVERITIES = {"low", "moderate", "high", "critical", "unknown"}
+        VALID_URGENCIES = {"routine", "urgent", "emergency"}
+
+        severity = result.get("severity", "moderate")
+        severity = severity.lower().strip() if isinstance(severity, str) else "moderate"
+        if severity not in VALID_SEVERITIES:
+            nlp_logger.warning(
+                f"Invalid severity '{result.get('severity')}' from LLM, defaulting to 'unknown'"
+            )
+            severity = "unknown"
+        result["severity"] = severity
+
+        urgency = result.get("urgency", "routine")
+        urgency = urgency.lower().strip() if isinstance(urgency, str) else "routine"
+        if urgency not in VALID_URGENCIES:
+            nlp_logger.warning(
+                f"Invalid urgency '{result.get('urgency')}' from LLM, defaulting to 'routine'"
+            )
+            urgency = "routine"
+        result["urgency"] = urgency
 
         max_urgency = self.SEVERITY_URGENCY_MAP.get(severity, "routine")
         max_rank = self._URGENCY_RANK.get(max_urgency, 0)

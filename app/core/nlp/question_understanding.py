@@ -70,6 +70,37 @@ BODY_PARTS = [
     "spine", "pelvis", "rib", "skull", "femur", "tibia",
 ]
 
+# Disease / condition keywords for entity extraction
+# Sorted longest-first so multi-word conditions match before sub-words
+CONDITION_KEYWORDS = sorted([
+    # Cardiovascular
+    "heart attack", "myocardial infarction", "cardiac arrest", "heart failure",
+    "coronary artery disease", "arrhythmia", "atrial fibrillation",
+    "cardiomyopathy", "endocarditis", "hypertension",
+    # Cerebrovascular / Neurological
+    "stroke", "cerebrovascular accident", "transient ischemic attack",
+    "meningitis", "encephalitis", "epilepsy", "aneurysm",
+    # Pulmonary
+    "pneumonia", "pulmonary embolism", "pneumothorax", "asthma",
+    "chronic obstructive pulmonary disease", "tuberculosis", "lung cancer",
+    "respiratory failure", "pulmonary edema",
+    # Emergency / Critical
+    "sepsis", "anaphylaxis", "hemorrhage", "shock",
+    # GI
+    "appendicitis", "pancreatitis", "cholecystitis", "cirrhosis",
+    "gastrointestinal bleeding", "bowel obstruction", "peritonitis",
+    # Renal
+    "kidney failure", "renal failure", "kidney stone",
+    # Metabolic
+    "diabetes", "diabetic ketoacidosis", "thyroid storm", "hypoglycemia",
+    # Oncological
+    "cancer", "tumor", "malignancy", "lymphoma", "leukemia",
+    # Infectious
+    "influenza", "covid", "hiv", "hepatitis", "malaria", "dengue",
+    # Thrombotic
+    "deep vein thrombosis", "thrombosis", "embolism",
+], key=len, reverse=True)
+
 
 class QuestionUnderstanding:
     """Parses and understands clinical questions for better retrieval."""
@@ -77,6 +108,7 @@ class QuestionUnderstanding:
     def __init__(self):
         self.intent_patterns = INTENT_PATTERNS
         self.body_parts = BODY_PARTS
+        self.condition_keywords = CONDITION_KEYWORDS
         nlp_logger.info("QuestionUnderstanding module initialized")
 
     def analyze(self, question: str) -> dict:
@@ -125,13 +157,19 @@ class QuestionUnderstanding:
         """Extract medical entities from the question."""
         entities = {
             "body_parts": [],
+            "conditions": [],
             "keywords": [],
         }
 
         # Extract body parts
         for part in self.body_parts:
-            if re.search(r"\b" + part + r"\b", question):
+            if re.search(r"\b" + re.escape(part) + r"\b", question):
                 entities["body_parts"].append(part)
+
+        # Extract disease / condition names (longest-first to avoid sub-matches)
+        for condition in self.condition_keywords:
+            if re.search(r"\b" + re.escape(condition) + r"\b", question):
+                entities["conditions"].append(condition)
 
         # Extract important medical keywords
         medical_keywords = re.findall(
@@ -151,7 +189,10 @@ class QuestionUnderstanding:
         if intent != "general":
             query_parts.append(f"clinical {intent}")
 
-        if entities["body_parts"]:
+        if entities.get("conditions"):
+            query_parts.append("conditions: " + ", ".join(entities["conditions"]))
+
+        if entities.get("body_parts"):
             query_parts.append("affecting " + ", ".join(entities["body_parts"]))
 
         return " ".join(query_parts)

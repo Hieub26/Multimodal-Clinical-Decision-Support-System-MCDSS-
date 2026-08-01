@@ -111,7 +111,18 @@ class SafetyController:
             is_safe = False
 
         # Check 4: Red-flag conditions
-        red_flags_found = [kw for kw in RED_FLAG_KEYWORDS if kw in primary]
+        # Scan ALL text sources — not just primary_diagnosis — to prevent
+        # bypass when NLP abstracts the user's input into a generic label
+        # (e.g. "Inquiry about disease etiology" instead of "heart attack").
+        scan_sources = [
+            primary,
+            (symptoms_text or "").lower(),
+            (clinical_question or "").lower(),
+            validated_output.get("explanation", "").lower(),
+        ]
+        scan_text = " ".join(scan_sources)
+
+        red_flags_found = [kw for kw in RED_FLAG_KEYWORDS if kw in scan_text]
         if red_flags_found:
             risk_factors.append(
                 f"Red-flag conditions detected: {', '.join(red_flags_found)}"

@@ -44,7 +44,11 @@ async def diagnose_text(request: TextDiagnosisRequest):
     validated = validator.validate(fused)
 
     # Safety check
-    safe_result = safety.evaluate(validated)
+    safe_result = safety.evaluate(
+        validated,
+        symptoms_text=request.symptoms_text,
+        clinical_question=request.clinical_question,
+    )
 
     # Generate report
     report_path = report_gen.generate_clinical_report(
