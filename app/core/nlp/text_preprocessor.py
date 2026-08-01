@@ -112,6 +112,41 @@ SYMPTOM_KEYWORDS = [
     "sputum", "hemoptysis", "night sweats", "edema", "dyspnea", "orthopnea",
 ]
 
+# Disease / condition keywords for extraction (includes red-flag conditions)
+# These complement SYMPTOM_KEYWORDS so the pipeline can recognize disease
+# names mentioned in user input, not just symptoms.
+DISEASE_KEYWORDS = [
+    # Cardiovascular
+    "heart attack", "myocardial infarction", "cardiac arrest", "heart failure",
+    "congestive heart failure", "coronary artery disease", "arrhythmia",
+    "atrial fibrillation", "cardiomyopathy", "endocarditis", "hypertension",
+    # Cerebrovascular / Neurological
+    "stroke", "cerebrovascular accident", "transient ischemic attack",
+    "meningitis", "encephalitis", "epilepsy", "aneurysm",
+    # Pulmonary
+    "pneumonia", "pulmonary embolism", "pneumothorax", "asthma",
+    "chronic obstructive pulmonary disease", "tuberculosis", "lung cancer",
+    "respiratory failure", "pulmonary edema",
+    # Emergency / Critical
+    "sepsis", "anaphylaxis", "hemorrhage", "shock",
+    "disseminated intravascular coagulation",
+    # Gastrointestinal
+    "appendicitis", "pancreatitis", "cholecystitis", "cirrhosis",
+    "gastrointestinal bleeding", "bowel obstruction", "peritonitis",
+    # Renal
+    "kidney failure", "renal failure", "nephrolithiasis", "kidney stone",
+    # Endocrine / Metabolic
+    "diabetes", "diabetic ketoacidosis", "thyroid storm", "hypoglycemia",
+    # Oncological
+    "cancer", "tumor", "malignancy", "lymphoma", "leukemia",
+    # Infectious
+    "influenza", "covid", "hiv", "hepatitis", "malaria", "dengue",
+    # Musculoskeletal
+    "fracture", "osteoporosis", "rheumatoid arthritis",
+    # Thrombotic
+    "deep vein thrombosis", "thrombosis", "embolism",
+]
+
 # Backward Negation triggers (preceding window up to 40 chars)
 BACKWARD_NEGATION_TRIGGERS = [
     "no", "not", "denies", "denied", "without", "never", "negative for",
@@ -135,6 +170,9 @@ class TextPreprocessor:
         self.abbreviations = MEDICAL_ABBREVIATIONS
         self.synonyms = SYNONYM_MAP
         self.symptom_keywords = set(SYMPTOM_KEYWORDS)
+        self.disease_keywords = set(DISEASE_KEYWORDS)
+        # Combined vocabulary for extraction pipeline
+        self.all_clinical_keywords = self.symptom_keywords | self.disease_keywords
         self._spacy_nlp = None
         nlp_logger.info("TextPreprocessor initialized")
 
@@ -247,7 +285,7 @@ class TextPreprocessor:
             normalized_text = re.sub(pattern, canonical, normalized_text)
 
         # Step B: Find all raw candidate matches
-        all_keywords = list(self.symptom_keywords | set(self.synonyms.values()))
+        all_keywords = list(self.all_clinical_keywords | set(self.synonyms.values()))
         raw_candidates = []
 
         for kw in all_keywords:

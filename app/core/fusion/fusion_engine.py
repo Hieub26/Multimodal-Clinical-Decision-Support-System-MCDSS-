@@ -276,10 +276,10 @@ class FusionEngine:
 
         # Severity scoring — conservative for conflicts
         severity_result = self._compute_severity_score(nlp_diag, cv_diag)
-        # Conflicts always escalate to at least "moderate" / "follow_up"
+        # Conflicts always escalate to at least "moderate" / "urgent"
         if severity_result["severity"] == "low":
             severity_result["severity"] = "moderate"
-            severity_result["urgency"] = "follow_up"
+            severity_result["urgency"] = "urgent"
 
         return {
             "primary_diagnosis": (
@@ -377,10 +377,12 @@ class FusionEngine:
                 risk_bonus = max(risk_bonus, bonus)
                 risk_findings_found.append(finding)
 
-        # Also check NLP primary for risk keywords
+        # Also check NLP primary for risk keywords (using word boundaries)
+        import re
         nlp_primary = nlp_diag.get("primary_diagnosis", "").lower()
         for finding, bonus in self.RISK_FINDING_BONUSES.items():
-            if finding in nlp_primary and finding not in risk_findings_found:
+            pattern = r"\b" + re.escape(finding.replace("_", " ")) + r"\b|\b" + re.escape(finding) + r"\b"
+            if re.search(pattern, nlp_primary) and finding not in risk_findings_found:
                 risk_bonus = max(risk_bonus, bonus)
                 risk_findings_found.append(finding)
 
