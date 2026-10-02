@@ -1,32 +1,35 @@
+# Pinned to the versions the code is developed and tested against
+# (Python 3.13). The UI uses Streamlit APIs that need >= 1.49, and the
+# vector store on disk is written by chromadb 1.x.
+
 # === Core Backend ===
-fastapi==0.115.0
-uvicorn[standard]==0.30.6
-python-multipart==0.0.9
-httpx==0.27.2
-pydantic==2.9.2
-pydantic-settings==2.5.2
-python-dotenv==1.0.1
+fastapi==0.136.1
+uvicorn[standard]==0.46.0
+python-multipart==0.0.27
+httpx==0.28.1
+pydantic==2.12.4
+pydantic-settings==2.12.0
 
 # === NLP / RAG ===
-langchain==0.3.3
-langchain-community==0.3.2
-langchain-google-genai==2.0.1
-google-genai>=1.0.0
-sentence-transformers==3.1.1
-chromadb==0.5.11
+google-genai==2.6.0
+sentence-transformers==5.4.1
+chromadb==1.5.8
 
 # === Computer Vision ===
 torch==2.6.0
 torchvision==0.21.0
-Pillow==10.4.0
-opencv-python-headless==4.10.0.84
-matplotlib==3.9.2
+Pillow==12.2.0
+matplotlib==3.10.6
 
 # === Database ===
-asyncpg==0.30.0
+asyncpg==0.31.0
 
 # === Web UI ===
-streamlit==1.38.0
+streamlit==1.51.0
 
 # === Utilities ===
-numpy==1.26.4
+numpy==2.4.4
+
+# === Optional ===
+# Tier-2 entity extraction in app/core/nlp/text_preprocessor.py is skipped
+# unless spaCy and the scispaCy model `en_ner_bc5cdr_md` are installed.

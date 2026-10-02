@@ -38,6 +38,12 @@ User Input (Symptoms Text / Clinical Question / Medical Image)
 
 ## 🚀 Quick Start
 
+### Prerequisites
+
+- Python 3.11+ (developed and tested on 3.13)
+- A running PostgreSQL instance (or use the Docker setup below)
+- The fine-tuned CV weights at `models/best_densenet121_chestxray14.pth`. They are not in the repository; without them image diagnosis returns `503` instead of guessing.
+
 ### 1. Install Dependencies
 
 ```bash
@@ -48,8 +54,12 @@ pip install -r requirements.txt
 
 ```bash
 cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY (optional — system works without it using rule-based fallback)
+# Edit .env:
+#   - DATABASE_URL / POSTGRES_PASSWORD (required)
+#   - GEMINI_API_KEY (optional — system works without it using rule-based fallback)
 ```
+
+The guideline index in `data/chroma_db` is built on first start and re-synced automatically whenever the files in `data/guidelines` change.
 
 ### 3. Launch the System
 
@@ -141,6 +151,7 @@ docker compose logs -f backend
 │   ├── db/                       # Database layer
 │   └── utils/                    # Utilities
 ├── streamlit_app/                # Streamlit Frontend
+├── tests/                        # Unit tests (pytest)
 ├── data/                         # Guidelines & ChromaDB storage
 ├── storage/                      # Images, reports, logs
 └── models/                       # PyTorch model weights
@@ -168,6 +179,17 @@ docker compose logs -f backend
 | GET | `/api/reports/history/{id}` | Case details |
 | GET | `/api/reports/health` | Health check |
 | POST | `/api/nlp/ingest-guidelines` | Ingest guidelines |
+
+`ingest-guidelines` accepts inline `text`, or a `file_path` to a `.txt` file inside `data/guidelines` (relative to that directory). When `ADMIN_API_KEY` is set, the request must carry it in the `X-API-Key` header.
+
+## 🧪 Tests
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+The suite uses temporary storage and never calls the LLM or the database.
 
 ## 🌳 Git Branching Strategy
 

@@ -12,7 +12,7 @@ services:
     environment:
       POSTGRES_DB: clinical_dss
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hieu2611}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     ports:
       - "5432:5432"
     volumes:
@@ -38,7 +38,7 @@ services:
       - .env
     environment:
       # Override DATABASE_URL to point to the Docker db service
-      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-hieu2611}@db:5432/clinical_dss
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/clinical_dss
       # Persist HuggingFace models in the mounted data volume
       HF_HOME: /app/data/huggingface_cache
     ports:

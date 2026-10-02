@@ -4,7 +4,7 @@
 # ==============================================================
 
 # ---- Base Stage ----
-FROM python:3.11-slim AS base
+FROM python:3.13-slim AS base
 
 # Prevent Python from writing .pyc files and enable unbuffered output
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -44,7 +44,9 @@ RUN mkdir -p storage/images storage/reports storage/logs data/chroma_db data/sam
 
 EXPOSE 8008
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+# Long start period: the first start downloads the embedding model and
+# builds the guideline index before the server accepts requests.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=300s --retries=3 \
     CMD curl -f http://localhost:8008/ || exit 1
 
 CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8008"]
