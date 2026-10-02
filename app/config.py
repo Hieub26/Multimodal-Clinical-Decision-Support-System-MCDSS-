@@ -50,6 +50,13 @@ class Settings(BaseSettings):
         "http://localhost:8008",
         "http://127.0.0.1:8008",
     ]
+    # When set, state-changing endpoints (guideline ingestion) require this
+    # value in the X-API-Key header. Empty = no check (local development).
+    admin_api_key: SecretStr = Field(
+        default=SecretStr(""),
+        description="API key required by administrative endpoints"
+    )
+    max_upload_size_mb: PositiveInt = Field(default=20, gt=0)
 
     # --- LLM Provider ---
     gemini_api_key: SecretStr = Field(

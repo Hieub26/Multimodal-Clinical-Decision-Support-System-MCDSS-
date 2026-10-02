@@ -3,7 +3,10 @@ API Dependencies: shared dependency injection for auth, DB sessions,
 and common service instances.
 """
 
+import secrets
 from functools import lru_cache
+from fastapi import Header, HTTPException
+from app.config import settings
 from app.core.nlp.vector_store import VectorStore
 from app.core.nlp.rag_engine import RAGEngine
 from app.core.nlp.text_preprocessor import TextPreprocessor
@@ -105,6 +108,19 @@ def get_safety_controller() -> SafetyController:
 def get_report_generator() -> ReportGenerator:
     """Singleton Report generator instance."""
     return ReportGenerator()
+
+
+def require_admin_key(x_api_key: str | None = Header(default=None)) -> None:
+    """Guard for endpoints that change server state.
+
+    Enforced only when ADMIN_API_KEY is configured, so local development
+    keeps working without credentials.
+    """
+    expected = settings.admin_api_key.get_secret_value()
+    if expected and not secrets.compare_digest(
+        (x_api_key or "").encode(), expected.encode()
+    ):
+        raise HTTPException(status_code=401, detail="Invalid or missing X-API-Key")
 
 
 def get_db_manager() -> DatabaseManager:

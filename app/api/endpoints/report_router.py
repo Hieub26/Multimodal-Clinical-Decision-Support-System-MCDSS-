@@ -3,22 +3,26 @@ Report Router: Case history and report retrieval endpoints.
 """
 
 import json
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query, Response
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse
 
 from app.api.schemas import (
     CaseHistoryItem, CaseHistoryResponse, HealthCheckResponse,
 )
+from app.config import settings
 from app.db.database import get_case, get_all_cases, get_case_count
-from app.api.dependencies import get_rag_engine, get_cv_model
-from app.utils.logger import api_logger
+from app.api.dependencies import get_rag_engine, get_db_manager
 from pathlib import Path
 
 router = APIRouter(prefix="/reports", tags=["Reports & History"])
 
 
 @router.get("/history", response_model=CaseHistoryResponse)
-async def get_history(limit: int = 50, offset: int = 0):
+async def get_history(
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+):
     """Get case history with pagination."""
     cases = await get_all_cases(limit, offset)
     total = await get_case_count()
@@ -80,22 +84,43 @@ async def download_report(case_id: str):
 
 
 @router.get("/health", response_model=HealthCheckResponse)
-async def health_check():
-    """System health check."""
-    components = {
-        "database": "healthy",
-        "vector_store": "healthy",
-    }
+async def health_check(response: Response):
+    """System health check. Returns 503 when the database is unreachable."""
+    components = {}
+
+    try:
+        await get_db_manager().ping()
+        components["database"] = "healthy"
+    except Exception as e:
+        components["database"] = f"error: {str(e)}"
 
     try:
         rag = get_rag_engine()
-        doc_count = rag.vector_store.get_document_count()
-        components["vector_store_docs"] = doc_count
+        components["vector_store_docs"] = await run_in_threadpool(
+            rag.vector_store.get_document_count
+        )
+        components["vector_store"] = "healthy"
     except Exception as e:
         components["vector_store"] = f"error: {str(e)}"
 
+    components["cv_model"] = (
+        "healthy"
+        if Path(settings.cv_model_path).exists()
+        else "error: model weights not found"
+    )
+
+    # Without the database no diagnosis can be stored; the other components
+    # only take one modality offline.
+    if components["database"] != "healthy":
+        status = "unhealthy"
+        response.status_code = 503
+    elif components["vector_store"] != "healthy" or components["cv_model"] != "healthy":
+        status = "degraded"
+    else:
+        status = "healthy"
+
     return HealthCheckResponse(
-        status="healthy",
-        version="1.0.0",
+        status=status,
+        version=settings.app_version,
         components=components,
     )

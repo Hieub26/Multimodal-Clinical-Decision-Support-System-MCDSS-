@@ -5,9 +5,8 @@ Orchestrates all components of the Multimodal Clinical Decision Support System.
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from pathlib import Path
 
 from app.config import settings
 from app.db.database import init_db, close_db
@@ -39,10 +38,11 @@ async def lifespan(app: FastAPI):
 
     # --- Non-Critical Startup Tasks ---
     # Failures here log a warning and allow application startup to continue.
+    # Model loading and embedding are blocking; keep them off the event loop.
     try:
         from app.api.dependencies import get_rag_engine
         rag = get_rag_engine()
-        rag.initialize_guidelines()
+        await run_in_threadpool(rag.initialize_guidelines)
         api_logger.info("Clinical guidelines loaded successfully")
     except Exception as e:
         api_logger.warning(f"Non-critical startup warning (Guideline initialization skipped): {e}")
@@ -50,10 +50,14 @@ async def lifespan(app: FastAPI):
     try:
         from app.api.dependencies import get_cv_model
         cv = get_cv_model()
-        _ = cv.model  # trigger lazy-load now, not on first request
+        # trigger lazy-load now, not on first request
+        await run_in_threadpool(lambda: cv.model)
         api_logger.info("CV model preloaded into memory successfully")
     except Exception as e:
-        api_logger.warning(f"Non-critical startup warning (CV model preload skipped): {e}")
+        api_logger.warning(
+            f"Non-critical startup warning (CV model unavailable — image "
+            f"diagnosis will return 503): {e}"
+        )
 
     api_logger.info(f"Server ready on http://{settings.fastapi_host}:{settings.fastapi_port}")
     api_logger.info(f"API docs at http://localhost:{settings.fastapi_port}{settings.docs_url}")
@@ -84,10 +88,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files for images
-images_dir = Path(settings.image_storage_dir)
-images_dir.mkdir(parents=True, exist_ok=True)
-app.mount("/static/images", StaticFiles(directory=str(images_dir)), name="images")
+# Uploaded images and Grad-CAM outputs are patient data: they are not served
+# over HTTP. The Streamlit frontend reads them from the shared storage volume.
 
 # Include routers using configurable API prefix
 app.include_router(nlp_router, prefix=settings.api_prefix)
