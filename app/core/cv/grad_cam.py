@@ -78,6 +78,7 @@ class GradCAMVisualizer:
         tensor: torch.Tensor,
         original_image: Image.Image,
         class_idx: int,
+        content_box: tuple[int, int, int, int] | None = None,
     ) -> str:
         """Generate Grad-CAM heatmap overlay and save as PNG.
 
@@ -85,20 +86,29 @@ class GradCAMVisualizer:
             tensor: Preprocessed input tensor [1, C, H, W]
             original_image: Original PIL Image for overlay
             class_idx: Target class index for Grad-CAM
+            content_box: (left, top, right, bottom) of the image content
+                inside the padded model input. None means no padding.
 
         Returns:
             File path to saved visualization, or empty string on failure.
         """
+        fig = None
         try:
             # Clone and enable gradients for Grad-CAM
             tensor_with_grad = tensor.clone().detach().requires_grad_(True)
             heatmap = self.grad_cam.generate(tensor_with_grad, class_idx)
 
-            # Resize heatmap to original image size
+            # The heatmap covers the padded square the model saw. Scale it to
+            # the model input and cut the padding off before stretching it
+            # over the original image, otherwise it is shifted on any
+            # non-square image.
+            heatmap_image = Image.fromarray(np.uint8(heatmap * 255)).resize(
+                (tensor.shape[-1], tensor.shape[-2]), Image.LANCZOS
+            )
+            if content_box is not None:
+                heatmap_image = heatmap_image.crop(content_box)
             heatmap_resized = np.array(
-                Image.fromarray(np.uint8(heatmap * 255)).resize(
-                    original_image.size, Image.LANCZOS
-                )
+                heatmap_image.resize(original_image.size, Image.LANCZOS)
             ) / 255.0
 
             # Create overlay
@@ -134,7 +144,6 @@ class GradCAMVisualizer:
             filename = f"gradcam_{uuid.uuid4().hex[:8]}.png"
             save_path = str(save_dir / filename)
             fig.savefig(save_path, dpi=150, bbox_inches="tight", facecolor="white")
-            plt.close(fig)
 
             cv_logger.info(f"Grad-CAM saved to {save_path}")
             return save_path
@@ -142,3 +151,6 @@ class GradCAMVisualizer:
         except Exception as e:
             cv_logger.error(f"Grad-CAM generation failed: {e}")
             return ""
+        finally:
+            if fig is not None:
+                plt.close(fig)

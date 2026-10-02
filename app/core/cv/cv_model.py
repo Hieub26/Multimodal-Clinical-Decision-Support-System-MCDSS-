@@ -6,8 +6,8 @@ uncertainty analysis, and Grad-CAM to dedicated modules via Dependency Injection
 
 import os
 import json
+import threading
 import numpy as np
-from PIL import Image
 
 import torch
 import torch.nn as nn
@@ -19,6 +19,10 @@ from app.core.cv.cv_postprocessor import CVPostprocessor
 from app.core.cv.uncertainty_analyzer import UncertaintyAnalyzer
 from app.core.cv.grad_cam import GradCAM, GradCAMVisualizer
 from app.utils.logger import cv_logger
+
+
+class ModelWeightsNotFoundError(RuntimeError):
+    """Raised when the fine-tuned CV weights file is missing."""
 
 
 class MedicalCVModel:
@@ -58,6 +62,9 @@ class MedicalCVModel:
         self._model = None
         self._grad_cam = None
         self._grad_cam_visualizer = None
+        # Requests run in worker threads. Grad-CAM keeps per-call state on the
+        # model hooks and matplotlib is not thread-safe, so run one at a time.
+        self._predict_lock = threading.Lock()
         cv_logger.info(f"MedicalCVModel initialized (device={self.device})")
 
     def _load_model_metadata(self):
@@ -75,7 +82,7 @@ class MedicalCVModel:
             thresholds = metadata.get("thresholds")
 
             if labels:
-                if labels != self.class_names:
+                if list(labels) != list(self.class_names):
                     cv_logger.warning(
                         "CV metadata labels differ from app config. Using metadata labels."
                     )
@@ -120,30 +127,32 @@ class MedicalCVModel:
         return self._grad_cam_visualizer
 
     def _build_model(self) -> nn.Module:
-        """Build DenseNet-121 with custom classification head."""
-        # Use pretrained weights from ImageNet as a starting point
-        weights = models.DenseNet121_Weights.IMAGENET1K_V1
-        model = models.densenet121(weights=weights)
+        """Build DenseNet-121 with custom classification head.
+
+        Raises:
+            ModelWeightsNotFoundError: if the fine-tuned weights are missing.
+                Without them the classifier head is random, so refusing to
+                predict is the only safe behaviour for a diagnostic output.
+        """
+        model_path = settings.cv_model_path
+        if not os.path.exists(model_path):
+            raise ModelWeightsNotFoundError(
+                f"No fine-tuned CV weights found at {model_path}. "
+                "Set CV_MODEL_PATH to the trained DenseNet-121 checkpoint."
+            )
+
+        # The checkpoint holds every layer, so no ImageNet download is needed
+        model = models.densenet121(weights=None)
 
         # Replace final FC layer for our classes
         # Modified to match the single Linear layer in the provided weights file
         num_features = model.classifier.in_features
         model.classifier = nn.Linear(num_features, self.num_classes)
 
-        # Load fine-tuned weights if available
-        model_path = settings.cv_model_path
-        if os.path.exists(model_path):
-            cv_logger.info(f"Loading model weights from {model_path}")
-            state_dict = torch.load(model_path, map_location=self.device)
-            model.load_state_dict(state_dict)
-            cv_logger.info("Fine-tuned weights loaded successfully")
-        else:
-            cv_logger.warning(
-                "No fine-tuned weights found at %s. "
-                "Using ImageNet pretrained features with untrained classifier. "
-                "Predictions will be unreliable — please train the model first.",
-                model_path,
-            )
+        cv_logger.info(f"Loading model weights from {model_path}")
+        state_dict = torch.load(model_path, map_location=self.device)
+        model.load_state_dict(state_dict)
+        cv_logger.info("Fine-tuned weights loaded successfully")
 
         return model
 
@@ -157,6 +166,10 @@ class MedicalCVModel:
         Returns:
             CVDiagnosis dictionary
         """
+        with self._predict_lock:
+            return self._predict(image_input)
+
+    def _predict(self, image_input) -> dict:
         cv_logger.info("Starting CV prediction")
 
         # Step 1: Preprocess image (delegated to ImagePreprocessor)
@@ -176,21 +189,25 @@ class MedicalCVModel:
 
         probs = probabilities.cpu().numpy()
 
-        # Step 3: Postprocess predictions (delegated to CVPostprocessor)
+        # Step 3: Postprocess predictions 
         result = self.postprocessor.postprocess(
             probs, self.class_names, self.class_thresholds
         )
 
-        # Step 4: Generate Grad-CAM only for positive findings (delegated to GradCAMVisualizer)
+        # Step 4: Generate Grad-CAM only for positive findings 
         if result["finding_detected"]:
-            predicted_class_idx = int(np.argmax(probs))
+            # Explain the finding that is reported, not the highest raw
+            # probability (which may sit below its own threshold)
             gradcam_path = self.grad_cam_visualizer.generate_and_save(
-                tensor, preprocessed["original_image"], predicted_class_idx
+                tensor,
+                preprocessed["original_image"],
+                result["primary_class_index"],
+                content_box=preprocessed["content_box"],
             )
         else:
             gradcam_path = ""
 
-        # Step 5: Compute uncertainty (delegated to UncertaintyAnalyzer)
+        # Step 5: Compute uncertainty 
         uncertainty = self.uncertainty_analyzer.compute(
             probs, self.class_names, self.class_thresholds
         )

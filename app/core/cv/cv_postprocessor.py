@@ -78,8 +78,12 @@ class CVPostprocessor:
         ]
 
         max_probability = float(np.max(probs))
-        top_class_idx = int(np.argmax(probs))
-        top_class_threshold = float(class_thresholds[top_class_idx])
+        # Class the decision is about: the strongest detected finding, or the
+        # highest raw probability when nothing crossed its threshold. These
+        # differ because thresholds are per-class (a 0.75 Emphysema can be
+        # below its threshold while a 0.50 Infiltration is above its own).
+        primary_class_idx = int(np.argmax(probs))
+        top_class_threshold = float(class_thresholds[primary_class_idx])
         threshold_ratios = probs / np.maximum(np.array(class_thresholds), 1e-6)
         max_threshold_ratio = float(np.max(threshold_ratios))
 
@@ -123,6 +127,8 @@ class CVPostprocessor:
             predictions.sort(key=lambda x: x["probability"], reverse=True)
             predicted_class_name = ", ".join([p["class"] for p in predictions])
             confidence = predictions[0]["probability"]
+            primary_class_idx = list(class_names).index(predictions[0]["class"])
+            top_class_threshold = predictions[0]["threshold"]
             detected_predictions = predictions
             finding_detected = True
             negative_screen = False
@@ -135,6 +141,7 @@ class CVPostprocessor:
 
         result = {
             "predicted_class": predicted_class_name,
+            "primary_class_index": primary_class_idx,
             "confidence": confidence,
             "top_predictions": top_predictions,
             "detected_predictions": detected_predictions,
