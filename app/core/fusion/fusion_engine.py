@@ -3,6 +3,8 @@ Fusion Engine: Combines NLP and CV diagnosis results
 using weighted strategies for concordant, complementary, and discordant cases.
 """
 
+import re
+
 from app.utils.logger import fusion_logger
 from app.config import settings
 
@@ -38,6 +40,11 @@ class FusionEngine:
         "low": 0.25,
         "unknown": 0.35,
     }
+
+    # Label ranks, used to keep the fused label at least as severe as the
+    # label each modality reported on its own.
+    SEVERITY_RANK = {"low": 0, "moderate": 1, "high": 2, "critical": 3}
+    URGENCY_RANK = {"routine": 0, "urgent": 1, "emergent": 2, "emergency": 2}
 
     # Risk finding bonuses: high-risk radiological findings
     RISK_FINDING_BONUSES = {
@@ -107,7 +114,10 @@ class FusionEngine:
         cv_primary = cv_diagnosis.get("predicted_class", "")
 
         # Determine fusion strategy
-        strategy = self._determine_strategy(nlp_primary, cv_primary, nlp_conf, cv_conf)
+        strategy = self._determine_strategy(
+            nlp_primary, cv_primary, nlp_conf, cv_conf,
+            cv_finding_detected=cv_diagnosis.get("finding_detected", True),
+        )
 
         if strategy == "concordant":
             result = self._fuse_concordant(nlp_diagnosis, cv_diagnosis)
@@ -151,21 +161,30 @@ class FusionEngine:
         )
 
     def _determine_strategy(self, nlp_primary: str, cv_primary: str,
-                            nlp_conf: float, cv_conf: float) -> str:
+                            nlp_conf: float, cv_conf: float,
+                            cv_finding_detected: bool = True) -> str:
         """Determine the appropriate fusion strategy."""
         nlp_lower = nlp_primary.lower()
-        cv_lower = cv_primary.lower()
+
+        # Detected CV classes, e.g. "Pleural_Thickening, Mass". Without a
+        # detected finding cv_primary is a sentence ("No confident abnormal
+        # finding detected"), which cannot agree with a diagnosis.
+        cv_classes = (
+            [c.strip().lower() for c in cv_primary.split(",") if c.strip()]
+            if cv_finding_detected
+            else []
+        )
 
         # Check for agreement using ontology mapping
         is_concordant = False
         for key, related_terms in self.ONTOLOGY_MAPPING.items():
-            if key in cv_lower:
-                if any(term in nlp_lower for term in related_terms):
+            if key in cv_classes:
+                if any(self._mentions(nlp_lower, term) for term in related_terms):
                     is_concordant = True
                     break
 
         # Fallback check
-        if not is_concordant and any(term in nlp_lower for term in cv_lower.replace(",", " ").split()):
+        if not is_concordant and any(self._mentions(nlp_lower, cls) for cls in cv_classes):
             is_concordant = True
 
         if is_concordant:
@@ -176,6 +195,12 @@ class FusionEngine:
             return "discordant"
 
         return "complementary"
+
+    @staticmethod
+    def _mentions(text: str, term: str) -> bool:
+        """Whole-word match (plural allowed): "mass" must not match "massive"."""
+        term = re.escape(term.replace("_", " "))
+        return re.search(r"\b" + term + r"(?:e?s)?\b", text) is not None
 
     def _fuse_concordant(self, nlp_diag: dict, cv_diag: dict) -> dict:
         """Both modalities agree — boost confidence safely."""
@@ -347,7 +372,7 @@ class FusionEngine:
         Does NOT use confidence — confidence ≠ severity.
         """
         # 1. Symptom severity weight (from NLP)
-        nlp_severity = nlp_diag.get("severity", "moderate").lower()
+        nlp_severity = str(nlp_diag.get("severity") or "moderate").lower()
         symptom_weight = self.SEVERITY_WEIGHT_MAP.get(nlp_severity, 0.35)
 
         # 2. Image burden: normalized count of detected CV findings
@@ -378,7 +403,6 @@ class FusionEngine:
                 risk_findings_found.append(finding)
 
         # Also check NLP primary for risk keywords (using word boundaries)
-        import re
         nlp_primary = nlp_diag.get("primary_diagnosis", "").lower()
         for finding, bonus in self.RISK_FINDING_BONUSES.items():
             pattern = r"\b" + re.escape(finding.replace("_", " ")) + r"\b|\b" + re.escape(finding) + r"\b"
@@ -409,11 +433,28 @@ class FusionEngine:
             severity = "low"
             urgency = "routine"
 
+        # The composite score blends the modalities, so on its own it can
+        # land below what either one reported (NLP "high" + CV pneumothorax
+        # scored "moderate"). Fusion must never de-escalate: keep the most
+        # severe label among the score and each modality's own assessment.
+        score_severity, score_urgency = severity, urgency
+        for diag in (nlp_diag, cv_diag):
+            diag_severity = str(diag.get("severity") or "").lower()
+            if self.SEVERITY_RANK.get(diag_severity, -1) > self.SEVERITY_RANK[severity]:
+                severity = diag_severity
+            diag_urgency = str(diag.get("urgency") or "").lower()
+            if self.URGENCY_RANK.get(diag_urgency, -1) > self.URGENCY_RANK[urgency]:
+                urgency = diag_urgency
+
         return {
             "severity": severity,
             "urgency": urgency,
             "severity_score": round(severity_score, 4),
             "breakdown": {
+                "score_severity": score_severity,
+                "score_urgency": score_urgency,
+                "nlp_severity": nlp_diag.get("severity"),
+                "cv_severity": cv_diag.get("severity"),
                 "symptom_weight": round(symptom_weight, 2),
                 "image_burden": round(image_burden, 2),
                 "risk_finding_bonus": round(risk_bonus, 2),
