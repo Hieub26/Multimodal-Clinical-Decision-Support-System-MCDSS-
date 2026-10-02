@@ -202,7 +202,7 @@ def render_about_page():
     ### 🏗️ Infrastructure
     - **FastAPI** — Backend REST API orchestrator
     - **Streamlit** — Interactive web interface
-    - **SQLite** — Case history persistence
+    - **PostgreSQL** — Case history persistence
     - **ChromaDB** — Vector storage for clinical guidelines
     
     ---
