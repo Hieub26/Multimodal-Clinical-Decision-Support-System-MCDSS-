@@ -14,6 +14,7 @@ The engine also produces a full explainability breakdown (fallback_reasoning) fo
 debugging and audit purposes.
 """
 
+import re
 from collections import defaultdict
 from app.core.nlp.text_preprocessor import TextPreprocessor
 from app.utils.logger import nlp_logger
@@ -250,7 +251,10 @@ COMBINATION_RULES = [
 # ---------------------------------------------------------------------------
 
 RETRIEVAL_BOOST_FACTOR = 3.0
-MIN_SIMILARITY_FOR_BOOST = 0.65  # Skip docs below this similarity to prevent leak
+# Skip docs below this cosine similarity to prevent boost leak. Calibrated on
+# the bundled guidelines with S-BioBert: symptom queries score ~0.48-0.59
+# against relevant chunks, vague or off-topic text stays below ~0.33.
+MIN_SIMILARITY_FOR_BOOST = 0.45
 NEGATION_WINDOW_WORDS = 12
 
 NEGATION_PATTERNS = [
@@ -529,41 +533,46 @@ class ClinicalFallbackEngine:
 
         for doc in retrieved_docs:
             text = doc.get("text", "").lower()
-            similarity = 1.0 - doc.get("distance", 1.0)
+            # Vector store uses cosine distance, so 1 - distance is the
+            # cosine similarity (clamped: distance can exceed 1).
+            similarity = min(max(1.0 - doc.get("distance", 1.0), 0.0), 1.0)
 
             # Gate: skip low-similarity docs to prevent boost leak
             if similarity < MIN_SIMILARITY_FOR_BOOST:
                 continue
 
-            text_words = text.split()
-
             for disease_key, profile in DISEASE_PROFILES.items():
-                boosted_this_doc = False
                 for keyword in profile["guideline_keywords"]:
-                    if keyword not in text:
-                        continue
-                    if boosted_this_doc:
-                        break
-
-                    # Negation check: find keyword position in word list
-                    # and inspect NEGATION_WINDOW_WORDS words before it
-                    if self._is_negated(text, text_words, keyword):
+                    if not self._has_affirmed_mention(text, keyword):
                         continue
 
                     # Use similarity² decay — low similarity decays quadratically
                     boost = (similarity ** 2) * RETRIEVAL_BOOST_FACTOR
                     scores[disease_key] += boost
                     retrieval_deltas[disease_key] += round(boost, 2)
-                    boosted_this_doc = True
+                    break  # one boost per disease per document
 
         return (
             {k: v for k, v in scores.items() if v > 0},
             dict(retrieval_deltas),
         )
 
+    @classmethod
+    def _has_affirmed_mention(cls, text: str, keyword: str) -> bool:
+        """True if the keyword occurs as a whole word at least once un-negated.
+
+        Whole-word matching matters: as substrings "tb" hits "heartburn" and
+        "uti" hits "routine".
+        """
+        pattern = r"\b" + re.escape(keyword) + r"\b"
+        return any(
+            not cls._is_negated(text, match.start())
+            for match in re.finditer(pattern, text)
+        )
+
     @staticmethod
-    def _is_negated(text: str, text_words: list, keyword: str) -> bool:
-        """Check if a keyword is negated using a two-tier word-based approach.
+    def _is_negated(text: str, kw_pos: int) -> bool:
+        """Check if the keyword at kw_pos is negated using a two-tier word-based approach.
 
         Tier 1: Multi-word patterns (e.g., "no evidence of", "ruled out")
                 — high precision, catches exact clinical negation phrases.
@@ -574,11 +583,6 @@ class ClinicalFallbackEngine:
 
         Both tiers use a NEGATION_WINDOW_WORDS word window before the keyword.
         """
-        # Find the character position of the keyword
-        kw_pos = text.find(keyword)
-        if kw_pos < 0:
-            return False
-
         # Get the text before the keyword, split into words,
         # then take the last NEGATION_WINDOW_WORDS words
         prefix_text = text[:kw_pos]

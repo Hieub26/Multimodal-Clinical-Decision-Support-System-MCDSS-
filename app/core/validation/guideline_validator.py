@@ -290,9 +290,11 @@ class GuidelineValidator:
             doc_text = doc.get("text", "").lower()
             matches = sum(1 for term in diagnosis_terms if term in doc_text)
             if matches > 0:
+                # Cosine distance can exceed 1; a dissimilar doc must not
+                # subtract from the support of the others.
+                similarity = max(0.0, 1.0 - doc.get("distance", 0.0))
                 guideline_support += (
-                    (1.0 - doc.get("distance", 0.0))
-                    * (matches / max(len(diagnosis_terms), 1))
+                    similarity * (matches / max(len(diagnosis_terms), 1))
                 )
 
         guideline_support = min(1.0, guideline_support)
