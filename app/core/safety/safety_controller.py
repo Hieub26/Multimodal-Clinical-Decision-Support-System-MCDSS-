@@ -5,6 +5,7 @@ and determines whether output is safe to present or requires doctor consultation
 """
 
 import json
+import re
 from pathlib import Path
 from PIL import Image
 
@@ -18,16 +19,27 @@ except ImportError:
     types = None
 
 from app.config import settings
+from app.core.nlp.text_preprocessor import (
+    STATED_FAMILY_HISTORY_CONTEXTS, family_context, is_negated,
+    normalize_contractions,
+)
 from app.utils.logger import safety_logger
 
 # Red-flag conditions that always require urgent medical attention
-RED_FLAG_KEYWORDS = [
+RED_FLAG_CONDITIONS = [
     "myocardial infarction", "heart attack", "stroke", "cerebrovascular",
     "pulmonary embolism", "anaphylaxis", "sepsis", "meningitis",
     "cardiac arrest", "respiratory failure", "hemorrhage", "bleeding",
-    "seizure", "unconscious", "critical", "emergency", "severe",
-    "life-threatening", "acute abdomen", "tension pneumothorax",
+    "seizure", "unconscious", "life-threatening", "acute abdomen",
+    "tension pneumothorax",
 ]
+
+# Generic alarm words. A red flag in what the patient wrote or in the
+# diagnosis label, but routine vocabulary in a generated explanation
+# ("return if symptoms become severe"), so they are not scanned there.
+RED_FLAG_QUALIFIERS = ["critical", "emergency", "severe"]
+
+RED_FLAG_KEYWORDS = RED_FLAG_CONDITIONS + RED_FLAG_QUALIFIERS
 
 # Severity ranking hierarchy for risk levels
 RISK_ORDER = {
@@ -78,7 +90,7 @@ class SafetyController:
         is_safe = True
 
         confidence = validated_output.get("combined_confidence", 0)
-        primary = validated_output.get("primary_diagnosis", "").lower()
+        primary = str(validated_output.get("primary_diagnosis") or "")
         severity = validated_output.get("severity", "moderate")
         urgency = validated_output.get("urgency", "routine")
         modality = validated_output.get("modality", "unknown")
@@ -114,15 +126,19 @@ class SafetyController:
         # Scan ALL text sources — not just primary_diagnosis — to prevent
         # bypass when NLP abstracts the user's input into a generic label
         # (e.g. "Inquiry about disease etiology" instead of "heart attack").
+        # Each source is scanned on its own so a negation in one cannot
+        # reach into the next.
         scan_sources = [
-            primary,
-            (symptoms_text or "").lower(),
-            (clinical_question or "").lower(),
-            validated_output.get("explanation", "").lower(),
+            (primary, RED_FLAG_KEYWORDS),
+            (symptoms_text or "", RED_FLAG_KEYWORDS),
+            (clinical_question or "", RED_FLAG_KEYWORDS),
+            (str(validated_output.get("explanation") or ""), RED_FLAG_CONDITIONS),
         ]
-        scan_text = " ".join(scan_sources)
-
-        red_flags_found = [kw for kw in RED_FLAG_KEYWORDS if kw in scan_text]
+        red_flags_found = list(dict.fromkeys(
+            kw
+            for text, keywords in scan_sources
+            for kw in self._find_red_flags(text, keywords)
+        ))
         if red_flags_found:
             risk_factors.append(
                 f"Red-flag conditions detected: {', '.join(red_flags_found)}"
@@ -193,6 +209,33 @@ class SafetyController:
             f"risks={len(risk_factors)}"
         )
         return safety_result
+
+    @staticmethod
+    def _find_red_flags(text: str, keywords: list[str]) -> list[str]:
+        """Keywords mentioned in text as whole words, not negated, and not
+        stated family history.
+
+        Whole-word matching keeps "keystrokes" from matching "stroke"; the
+        negation check keeps "no bleeding" / "not life-threatening" from
+        escalating a case.
+
+        A relative's condition is skipped only when the text states or dates
+        it as history ("family history of stroke", "mother had a stroke last
+        year"). An undated "my mother had a stroke" still counts: it can be
+        someone reporting an emergency, and this gate errs towards escalation.
+        """
+        text = normalize_contractions(text.lower())
+        found = []
+        for kw in keywords:
+            pattern = r"\b" + re.escape(kw) + r"(?:e?s)?\b"
+            if any(
+                not is_negated(text, match.start(), match.end())
+                and family_context(text, match.start(), match.end())
+                not in STATED_FAMILY_HISTORY_CONTEXTS
+                for match in re.finditer(pattern, text)
+            ):
+                found.append(kw)
+        return found
 
     def _should_run_vlm_review(
         self,
@@ -496,6 +539,16 @@ class SafetyController:
 
         decision = str(vlm_review.get("decision", "")).lower()
         reasoning = vlm_review.get("reasoning", "")
+
+        if vlm_review.get("_vlm_fallback"):
+            # The VLM never looked at this case. A rule-based stand-in may add
+            # a note, but it must not clear risks the way a real review can —
+            # otherwise an API outage would relax the safety gate.
+            note = "VLM safety verification unavailable — rule-based review applied"
+            if reasoning:
+                note += f": {reasoning}"
+            warning_notes = list(dict.fromkeys(warning_notes + [note]))
+            return risk_factors, warning_notes, is_safe
 
         hard_risks = [
             r for r in risk_factors
