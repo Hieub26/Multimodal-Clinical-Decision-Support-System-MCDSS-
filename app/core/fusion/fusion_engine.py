@@ -150,6 +150,11 @@ class FusionEngine:
         result["cv_diagnosis"] = cv_diagnosis
         result["modality"] = "multimodal"
 
+        # What the image flag is worth on the model's validation set
+        reliability = cv_diagnosis.get("reliability")
+        if reliability:
+            result["explanation"] += f" {reliability['note']}"
+
         # Missing uncertainty reasoning logic (Confidence Gap)
         confidence_gap = abs(nlp_conf - cv_conf)
         if confidence_gap > 0.4:
@@ -246,7 +251,7 @@ class FusionEngine:
             f"NLP suggests '{nlp_diag.get('primary_diagnosis', '')}' "
             f"(confidence: {nlp_conf:.0%}), "
             f"CV confirms '{cv_diag.get('predicted_class', '')}' "
-            f"(confidence: {cv_conf:.0%}). "
+            f"(model score: {cv_conf:.0%}). "
             f"Calibrated combined confidence: {combined_conf:.0%} "
             f"(agreement factor: {agreement:.2f})."
         )
@@ -283,7 +288,8 @@ class FusionEngine:
         explanation = (
             f"Text and image analyses provide complementary insights. "
             f"NLP analysis: '{nlp_diag.get('primary_diagnosis', '')}' ({nlp_conf:.0%}). "
-            f"Image analysis: '{cv_diag.get('predicted_class', '')}' ({cv_conf:.0%}). "
+            f"Image analysis: '{cv_diag.get('predicted_class', '')}' "
+            f"(model score: {cv_conf:.0%}). "
             f"Both perspectives are considered in the combined assessment."
         )
         return {
@@ -336,7 +342,7 @@ class FusionEngine:
                 f"⚠️ CONFLICT DETECTED: Text analysis suggests "
                 f"'{nlp_diag.get('primary_diagnosis', '')}' ({nlp_conf:.0%}), "
                 f"but image analysis suggests '{cv_diag.get('predicted_class', '')}' "
-                f"({cv_conf:.0%}). "
+                f"(model score: {cv_conf:.0%}). "
                 f"Professional review is recommended to resolve the discrepancy."
             ),
             "question_answer": question_answer,

@@ -52,6 +52,9 @@ class MedicalCVModel:
         self.num_classes = settings.cv_num_classes
         self.class_names = settings.cv_class_names
         self.class_thresholds = [settings.confidence_threshold_cv] * self.num_classes
+        # Per class: the threshold the model was validated at and the
+        # precision and recall measured there. None without model metadata.
+        self.validation_metrics: list[dict] | None = None
         self._load_model_metadata()
 
         # Dependency Injection
@@ -93,6 +96,19 @@ class MedicalCVModel:
                 relaxation = float(getattr(settings, "cv_threshold_relaxation", 1.0))
                 relaxation = min(max(relaxation, 0.0), 1.0)
                 self.class_thresholds = [float(t) * relaxation for t in thresholds]
+                # The decision thresholds above may sit below the validated
+                # ones; the validated figures say what a flag is worth.
+                measured = {
+                    m.get("label"): m for m in metadata.get("threshold_metrics") or []
+                }
+                self.validation_metrics = [
+                    {
+                        "threshold": float(threshold),
+                        "precision": measured.get(label, {}).get("precision"),
+                        "recall": measured.get(label, {}).get("recall"),
+                    }
+                    for label, threshold in zip(self.class_names, thresholds)
+                ]
             else:
                 cv_logger.warning(
                     "CV metadata thresholds missing or invalid. Using default threshold."
@@ -191,7 +207,7 @@ class MedicalCVModel:
 
         # Step 3: Postprocess predictions 
         result = self.postprocessor.postprocess(
-            probs, self.class_names, self.class_thresholds
+            probs, self.class_names, self.class_thresholds, self.validation_metrics
         )
 
         # Step 4: Generate Grad-CAM only for positive findings 

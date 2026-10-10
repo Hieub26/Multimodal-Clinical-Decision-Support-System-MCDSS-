@@ -101,11 +101,16 @@ def render_results(response: dict, gradcam_path: str = None):
     # === Metrics Row ===
     col1, col2, col3, col4 = st.columns(4)
 
+    # For an image-only result the number is the classifier's score for the
+    # flagged class, which is not the chance that the flag is right (that is
+    # shown with the image analysis below).
+    confidence_label = "Model score" if response.get("modality") == "image" else "Confidence"
+
     with col1:
         st.markdown(f"""
         <div class="metric-card">
             <div class="metric-value">{confidence:.0%}</div>
-            <div class="metric-label">Confidence</div>
+            <div class="metric-label">{confidence_label}</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -220,12 +225,24 @@ def render_results(response: dict, gradcam_path: str = None):
     if cv:
         with st.expander("🩻 Computer Vision Analysis", expanded=False):
             st.markdown(f"**Predicted Class:** {cv.get('predicted_class', 'N/A')}")
-            st.markdown(f"**Confidence:** {cv.get('confidence', 0):.0%}")
+            st.markdown(f"**Model score:** {cv.get('confidence', 0):.0%}")
+
+            # What a flag of this class was worth on the model's validation set
+            reliability = cv.get("reliability")
+            if reliability:
+                precision = reliability.get("validated_precision")
+                recall = reliability.get("validated_recall")
+                flagged = str(reliability.get("class", "")).replace("_", " ")
+                st.markdown(
+                    f"**Validated precision ({flagged}):** {precision:.0%}"
+                    + (f" · **recall:** {recall:.0%}" if recall is not None else "")
+                )
+                st.warning(reliability.get("note", ""))
 
             # Top predictions
             preds = cv.get("top_predictions", [])
             if preds:
-                st.markdown("**Class Probabilities:**")
+                st.markdown("**Model scores per class** (not calibrated probabilities):")
                 for p in preds:
                     prob = p.get("probability", 0)
                     name = p.get("class", "Unknown")
