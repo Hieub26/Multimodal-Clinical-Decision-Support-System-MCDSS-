@@ -6,6 +6,7 @@ and determines whether output is safe to present or requires doctor consultation
 
 import json
 import re
+from dataclasses import dataclass, field
 from pathlib import Path
 from PIL import Image
 
@@ -19,6 +20,7 @@ except ImportError:
     types = None
 
 from app.config import settings
+from app.core.nlp.jev_judge import DENIED, OTHER_PERSON, PAST, JevJudge
 from app.core.nlp.text_preprocessor import (
     STATED_FAMILY_HISTORY_CONTEXTS, family_context, is_negated,
     normalize_contractions,
@@ -41,6 +43,22 @@ RED_FLAG_QUALIFIERS = ["critical", "emergency", "severe"]
 
 RED_FLAG_KEYWORDS = RED_FLAG_CONDITIONS + RED_FLAG_QUALIFIERS
 
+# --- Jev emergency signs (used when a TypeSafe key is configured) ---
+# A sign counts once its probability reaches this value. On the development
+# phrasings (evaluation/) clear non-emergencies stayed at or below 0.19 and
+# clear emergencies at or above 0.39. The threshold sits low on purpose:
+# missing an emergency costs more than a false alarm.
+EMERGENCY_SIGN_THRESHOLD = 0.3
+
+# A keyword red flag may be dropped only when no emergency sign fires and Jev
+# is close to certain that the mention is history: at most this probability
+# that the patient has the condition now, and at least CLEAR_MIN_HISTORY
+# spread over "past", "another person's" and "denied". An undated "my mother
+# had a stroke" stays flagged: Jev gives it 0.1-0.4 of being current.
+CLEAR_MAX_PRESENT_PROBABILITY = 0.05
+CLEAR_MIN_HISTORY_PROBABILITY = 0.9
+CLEARABLE_CONTEXTS = (PAST, OTHER_PERSON, DENIED)
+
 # Severity ranking hierarchy for risk levels
 RISK_ORDER = {
     "low": 0,
@@ -50,13 +68,42 @@ RISK_ORDER = {
 }
 
 
+@dataclass
+class PatientTextFlags:
+    """Red flags found in what the patient wrote."""
+    keywords: list[str] = field(default_factory=list)                # rule keywords that stand
+    emergency_signs: dict[str, float] = field(default_factory=dict)  # Jev signs at/above threshold
+    cleared: list[str] = field(default_factory=list)                 # keywords dropped as history
+    signals: dict[str, float] | None = None                          # all Jev signs; None = Jev not used
+
+    @property
+    def any(self) -> bool:
+        return bool(self.keywords or self.emergency_signs)
+
+
 class SafetyController:
     """Evaluates safety of diagnosis output and controls release."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        context_judge: JevJudge | None = None,
+        clear_history_flags: bool | None = None,
+    ):
+        """
+        Args:
+            context_judge: Optional Jev judge. Without it (or without an API
+                key) the red-flag gate is purely rule-based.
+            clear_history_flags: Whether Jev may drop a keyword red flag it
+                reads as history. Defaults to the configured setting.
+        """
         self.confidence_threshold_cv = settings.confidence_threshold_cv
         self.confidence_threshold_nlp = settings.confidence_threshold_nlp
         self.safety_threshold = settings.safety_threshold
+        self._context_judge = context_judge
+        self._clear_history_flags = (
+            settings.jev_clear_history_red_flags
+            if clear_history_flags is None else clear_history_flags
+        )
         self._client = None
         safety_logger.info(
             f"SafetyController initialized "
@@ -128,22 +175,23 @@ class SafetyController:
         # (e.g. "Inquiry about disease etiology" instead of "heart attack").
         # Each source is scanned on its own so a negation in one cannot
         # reach into the next.
-        scan_sources = [
-            (primary, RED_FLAG_KEYWORDS),
-            (symptoms_text or "", RED_FLAG_KEYWORDS),
-            (clinical_question or "", RED_FLAG_KEYWORDS),
-            (str(validated_output.get("explanation") or ""), RED_FLAG_CONDITIONS),
-        ]
+        patient_flags = self.patient_text_flags(symptoms_text, clinical_question)
         red_flags_found = list(dict.fromkeys(
-            kw
-            for text, keywords in scan_sources
-            for kw in self._find_red_flags(text, keywords)
+            self._find_red_flags(primary, RED_FLAG_KEYWORDS)
+            + patient_flags.keywords
+            + self._find_red_flags(
+                str(validated_output.get("explanation") or ""), RED_FLAG_CONDITIONS
+            )
         ))
         if red_flags_found:
             risk_factors.append(
                 f"Red-flag conditions detected: {', '.join(red_flags_found)}"
             )
             # Red flags ALWAYS require professional review and emergency consultation
+            is_safe = False
+        if patient_flags.emergency_signs:
+            signs = ", ".join(s.replace("_", " ") for s in patient_flags.emergency_signs)
+            risk_factors.append(f"Emergency warning signs detected: {signs}")
             is_safe = False
 
         # Check 5: Severity/urgency — only a warning note, not a blocker
@@ -202,6 +250,8 @@ class SafetyController:
             "safety_message": safety_message,
             "confidence_threshold_used": threshold,
             "vlm_safety_review": vlm_review,
+            "emergency_signals": patient_flags.signals,
+            "red_flags_cleared": patient_flags.cleared,
         }
 
         safety_logger.info(
@@ -209,6 +259,75 @@ class SafetyController:
             f"risks={len(risk_factors)}"
         )
         return safety_result
+
+    def patient_text_flags(
+        self, symptoms_text: str | None, clinical_question: str | None
+    ) -> PatientTextFlags:
+        """Red flags in what the patient wrote.
+
+        The keyword scan always runs. With Jev available it is combined with
+        Jev's emergency warning signs:
+          - a sign at or above EMERGENCY_SIGN_THRESHOLD is a red flag even
+            when no keyword matched ("my face is drooping");
+          - when no sign fires, a keyword Jev is close to certain is history
+            ("I had a stroke five years ago", "my late father had a cardiac
+            arrest at 80") is dropped. Questions about a condition and
+            generic alarm words ("severe") are never dropped.
+        """
+        sources = [symptoms_text or "", clinical_question or ""]
+        flags = PatientTextFlags(
+            keywords=list(dict.fromkeys(
+                keyword
+                for text in sources
+                for keyword in self._find_red_flags(text, RED_FLAG_KEYWORDS)
+            ))
+        )
+
+        judge = self._context_judge
+        if judge is None or not judge.available:
+            return flags
+        signals = judge.emergency_signals(*sources)
+        if signals is None:
+            return flags
+        flags.signals = signals
+        flags.emergency_signs = {
+            sign: probability
+            for sign, probability in signals.items()
+            if probability >= EMERGENCY_SIGN_THRESHOLD
+        }
+        if flags.emergency_signs or not self._clear_history_flags:
+            return flags
+
+        candidates = [k for k in flags.keywords if k in RED_FLAG_CONDITIONS]
+        if not candidates:
+            return flags
+        judgments = judge.judge_mentions(
+            "\n".join(source for source in sources if source), candidates
+        )
+        if judgments is None:
+            return flags
+        flags.cleared = [
+            keyword for keyword in candidates
+            if self._is_history(judgments[keyword])
+        ]
+        flags.keywords = [k for k in flags.keywords if k not in flags.cleared]
+        if flags.cleared:
+            # Which ones is in the case record ("red_flags_cleared")
+            safety_logger.info(
+                f"Red flags read as history and dropped: {len(flags.cleared)}"
+            )
+        return flags
+
+    @staticmethod
+    def _is_history(judgment) -> bool:
+        """Whether Jev is close to certain the mention is not a current problem."""
+        history = sum(
+            judgment.probabilities.get(context, 0.0) for context in CLEARABLE_CONTEXTS
+        )
+        return (
+            judgment.present <= CLEAR_MAX_PRESENT_PROBABILITY
+            and history >= CLEAR_MIN_HISTORY_PROBABILITY
+        )
 
     @staticmethod
     def _find_red_flags(text: str, keywords: list[str]) -> list[str]:
@@ -552,7 +671,7 @@ class SafetyController:
 
         hard_risks = [
             r for r in risk_factors
-            if r.startswith("Low confidence") or r.startswith("Red-flag")
+            if r.startswith(("Low confidence", "Red-flag", "Emergency warning signs"))
         ]
 
         if decision == "block":

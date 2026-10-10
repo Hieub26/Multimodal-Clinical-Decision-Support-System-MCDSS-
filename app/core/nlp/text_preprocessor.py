@@ -10,6 +10,13 @@ from enum import Enum
 from typing import Any
 from app.utils.logger import nlp_logger
 
+# Mention contexts, shared with the Jev judge (app/core/nlp/jev_judge.py)
+PRESENT = "present"
+DENIED = "denied"
+PAST = "past"
+OTHER_PERSON = "other_person"
+HYPOTHETICAL = "hypothetical"
+
 
 class SeverityLevel(str, Enum):
     """Clinical severity levels for extracted metadata."""
@@ -497,7 +504,15 @@ def family_context(text: str, start: int, end: int) -> str | None:
 class TextPreprocessor:
     """Production-grade Hybrid Clinical NLP preprocessor."""
 
-    def __init__(self):
+    def __init__(self, context_judge=None):
+        """
+        Args:
+            context_judge: Optional JevJudge. When it is available it decides
+                what the text says about each mention the keyword matcher
+                finds; otherwise the rule-based NegEx / family-history logic
+                does.
+        """
+        self._context_judge = context_judge
         self.abbreviations = MEDICAL_ABBREVIATIONS
         self.synonyms = SYNONYM_MAP
         self.symptom_keywords = set(SYMPTOM_KEYWORDS)
@@ -526,6 +541,8 @@ class TextPreprocessor:
                 "extracted_symptoms": [],
                 "negated_symptoms": [],
                 "family_history": [],
+                "mention_contexts": {},
+                "context_source": "rules",
                 "severity_qualifiers": [],
                 "durations": [],
                 "search_query": "",
@@ -546,15 +563,16 @@ class TextPreprocessor:
         durations = self._extract_durations(expanded)
 
         # Step 4: Tier 1 - Bi-directional NegEx with non-overlapping match selection
-        active_symptoms, negated_symptoms, family_history = (
-            self._extract_symptoms_with_negation(expanded)
+        (active_symptoms, negated_symptoms, family_history,
+         mention_contexts, context_source) = (
+            self._extract_symptoms_with_negation(expanded, original_text=text)
         )
 
         # Step 5: Tier 2 - scispaCy / SpaCy fallback if Tier 1 returned no active symptoms
         if not active_symptoms:
             # Tier 2 has no context detection of its own: do not let it bring
             # back what Tier 1 already ruled out.
-            excluded = set(negated_symptoms) | set(family_history)
+            excluded = set(mention_contexts) - set(active_symptoms)
             spacy_entities = [
                 e for e in self._extract_tier2_spacy(expanded) if e not in excluded
             ]
@@ -571,6 +589,8 @@ class TextPreprocessor:
             "extracted_symptoms": active_symptoms,
             "negated_symptoms": negated_symptoms,
             "family_history": family_history,
+            "mention_contexts": mention_contexts,
+            "context_source": context_source,
             "severity_qualifiers": severity_qualifiers,
             "durations": durations,
             "search_query": search_query,
@@ -581,6 +601,7 @@ class TextPreprocessor:
             f"Extraction complete: active={len(active_symptoms)}, "
             f"negated={len(negated_symptoms)}, "
             f"family_history={len(family_history)}, "
+            f"context_source={context_source}, "
             f"severity={len(severity_qualifiers)}, durations={len(durations)}"
         )
         return result
@@ -618,15 +639,22 @@ class TextPreprocessor:
         return list(dict.fromkeys(matches))
 
     def _extract_symptoms_with_negation(
-        self, text: str
-    ) -> tuple[list[str], list[str], list[str]]:
+        self, text: str, original_text: str | None = None
+    ) -> tuple[list[str], list[str], list[str], dict[str, str], str]:
         """
-        Tier 1: Extract symptoms using non-overlapping interval match selection
-        and bi-directional (backward & forward 15-25 char) negation detection.
+        Tier 1: Extract symptoms using non-overlapping interval match selection,
+        then decide what the text says about each one: with Jev when a context
+        judge is available, otherwise with bi-directional negation detection
+        and the family-history rules.
+
+        Args:
+            text: Cleaned and abbreviation-expanded text (used for matching).
+            original_text: The text as written, which is what Jev reads.
 
         Returns:
-            (active, negated, family history) — each mention lands in exactly
-            one list; only the active ones describe the patient's current state.
+            (active, negated, family history, {mention: context}, source).
+            Only the active mentions describe the patient's current state;
+            source is "jev" or "rules".
         """
         text_lower = text.lower()
 
@@ -670,7 +698,14 @@ class TextPreprocessor:
         # Sort selected candidates into original text order
         selected_candidates.sort(key=lambda x: x["start"])
 
-        # Step D: Bi-directional Negation Detection + family-history context
+        # Step D (Jev): typed judgment for every distinct mention
+        judged = self._judge_with_jev(
+            original_text or text, [c["symptom"] for c in selected_candidates]
+        )
+        if judged is not None:
+            return judged
+
+        # Step D (rules): Bi-directional Negation Detection + family-history context
         active_symptoms = []
         negated_symptoms = []
         family_history = []
@@ -699,7 +734,34 @@ class TextPreprocessor:
         ordered_negated = list(dict.fromkeys(negated_symptoms))
         ordered_family = list(dict.fromkeys(family_history))
 
-        return ordered_active, ordered_negated, ordered_family
+        # A mention counts as present if any of its occurrences is
+        mention_contexts = {
+            **{s: OTHER_PERSON for s in ordered_family},
+            **{s: DENIED for s in ordered_negated},
+            **{s: PRESENT for s in ordered_active},
+        }
+        return ordered_active, ordered_negated, ordered_family, mention_contexts, "rules"
+
+    def _judge_with_jev(
+        self, text: str, mentions: list[str]
+    ) -> tuple[list[str], list[str], list[str], dict[str, str], str] | None:
+        """Sort mentions by Jev's reading of them; None when Jev is not used."""
+        judge = self._context_judge
+        if judge is None or not judge.available:
+            return None
+        mentions = list(dict.fromkeys(mentions))
+        judgments = judge.judge_mentions(text, mentions)
+        if judgments is None:
+            return None
+
+        contexts = {mention: judgments[mention].context for mention in mentions}
+        return (
+            [m for m in mentions if contexts[m] == PRESENT],
+            [m for m in mentions if contexts[m] == DENIED],
+            [m for m in mentions if contexts[m] == OTHER_PERSON],
+            contexts,
+            "jev",
+        )
 
     def _is_family_history(
         self, symptom: str, context: str | None, patient_reports_own: bool

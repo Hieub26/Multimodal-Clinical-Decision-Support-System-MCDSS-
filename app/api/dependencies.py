@@ -10,6 +10,7 @@ from app.config import settings
 from app.core.nlp.vector_store import VectorStore
 from app.core.nlp.rag_engine import RAGEngine
 from app.core.nlp.text_preprocessor import TextPreprocessor
+from app.core.nlp.jev_judge import JevJudge
 from app.core.nlp.question_understanding import QuestionUnderstanding
 from app.core.nlp.clinical_fallback import ClinicalFallbackEngine
 from app.core.cv.cv_model import MedicalCVModel
@@ -30,9 +31,15 @@ def get_vector_store() -> VectorStore:
 
 
 @lru_cache()
+def get_jev_judge() -> JevJudge:
+    """Singleton Jev judge (inactive without a TypeSafe API key)."""
+    return JevJudge()
+
+
+@lru_cache()
 def get_text_preprocessor() -> TextPreprocessor:
     """Singleton TextPreprocessor instance."""
-    return TextPreprocessor()
+    return TextPreprocessor(context_judge=get_jev_judge())
 
 
 @lru_cache()
@@ -44,7 +51,7 @@ def get_question_understanding() -> QuestionUnderstanding:
 @lru_cache()
 def get_clinical_fallback_engine() -> ClinicalFallbackEngine:
     """Singleton ClinicalFallbackEngine instance."""
-    return ClinicalFallbackEngine()
+    return ClinicalFallbackEngine(preprocessor=get_text_preprocessor())
 
 
 @lru_cache()
@@ -101,7 +108,7 @@ def get_guideline_validator() -> GuidelineValidator:
 @lru_cache()
 def get_safety_controller() -> SafetyController:
     """Singleton Safety controller instance."""
-    return SafetyController()
+    return SafetyController(context_judge=get_jev_judge())
 
 
 @lru_cache()

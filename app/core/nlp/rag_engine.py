@@ -127,7 +127,10 @@ class RAGEngine:
         ])
 
         # Generate diagnosis using LLM (pass retrieved_docs for fallback)
-        diagnosis = self._generate_diagnosis(context, processed_input, retrieved_docs)
+        raw_input = " ".join(t for t in (symptoms_text, clinical_question) if t)
+        diagnosis = self._generate_diagnosis(
+            context, processed_input, retrieved_docs, raw_input=raw_input
+        )
         diagnosis["retrieved_documents"] = [
             {"text": d["text"][:200], "distance": d["distance"]}
             for d in retrieved_docs
@@ -138,12 +141,17 @@ class RAGEngine:
         return diagnosis
 
     def _generate_diagnosis(self, context: str, user_input: str,
-                            retrieved_docs: list[dict] = None) -> dict:
+                            retrieved_docs: list[dict] = None,
+                            raw_input: str = None) -> dict:
         """Call LLM to generate diagnosis from context and input.
 
-        Falls back to ClinicalFallbackEngine when LLM is unavailable
+        Falls back to ClinicalFallbackEngine when LLM is unavailable. The
+        fallback reads the text as the patient wrote it (raw_input): its
+        symptom extraction then repeats the request already made for this
+        text instead of issuing a new one for the expanded form.
         """
         self._ensure_llm()
+        fallback_input = raw_input or user_input
 
         prompt = RAG_PROMPT_TEMPLATE.format(context=context, user_input=user_input)
 
@@ -161,10 +169,10 @@ class RAGEngine:
                 return self._normalize_urgency(result)
             else:
                 nlp_logger.warning("No API key — using clinical fallback engine")
-                return self._fallback.diagnose(user_input, retrieved_docs or [])
+                return self._fallback.diagnose(fallback_input, retrieved_docs or [])
         except Exception as e:
             nlp_logger.error(f"LLM generation failed: {describe_error(e)}")
-            return self._fallback.diagnose(user_input, retrieved_docs or [])
+            return self._fallback.diagnose(fallback_input, retrieved_docs or [])
 
     def _parse_llm_response(self, response_text: str) -> dict:
         """Parse the JSON response from the LLM."""

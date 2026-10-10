@@ -351,8 +351,8 @@ _validate_config()
 class ClinicalFallbackEngine:
     """4-layer resilient clinical fallback when LLM is unavailable."""
 
-    def __init__(self):
-        self._preprocessor = TextPreprocessor()
+    def __init__(self, preprocessor: TextPreprocessor | None = None):
+        self._preprocessor = preprocessor or TextPreprocessor()
 
     # ---------------------------------------------------------------
     # Public API

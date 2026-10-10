@@ -65,6 +65,22 @@ class Settings(BaseSettings):
     )
     llm_model_name: str = "gemini-2.5-flash"
 
+    # --- Jev (TypeSafe System One): typed context judgments ---
+    # Used only when a key is set; every caller falls back to rules without it.
+    typesafe_api_key: SecretStr = Field(
+        default=SecretStr(""),
+        description="API key for TypeSafe's Jev model"
+    )
+    jev_enabled: bool = True
+    # Pinned: the decision thresholds were tuned against this version.
+    jev_model: str = "jev-1.13.0"
+    # A normal call takes about 0.3 s; a slower one falls back to the rules.
+    jev_timeout_seconds: float = Field(default=2.5, gt=0.0)
+    # Whether Jev may drop a keyword red flag when it is close to certain the
+    # mention is history ("I had a stroke five years ago"). It can always add
+    # red flags; this only controls removing them.
+    jev_clear_history_red_flags: bool = True
+
     # --- Embedding Model ---
     embedding_model_name: str = "pritamdeka/S-BioBert-snli-multinli-stsb"
 
