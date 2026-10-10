@@ -64,13 +64,32 @@ class FusionEngine:
         "hernia": 0.05,
     }
 
-    # Ontology mapping for more robust concordant matching
+    # Ontology mapping for more robust concordant matching.
+    # Key: a detected CV class. Value: terms of a text diagnosis that the
+    # finding supports. Consolidation and infiltration are how pneumonia shows
+    # on a chest X-ray, edema and cardiomegaly are signs of heart failure, so
+    # those pairs agree rather than conflict.
     ONTOLOGY_MAPPING = {
-        "pneumonia": ["infiltration", "consolidation", "pneumonia", "lung infection"],
-        "effusion": ["effusion", "pleural_thickening", "fluid"],
-        "cardiomegaly": ["cardiomegaly", "enlarged heart", "heart"],
-        "nodule": ["nodule", "mass", "lesion", "tumor"],
-        "edema": ["edema", "fluid in lungs", "pulmonary edema"],
+        "pneumonia": ["pneumonia", "lung infection", "chest infection",
+                      "infiltration", "consolidation"],
+        "consolidation": ["consolidation", "pneumonia", "lung infection",
+                          "chest infection"],
+        "infiltration": ["infiltration", "infiltrate", "pneumonia",
+                         "lung infection", "chest infection"],
+        "effusion": ["effusion", "pleural_thickening", "fluid", "heart failure"],
+        "edema": ["edema", "fluid in lungs", "pulmonary edema", "heart failure",
+                  "fluid overload"],
+        "cardiomegaly": ["cardiomegaly", "enlarged heart", "heart",
+                         "cardiomyopathy"],
+        "mass": ["mass", "nodule", "lesion", "tumor", "cancer", "malignancy",
+                 "carcinoma"],
+        "nodule": ["nodule", "mass", "lesion", "tumor", "cancer", "malignancy",
+                   "carcinoma"],
+        "pneumothorax": ["pneumothorax", "collapsed lung"],
+        "atelectasis": ["atelectasis", "lung collapse"],
+        "emphysema": ["emphysema", "copd",
+                      "chronic obstructive pulmonary disease"],
+        "fibrosis": ["fibrosis", "interstitial lung disease"],
     }
 
     def __init__(self):
