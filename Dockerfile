@@ -52,12 +52,16 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=300s --retries=3 \
 CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8008"]
 
 # ---- Frontend Target ----
-FROM deps AS frontend
+# Built on the base image, not on the backend's dependency stage: the UI
+# talks to the API over HTTP and imports nothing from app/, so it needs
+# Streamlit, an HTTP client and Pillow, not torch or the vector store.
+FROM base AS frontend
+
+COPY requirements-frontend.txt .
+RUN pip install --no-cache-dir -r requirements-frontend.txt
 
 # Copy Streamlit application
 COPY streamlit_app/ ./streamlit_app/
-COPY app/config.py ./app/config.py
-COPY app/__init__.py ./app/__init__.py
 
 # Create Streamlit config to disable CORS/XSRF for Docker networking
 RUN mkdir -p /root/.streamlit && \
