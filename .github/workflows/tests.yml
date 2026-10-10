@@ -1,0 +1,66 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      # CPU-only PyTorch, as in the Dockerfile: the default Linux wheel
+      # carries the CUDA libraries.
+      - name: Install dependencies
+        run: |
+          pip install --extra-index-url https://download.pytorch.org/whl/cpu \
+            -r requirements-dev.txt
+
+      # The suite needs no API key, database, model weights or model
+      # download; these two variables turn an accidental download into a
+      # failure instead of a slow pass.
+      - name: Run tests
+        env:
+          HF_HUB_OFFLINE: "1"
+          TRANSFORMERS_OFFLINE: "1"
+        run: pytest -q
+
+  docker:
+    name: Compose file and frontend image
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate docker-compose.yml against .env.example
+        run: |
+          cp .env.example .env
+          docker compose config --quiet
+
+      - name: Build the frontend image
+        run: docker build --target frontend --tag mcdss-frontend .
+
+      - name: The frontend image has what the UI imports and no model stack
+        run: |
+          docker run --rm mcdss-frontend python -c "
+          import importlib.util as u
+          import streamlit, httpx, PIL
+          assert u.find_spec('torch') is None, 'torch is in the frontend image'
+          assert u.find_spec('chromadb') is None, 'chromadb is in the frontend image'
+          "
