@@ -374,7 +374,7 @@ class ClinicalFallbackEngine:
         preprocessed = self._preprocessor.preprocess(user_input)
         symptoms = set(preprocessed["extracted_symptoms"])
 
-        nlp_logger.info(f"Fallback symptoms: {sorted(symptoms)}")
+        nlp_logger.info(f"Fallback symptoms: {len(symptoms)}")
 
         # Initialize scores for all known diseases
         scores = defaultdict(float)
@@ -442,7 +442,6 @@ class ClinicalFallbackEngine:
             f"(score={top_score:.1f}, runner_up={second_key}:{second_score:.1f}, "
             f"promoted={was_promoted})"
         )
-        nlp_logger.info(f"Fallback reasoning: {fallback_reasoning}")
 
         # Build differential diagnoses from ranked scores
         differentials = []

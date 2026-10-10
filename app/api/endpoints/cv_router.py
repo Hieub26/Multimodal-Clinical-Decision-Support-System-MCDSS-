@@ -115,7 +115,8 @@ async def diagnose_image(
     Perform image-based (or multimodal) clinical diagnosis.
     Upload a medical image and optionally provide symptoms text.
     """
-    api_logger.info(f"Image diagnosis request: {image.filename}")
+    # The client's file name can carry a patient's name: it is not logged
+    api_logger.info("Image diagnosis request received")
 
     content, extension = await _read_validated_image(image)
 

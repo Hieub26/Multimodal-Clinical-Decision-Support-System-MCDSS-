@@ -18,7 +18,7 @@ from app.core.nlp.vector_store import VectorStore
 from app.core.nlp.text_preprocessor import TextPreprocessor
 from app.core.nlp.question_understanding import QuestionUnderstanding
 from app.core.nlp.clinical_fallback import ClinicalFallbackEngine
-from app.utils.logger import nlp_logger
+from app.utils.logger import describe_error, nlp_logger
 
 
 RAG_PROMPT_TEMPLATE = """You are an expert clinical decision support system. Based on the clinical guidelines provided and the patient's input, provide a detailed clinical analysis.
@@ -163,7 +163,7 @@ class RAGEngine:
                 nlp_logger.warning("No API key — using clinical fallback engine")
                 return self._fallback.diagnose(user_input, retrieved_docs or [])
         except Exception as e:
-            nlp_logger.error(f"LLM generation failed: {e}")
+            nlp_logger.error(f"LLM generation failed: {describe_error(e)}")
             return self._fallback.diagnose(user_input, retrieved_docs or [])
 
     def _parse_llm_response(self, response_text: str) -> dict:
@@ -244,7 +244,11 @@ class RAGEngine:
             nlp_logger.info(f"Parsed LLM response with regex fallback: {result['primary_diagnosis']}")
             return result
         except Exception as e2:
-            nlp_logger.error(f"All JSON parsing strategies failed: {e2}\nRaw response: {response_text}")
+            # The response restates the patient's text, so it is not logged
+            nlp_logger.error(
+                f"All JSON parsing strategies failed: {type(e2).__name__} "
+                f"(response of {len(response_text)} characters)"
+            )
 
         return {
             "primary_diagnosis": "Analysis completed",

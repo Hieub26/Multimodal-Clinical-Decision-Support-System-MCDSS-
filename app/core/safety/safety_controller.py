@@ -23,7 +23,7 @@ from app.core.nlp.text_preprocessor import (
     STATED_FAMILY_HISTORY_CONTEXTS, family_context, is_negated,
     normalize_contractions,
 )
-from app.utils.logger import safety_logger
+from app.utils.logger import describe_error, safety_logger
 
 # Red-flag conditions that always require urgent medical attention
 RED_FLAG_CONDITIONS = [
@@ -301,8 +301,8 @@ class SafetyController:
             )
             return review
         except Exception as e:
-            safety_logger.error("VLM safety review failed: %s", e)
-            return self._fallback_safety_review(validated_output, str(e))
+            safety_logger.error("VLM safety review failed: %s", describe_error(e))
+            return self._fallback_safety_review(validated_output, describe_error(e))
 
     def _fallback_safety_review(
         self, validated_output: dict, error_msg: str

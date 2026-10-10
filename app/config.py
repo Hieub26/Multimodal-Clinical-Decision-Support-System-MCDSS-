@@ -105,9 +105,12 @@ class Settings(BaseSettings):
     vlm_safety_model: str = "gemini-2.5-flash"
 
     # --- Database ---
+    # Holds the database password, so it is left out of the settings repr
+    # (which ends up in tracebacks and test failure output).
     database_url: str = Field(
         default="postgresql://postgres:postgres@localhost:5432/clinical_dss",
-        description="Async SQLAlchemy database connection URL"
+        description="Async SQLAlchemy database connection URL",
+        repr=False,
     )
     db_pool_min_size: PositiveInt = Field(default=2, gt=0)
     db_pool_max_size: PositiveInt = Field(default=10, gt=0)

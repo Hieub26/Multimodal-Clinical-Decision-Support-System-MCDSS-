@@ -1,6 +1,9 @@
 """
 Structured logging configuration with file rotation.
 Provides separate loggers for each system component.
+
+Logs must not hold patient data: no symptom text, question, uploaded file
+name or model restatement of them. Log lengths, counts and outcomes.
 """
 
 import logging
@@ -8,6 +11,27 @@ import sys
 from pathlib import Path
 from logging.handlers import RotatingFileHandler
 from app.config import settings
+
+# Packages whose exceptions describe an API call (status, quota,
+# authentication) rather than the data that was sent
+_API_CLIENT_PACKAGES = {
+    "google", "openai", "typesafe_sdk", "httpx", "httpx2", "httpcore", "httpcore2",
+}
+
+
+def describe_error(error: BaseException) -> str:
+    """An exception as it may be logged on a path that carries patient text.
+
+    Validation and parsing errors quote the value they failed on, which on
+    such a path is the patient's text or a model's restatement of it: they
+    are reduced to their type. Errors from an API client or the network keep
+    their message, which is what an operator needs.
+    """
+    name = type(error).__name__
+    package = type(error).__module__.split(".")[0]
+    if package in _API_CLIENT_PACKAGES or isinstance(error, OSError):
+        return f"{name}: {error}"
+    return name
 
 
 def _create_formatter() -> logging.Formatter:

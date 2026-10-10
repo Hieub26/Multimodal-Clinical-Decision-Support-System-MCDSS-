@@ -532,7 +532,8 @@ class TextPreprocessor:
                 "symptom_count": 0,
             }
 
-        nlp_logger.info(f"Preprocessing text: {text[:100]}...")
+        # Patient text is never logged: lengths and counts only
+        nlp_logger.info(f"Preprocessing text ({len(text)} characters)")
 
         # Step 1: Basic cleaning
         cleaned = self._clean_text(text)
@@ -577,9 +578,10 @@ class TextPreprocessor:
         }
 
         nlp_logger.info(
-            f"Extraction complete: active={active_symptoms}, "
-            f"negated={negated_symptoms}, family_history={family_history}, "
-            f"severity={severity_qualifiers}, durations={durations}"
+            f"Extraction complete: active={len(active_symptoms)}, "
+            f"negated={len(negated_symptoms)}, "
+            f"family_history={len(family_history)}, "
+            f"severity={len(severity_qualifiers)}, durations={len(durations)}"
         )
         return result
 
