@@ -1,0 +1,90 @@
+{"id": "d001", "symptoms": "my mother had a stroke an hour ago", "label": "escalate", "category": "keyword_current"}
+{"id": "d002", "symptoms": "my mother had a stroke and is not responding", "label": "escalate", "category": "keyword_current"}
+{"id": "d003", "symptoms": "my mother is having a stroke", "label": "escalate", "category": "keyword_current"}
+{"id": "d004", "symptoms": "my mother's stroke symptoms started today", "label": "escalate", "category": "keyword_current"}
+{"id": "d005", "symptoms": "my mother's seizure will not stop", "label": "escalate", "category": "keyword_current"}
+{"id": "d006", "symptoms": "my mothers stroke happened 10 minutes ago", "label": "escalate", "category": "keyword_current"}
+{"id": "d007", "symptoms": "my mother suffered a stroke just now", "label": "escalate", "category": "keyword_current"}
+{"id": "d008", "symptoms": "my father had a heart attack last night", "label": "escalate", "category": "keyword_current"}
+{"id": "d009", "symptoms": "my mother has been bleeding since last month", "label": "escalate", "category": "keyword_current"}
+{"id": "d010", "symptoms": "my mother had a stroke this morning", "label": "escalate", "category": "keyword_current"}
+{"id": "d011", "symptoms": "my father is having a heart attack", "label": "escalate", "category": "keyword_current"}
+{"id": "d012", "symptoms": "severe chest pain", "label": "escalate", "category": "keyword_current"}
+{"id": "d013", "symptoms": "I had two seizures today", "label": "escalate", "category": "keyword_current"}
+{"id": "d014", "symptoms": "no fever, bleeding from the nose since morning", "label": "escalate", "category": "negation_plus_current"}
+{"id": "d015", "symptoms": "no fever, has severe chest pain radiating to left arm with sweating", "label": "escalate", "category": "negation_plus_current"}
+{"id": "d016", "symptoms": "my father had a heart attack last year and now he has a seizure", "label": "escalate", "category": "history_plus_current"}
+{"id": "d017", "symptoms": "my father had a heart attack last year, now he is unconscious", "label": "escalate", "category": "history_plus_current"}
+{"id": "d018", "symptoms": "last year my mother had a stroke and today she had a seizure", "label": "escalate", "category": "history_plus_current"}
+{"id": "d019", "symptoms": "my mother had a stroke last year. she is having another stroke", "label": "escalate", "category": "history_plus_current"}
+{"id": "d020", "symptoms": "my mother had a stroke last year, i think i am having a stroke", "label": "escalate", "category": "history_plus_current"}
+{"id": "d021", "symptoms": "my mother had a stroke last year and now a seizure", "label": "escalate", "category": "history_plus_current"}
+{"id": "d022", "symptoms": "my mother had a stroke last year and a seizure today", "label": "escalate", "category": "history_plus_current"}
+{"id": "d023", "symptoms": "my mother had a stroke last year and is bleeding", "label": "escalate", "category": "history_plus_current"}
+{"id": "d024", "symptoms": "my dad had a stroke 2 years ago and another stroke today", "label": "escalate", "category": "history_plus_current"}
+{"id": "d025", "symptoms": "my father died of a heart attack and i am having a seizure", "label": "escalate", "category": "history_plus_current"}
+{"id": "d026", "symptoms": "my father died of a heart attack last year and my mother is unconscious", "label": "escalate", "category": "history_plus_current"}
+{"id": "d027", "symptoms": "my grandfather had a stroke in 2015 and my father is unconscious", "label": "escalate", "category": "history_plus_current"}
+{"id": "d028", "symptoms": "my brother who had a stroke last year is bleeding heavily", "label": "escalate", "category": "history_plus_current"}
+{"id": "d029", "symptoms": "my sister has a history of seizures and she is having a seizure", "label": "escalate", "category": "history_plus_current"}
+{"id": "d030", "symptoms": "my mother has a history of stroke and is unconscious", "label": "escalate", "category": "history_plus_current"}
+{"id": "d031", "symptoms": "years ago my mother had sepsis and now my baby is unconscious", "label": "escalate", "category": "history_plus_current"}
+{"id": "d032", "symptoms": "family history of stroke. i think i am having a stroke", "label": "escalate", "category": "history_plus_current"}
+{"id": "d033", "symptoms": "family history of stroke, sudden severe headache", "label": "escalate", "category": "history_plus_current"}
+{"id": "d034", "symptoms": "family history of stroke, now unconscious", "label": "escalate", "category": "history_plus_current"}
+{"id": "d035", "symptoms": "family history of stroke and he is unconscious", "label": "escalate", "category": "history_plus_current"}
+{"id": "d036", "symptoms": "family history of stroke and now has slurred speech and a seizure", "label": "escalate", "category": "history_plus_current"}
+{"id": "d037", "symptoms": "family history significant for stroke. patient is having a seizure", "label": "escalate", "category": "history_plus_current"}
+{"id": "d038", "symptoms": "fhx of stroke. severe headache and bleeding", "label": "escalate", "category": "history_plus_current"}
+{"id": "d039", "symptoms": "my mother had a stroke last year and she is having a seizure", "label": "escalate", "category": "history_plus_current"}
+{"id": "d040", "symptoms": "family history of stroke, my father is unconscious", "label": "escalate", "category": "history_plus_current"}
+{"id": "d041", "symptoms": "my mother had a stroke last year", "label": "no_escalate", "category": "family_history"}
+{"id": "d042", "symptoms": "my mother had a stroke 5 years ago, i have a cough", "label": "no_escalate", "category": "family_history"}
+{"id": "d043", "symptoms": "my mother's stroke was 3 years ago", "label": "no_escalate", "category": "family_history"}
+{"id": "d044", "symptoms": "my grandmother had a stroke at the age of 80", "label": "no_escalate", "category": "family_history"}
+{"id": "d045", "symptoms": "my mother has a history of stroke", "label": "no_escalate", "category": "family_history"}
+{"id": "d046", "symptoms": "my mother, who had a stroke last year, is fine. i have a cough", "label": "no_escalate", "category": "family_history"}
+{"id": "d047", "symptoms": "both my parents had heart attacks years ago", "label": "no_escalate", "category": "family_history"}
+{"id": "d048", "symptoms": "my father died of a heart attack", "label": "no_escalate", "category": "family_history"}
+{"id": "d049", "symptoms": "my father passed away from a heart attack in 2010", "label": "no_escalate", "category": "family_history"}
+{"id": "d050", "symptoms": "my grandfather passed away from sepsis", "label": "no_escalate", "category": "family_history"}
+{"id": "d051", "symptoms": "family history of heart attack and stroke", "label": "no_escalate", "category": "family_history"}
+{"id": "d052", "symptoms": "family history significant for stroke and myocardial infarction", "label": "no_escalate", "category": "family_history"}
+{"id": "d053", "symptoms": "fhx: stroke, heart attack", "label": "no_escalate", "category": "family_history"}
+{"id": "d054", "symptoms": "stroke runs in my family", "label": "no_escalate", "category": "family_history"}
+{"id": "d055", "symptoms": "mild headache, my mother had a stroke last year", "label": "no_escalate", "category": "family_history"}
+{"id": "d056", "symptoms": "mild headache, my mother's stroke was last year", "label": "no_escalate", "category": "family_history"}
+{"id": "d057", "symptoms": "runny nose. family history of heart attack and stroke", "label": "no_escalate", "category": "family_history"}
+{"id": "d058", "symptoms": "runny nose, my father died of a heart attack", "label": "no_escalate", "category": "family_history"}
+{"id": "d059", "symptoms": "runny nose, no bleeding, nothing severe", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "d060", "symptoms": "sore throat after 2000 keystrokes of typing", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "d061", "symptoms": "runny nose", "label": "no_escalate", "category": "benign"}
+{"id": "d062", "symptoms": "I don't have chest pain, just a runny nose and nothing severe", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "d063", "symptoms": "my mother had a stroke", "label": "ambiguous", "category": "undated_relative"}
+{"id": "d064", "symptoms": "my dad had a seizure again", "label": "ambiguous", "category": "undated_relative"}
+{"id": "d065", "symptoms": "mother had sepsis 3 days ago", "label": "ambiguous", "category": "undated_relative"}
+{"id": "d066", "symptoms": "mother: stroke", "label": "ambiguous", "category": "undated_relative"}
+{"id": "d067", "symptoms": "my husband had a heart attack last year", "label": "ambiguous", "category": "undated_relative"}
+{"id": "d068", "symptoms": "i had a stroke last year", "label": "ambiguous", "category": "personal_history"}
+{"id": "d069", "symptoms": "my son had a seizure last year", "label": "ambiguous", "category": "undated_relative"}
+{"id": "d070", "symptoms": "", "question": "what are the risk factors for stroke?", "label": "ambiguous", "category": "informational_question"}
+{"id": "d071", "symptoms": "cough, fever, sputum, shortness of breath, chills for 3 days", "label": "ambiguous", "category": "borderline_symptom"}
+{"id": "d072", "symptoms": "one side of my face feels numb and my smile is uneven since this morning", "label": "escalate", "category": "paraphrase"}
+{"id": "d073", "symptoms": "there is a heavy squeezing feeling in my chest and I feel sick and clammy", "label": "escalate", "category": "paraphrase"}
+{"id": "d074", "symptoms": "my wife can't catch her breath and is making a whistling sound, she can barely talk", "label": "escalate", "category": "paraphrase"}
+{"id": "d075", "symptoms": "after the wasp sting my eyes and lips puffed up and I feel dizzy", "label": "escalate", "category": "paraphrase"}
+{"id": "d076", "symptoms": "he threw up something that looks like coffee grounds", "label": "escalate", "category": "paraphrase"}
+{"id": "d077", "symptoms": "my baby is floppy and very hard to wake", "label": "escalate", "category": "paraphrase"}
+{"id": "d078", "symptoms": "she is shaking all over and foaming at the mouth", "label": "escalate", "category": "paraphrase"}
+{"id": "d079", "symptoms": "I swallowed a lot of sleeping pills", "label": "escalate", "category": "paraphrase"}
+{"id": "d080", "symptoms": "my head hurts worse than anything I have ever felt and it started in one second", "label": "escalate", "category": "paraphrase"}
+{"id": "d081", "symptoms": "fever, a very stiff neck, and he is confused and sleepy", "label": "escalate", "category": "paraphrase"}
+{"id": "d082", "symptoms": "I had a heart attack ten years ago and today I have the same crushing chest pain", "label": "escalate", "category": "history_plus_current"}
+{"id": "d083", "symptoms": "my arm felt a bit numb after sleeping on it, it was fine after a minute", "label": "no_escalate", "category": "benign"}
+{"id": "d084", "symptoms": "I get a little out of breath after running up five flights of stairs", "label": "no_escalate", "category": "benign"}
+{"id": "d085", "symptoms": "my nose bled for a minute after I blew it and then it stopped", "label": "no_escalate", "category": "benign"}
+{"id": "d086", "symptoms": "I felt light-headed for a second when I stood up quickly", "label": "no_escalate", "category": "benign"}
+{"id": "d087", "symptoms": "I had a heart attack ten years ago and have been fine since. Today I have a blocked nose", "label": "no_escalate", "category": "personal_history"}
+{"id": "d088", "symptoms": "Years ago I had a seizure after a head injury, nothing since. I have a mild cough", "label": "no_escalate", "category": "personal_history"}
+{"id": "d089", "symptoms": "My friend was unconscious after a car crash last year. I have a sore knee", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "d090", "symptoms": "The pharmacist told me the rash is not an emergency", "label": "no_escalate", "category": "tricky_wording"}

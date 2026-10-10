@@ -1,0 +1,678 @@
+{
+  "split": "heldout",
+  "threshold": 0.4,
+  "n_items": 49,
+  "n_clear": 43,
+  "metrics": {
+    "tokens": {
+      "n": 43,
+      "accuracy": 0.9302,
+      "sensitivity": 0.8636,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 0.9268,
+      "tp": 19,
+      "tn": 21,
+      "fp": 0,
+      "fn": 3
+    },
+    "openai_original": {
+      "n": 43,
+      "accuracy": 0.9535,
+      "sensitivity": 1.0,
+      "specificity": 0.9048,
+      "precision": 0.9167,
+      "f1": 0.9565,
+      "tp": 22,
+      "tn": 19,
+      "fp": 2,
+      "fn": 0
+    },
+    "openai": {
+      "n": 43,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 22,
+      "tn": 21,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "n_graded_by_every_system": 43,
+  "metrics_graded_by_every_system": null,
+  "correct_per_category": {
+    "tokens": {
+      "exact": "6/6",
+      "synonym": "3/6",
+      "qualified": "6/6",
+      "cv_label": "4/4",
+      "not_in_kb": "8/8",
+      "lexical_trap": "6/6",
+      "non_diagnosis": "3/3",
+      "contradicted": "4/4"
+    },
+    "openai_original": {
+      "exact": "6/6",
+      "synonym": "6/6",
+      "qualified": "6/6",
+      "cv_label": "4/4",
+      "not_in_kb": "8/8",
+      "lexical_trap": "6/6",
+      "non_diagnosis": "1/3",
+      "contradicted": "4/4"
+    },
+    "openai": {
+      "exact": "6/6",
+      "synonym": "6/6",
+      "qualified": "6/6",
+      "cv_label": "4/4",
+      "not_in_kb": "8/8",
+      "lexical_trap": "6/6",
+      "non_diagnosis": "3/3",
+      "contradicted": "4/4"
+    }
+  },
+  "errors": {
+    "tokens": [
+      {
+        "id": "jh07",
+        "diagnosis": "Heart attack",
+        "label": "supported",
+        "score": 0.0
+      },
+      {
+        "id": "jh11",
+        "diagnosis": "Bladder infection",
+        "label": "supported",
+        "score": 0.0
+      },
+      {
+        "id": "jh13",
+        "diagnosis": "Scarring of the lungs",
+        "label": "supported",
+        "score": 0.0
+      }
+    ],
+    "openai_original": [
+      {
+        "id": "jh39",
+        "diagnosis": "Insufficient information to determine a diagnosis",
+        "label": "unsupported",
+        "score": 0.5
+      },
+      {
+        "id": "jh40",
+        "diagnosis": "Further evaluation needed",
+        "label": "unsupported",
+        "score": 0.5
+      }
+    ],
+    "openai": []
+  },
+  "usage": {
+    "openai_original": {
+      "model": "gpt-6-luna",
+      "requests": 49,
+      "live_calls_this_run": 0,
+      "input_tokens": 44534,
+      "output_tokens": 5428,
+      "latency_median_s": 2.245,
+      "latency_p95_s": 3.415,
+      "cost_usd": 0.00717
+    },
+    "openai": {
+      "model": "gpt-6-luna",
+      "requests": 49,
+      "live_calls_this_run": 0,
+      "input_tokens": 52356,
+      "output_tokens": 5747,
+      "latency_median_s": 2.556,
+      "latency_p95_s": 3.902,
+      "cost_usd": 0.00811
+    }
+  },
+  "items": [
+    {
+      "id": "jh01",
+      "diagnosis": "COPD",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.95,
+        "openai": 0.98
+      }
+    },
+    {
+      "id": "jh02",
+      "diagnosis": "COVID-19",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.95,
+        "openai": 0.98
+      }
+    },
+    {
+      "id": "jh03",
+      "diagnosis": "Urinary Tract Infection",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.95,
+        "openai": 0.98
+      }
+    },
+    {
+      "id": "jh04",
+      "diagnosis": "Chronic Kidney Disease",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.95,
+        "openai": 1.0
+      }
+    },
+    {
+      "id": "jh05",
+      "diagnosis": "Pulmonary Edema",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 1.0,
+        "openai": 1.0
+      }
+    },
+    {
+      "id": "jh06",
+      "diagnosis": "Acute Coronary Syndrome",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.95,
+        "openai": 1.0
+      }
+    },
+    {
+      "id": "jh07",
+      "diagnosis": "Heart attack",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.75,
+        "openai": 0.9
+      }
+    },
+    {
+      "id": "jh08",
+      "diagnosis": "NSTEMI",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.9,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jh09",
+      "diagnosis": "Cerebrovascular accident",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 1.0,
+        "openai": 0.98
+      }
+    },
+    {
+      "id": "jh10",
+      "diagnosis": "CHF",
+      "category": "retrieval_miss",
+      "label": "ambiguous",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.45,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh11",
+      "diagnosis": "Bladder infection",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.9,
+        "openai": 0.9
+      }
+    },
+    {
+      "id": "jh12",
+      "diagnosis": "Enlarged heart",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.95,
+        "openai": 0.98
+      }
+    },
+    {
+      "id": "jh13",
+      "diagnosis": "Scarring of the lungs",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.9,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jh14",
+      "diagnosis": "Acute Coronary Syndrome (possible STEMI)",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.85,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jh15",
+      "diagnosis": "Hospital-acquired pneumonia",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.8,
+        "openai": 0.98
+      }
+    },
+    {
+      "id": "jh16",
+      "diagnosis": "Congestive heart failure exacerbation",
+      "category": "retrieval_miss",
+      "label": "ambiguous",
+      "scores": {
+        "tokens": 0.667,
+        "openai_original": 0.45,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh17",
+      "diagnosis": "Hypertensive crisis",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.85,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jh18",
+      "diagnosis": "Acute pyelonephritis",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.9,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jh19",
+      "diagnosis": "Asthma exacerbation",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.6,
+        "openai": 0.7
+      }
+    },
+    {
+      "id": "jh20",
+      "diagnosis": "Type 1 diabetes mellitus",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.85,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jh21",
+      "diagnosis": "Mass",
+      "category": "cv_label",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.7,
+        "openai": 0.55
+      }
+    },
+    {
+      "id": "jh22",
+      "diagnosis": "Hernia",
+      "category": "cv_label",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.7,
+        "openai": 0.7
+      }
+    },
+    {
+      "id": "jh23",
+      "diagnosis": "Infiltration",
+      "category": "cv_label",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.9,
+        "openai": 0.88
+      }
+    },
+    {
+      "id": "jh24",
+      "diagnosis": "Nodule",
+      "category": "cv_label",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.7,
+        "openai": 0.5
+      }
+    },
+    {
+      "id": "jh25",
+      "diagnosis": "Anemia",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh26",
+      "diagnosis": "Hyperthyroidism",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh27",
+      "diagnosis": "Common cold",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh28",
+      "diagnosis": "Acute sinusitis",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh29",
+      "diagnosis": "Viral gastroenteritis",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.2,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh30",
+      "diagnosis": "Osteoarthritis",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.1
+      }
+    },
+    {
+      "id": "jh31",
+      "diagnosis": "Major depressive disorder",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh32",
+      "diagnosis": "Deep vein thrombosis",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh33",
+      "diagnosis": "Pulmonary hypertension",
+      "category": "lexical_trap",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh34",
+      "diagnosis": "Acute kidney injury",
+      "category": "lexical_trap",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh35",
+      "diagnosis": "Urinary incontinence",
+      "category": "lexical_trap",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh36",
+      "diagnosis": "Chronic fatigue syndrome",
+      "category": "lexical_trap",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh37",
+      "diagnosis": "Heart block",
+      "category": "lexical_trap",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh38",
+      "diagnosis": "Acute bronchitis",
+      "category": "lexical_trap",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh39",
+      "diagnosis": "Insufficient information to determine a diagnosis",
+      "category": "non_diagnosis",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.5,
+        "openai": 0.0
+      }
+    },
+    {
+      "id": "jh40",
+      "diagnosis": "Further evaluation needed",
+      "category": "non_diagnosis",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.5,
+        "openai": 0.1
+      }
+    },
+    {
+      "id": "jh41",
+      "diagnosis": "No acute cardiopulmonary disease",
+      "category": "non_diagnosis",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.3,
+        "openai": 0.1
+      }
+    },
+    {
+      "id": "jh42",
+      "diagnosis": "Chronic kidney disease (eGFR 95 mL/min/1.73m2, no albuminuria)",
+      "category": "contradicted",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.1,
+        "openai": 0.1
+      }
+    },
+    {
+      "id": "jh43",
+      "diagnosis": "Stage 2 hypertension (BP 118/76 mmHg)",
+      "category": "contradicted",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.1,
+        "openai": 0.1
+      }
+    },
+    {
+      "id": "jh44",
+      "diagnosis": "Diabetes mellitus (fasting plasma glucose 85 mg/dL, HbA1c 5.0%)",
+      "category": "contradicted",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.15,
+        "openai": 0.1
+      }
+    },
+    {
+      "id": "jh45",
+      "diagnosis": "COPD (post-bronchodilator FEV1/FVC 0.82)",
+      "category": "contradicted",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.1,
+        "openai": 0.1
+      }
+    },
+    {
+      "id": "jh46",
+      "diagnosis": "GERD",
+      "category": "borderline",
+      "label": "ambiguous",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.4,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh47",
+      "diagnosis": "Lung cancer",
+      "category": "borderline",
+      "label": "ambiguous",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.6,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jh48",
+      "diagnosis": "Melanoma",
+      "category": "borderline",
+      "label": "ambiguous",
+      "scores": {
+        "tokens": 1.0,
+        "openai_original": 0.55,
+        "openai": 0.8
+      }
+    },
+    {
+      "id": "jh49",
+      "diagnosis": "Anaphylaxis",
+      "category": "borderline",
+      "label": "ambiguous",
+      "scores": {
+        "tokens": 0.0,
+        "openai_original": 0.65,
+        "openai": 0.35
+      }
+    }
+  ]
+}

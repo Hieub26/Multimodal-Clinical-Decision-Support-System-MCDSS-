@@ -1,0 +1,919 @@
+{
+  "split": "heldout2",
+  "metrics": {
+    "rules": {
+      "n": 42,
+      "accuracy": 0.4762,
+      "sensitivity": 0.4,
+      "specificity": 0.5455,
+      "precision": 0.4444,
+      "f1": 0.421,
+      "tp": 8,
+      "tn": 12,
+      "fp": 10,
+      "fn": 12
+    },
+    "jev signs only": {
+      "n": 42,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 20,
+      "tn": 22,
+      "fp": 0,
+      "fn": 0
+    },
+    "rules + jev signs": {
+      "n": 42,
+      "accuracy": 0.7619,
+      "sensitivity": 1.0,
+      "specificity": 0.5455,
+      "precision": 0.6667,
+      "f1": 0.8,
+      "tp": 20,
+      "tn": 12,
+      "fp": 10,
+      "fn": 0
+    },
+    "rules + jev signs + clearing": {
+      "n": 42,
+      "accuracy": 0.9762,
+      "sensitivity": 1.0,
+      "specificity": 0.9545,
+      "precision": 0.9524,
+      "f1": 0.9756,
+      "tp": 20,
+      "tn": 21,
+      "fp": 1,
+      "fn": 0
+    }
+  },
+  "by_category": {
+    "benign": {
+      "label": "no_escalate",
+      "n": 4,
+      "rules": 0.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.0,
+      "rules + jev signs + clearing": 0.0
+    },
+    "chronic_stable": {
+      "label": "no_escalate",
+      "n": 5,
+      "rules": 0.2,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.2,
+      "rules + jev signs + clearing": 0.2
+    },
+    "family_history": {
+      "label": "no_escalate",
+      "n": 7,
+      "rules": 0.7143,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.7143,
+      "rules + jev signs + clearing": 0.0
+    },
+    "history_plus_current": {
+      "label": "escalate",
+      "n": 12,
+      "rules": 0.5,
+      "jev signs only": 1.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 1.0
+    },
+    "keyword_current": {
+      "label": "escalate",
+      "n": 1,
+      "rules": 1.0,
+      "jev signs only": 1.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 1.0
+    },
+    "negated_keyword": {
+      "label": "no_escalate",
+      "n": 2,
+      "rules": 0.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.0,
+      "rules + jev signs + clearing": 0.0
+    },
+    "paraphrase": {
+      "label": "escalate",
+      "n": 7,
+      "rules": 0.1429,
+      "jev signs only": 1.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 1.0
+    },
+    "personal_history": {
+      "label": "no_escalate",
+      "n": 4,
+      "rules": 1.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 0.0
+    }
+  },
+  "items": [
+    {
+      "id": "h001",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "My husband had a stroke two years ago. This evening his words are coming out jumbled and his left hand has gone weak",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.96,
+        "other_emergency": 0.35
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "h002",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "I had a mini-stroke in 2020 and since an hour ago I can't feel my right leg and my face feels lopsided",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.97,
+        "other_emergency": 0.3
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "h003",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "Grandma had a stroke last spring; tonight she suddenly cannot lift her arm and she is dribbling from one side of her mouth",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.97,
+        "other_emergency": 0.3
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "h004",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "After her stroke last year she recovered completely, but this morning her speech is slurred again and one eyelid is drooping",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.94,
+        "other_emergency": 0.41
+      },
+      "max_signal": 0.94,
+      "cleared": []
+    },
+    {
+      "id": "h005",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "My dad has had two heart attacks before and now he is grey, sweating and holding his chest",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "heart attack"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.95
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "h006",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "I had a heart attack in 2018. For the past half hour there is a heavy weight on my chest and my jaw aches",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "heart attack"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.95
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "h007",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "He has epilepsy and has been fitting continuously for ten minutes",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "seizure": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "h008",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "She has asthma and tonight she is so breathless she cannot finish a sentence, her inhaler does nothing",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "breathing_emergency": 0.97
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "h009",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "I am allergic to nuts, I ate a cookie and now my throat feels tight and my tongue is swelling",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "severe_allergic_reaction": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "h010",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "My mother has diabetes, she is drowsy, sweaty and we cannot wake her properly",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "unresponsive": 0.85
+      },
+      "max_signal": 0.85,
+      "cleared": []
+    },
+    {
+      "id": "h011",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "I have a stomach ulcer and I just vomited a lot of dark blood",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "serious_bleeding": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "h012",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "He had a head injury last week and today he keeps vomiting and is very sleepy and confused",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "head_emergency": 0.97,
+        "serious_infection": 0.62,
+        "other_emergency": 0.36
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "h013",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "My left arm and leg suddenly went weak and I can't speak clearly",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "h014",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "There's a squeezing pain across my chest going into my left shoulder and I feel breathless and sweaty",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "cardiac_signs": 0.97
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "h015",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "My baby's lips are blue and she is grunting with every breath",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "breathing_emergency": 0.96,
+        "other_emergency": 0.33
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "h016",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "He is lying on the floor and does not react when I shake him",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "unresponsive": 0.95
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "h017",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "I have been bleeding heavily for an hour and feel dizzy and faint",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "bleeding"
+      ],
+      "jev_signs": {
+        "serious_bleeding": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "h018",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "I want to kill myself and I have the pills ready",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "self_harm_or_poisoning": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "h019",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "My son drank bleach by accident",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "self_harm_or_poisoning": 0.97
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "h020",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "Sudden severe pain in my head, the worst I have ever had, and my neck is stiff",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "severe"
+      ],
+      "jev_signs": {
+        "head_emergency": 0.96,
+        "serious_infection": 0.43,
+        "other_emergency": 0.36
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "h021",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "My mother had a stroke last year and still has weakness in her right arm, unchanged since then. I am asking about her diet",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "h022",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "Since my stroke three years ago my speech has been a little slurred, it has not changed. Today I have a cold",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.08,
+      "cleared": []
+    },
+    {
+      "id": "h023",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "I have had numbness in two fingers for years after an old injury, nothing new. I need advice on dry skin",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "h024",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "My father has had a slightly drooping eyelid since birth. He has a mild cough this week",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "h025",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "I have had stable angina for years, well controlled with medication, no recent chest pain. I want to ask about my vitamin D",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.03,
+      "cleared": []
+    },
+    {
+      "id": "h026",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "Dad's heart attack was back in 2009 and he has been healthy since. I have a blister on my heel",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.06,
+      "cleared": []
+    },
+    {
+      "id": "h027",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "Both grandparents on my mother's side had strokes in their eighties. I am 25 and have hay fever",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": [
+        "stroke"
+      ]
+    },
+    {
+      "id": "h028",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "My aunt had meningitis when she was a baby. I have a mild earache",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "meningitis"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.06,
+      "cleared": [
+        "meningitis"
+      ]
+    },
+    {
+      "id": "h029",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "My late mother had seizures for most of her life. I get occasional tension headaches",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": [
+        "seizure"
+      ]
+    },
+    {
+      "id": "h030",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "My brother was unconscious for a day after an accident ten years ago. I have a sore shoulder from the gym",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.1,
+      "cleared": [
+        "unconscious"
+      ]
+    },
+    {
+      "id": "h031",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "Heart attacks and strokes are common in my father's family. I'd like tips on eating healthier",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "heart attack",
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": [
+        "heart attack",
+        "stroke"
+      ]
+    },
+    {
+      "id": "h032",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "My grandfather died of a hemorrhage in the 1990s. I have a small wart on my hand",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "h033",
+      "label": "no_escalate",
+      "category": "personal_history",
+      "text": "I had sepsis as a newborn. Now I'm 30 with a mild cold",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "sepsis"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": [
+        "sepsis"
+      ]
+    },
+    {
+      "id": "h034",
+      "label": "no_escalate",
+      "category": "personal_history",
+      "text": "I had a seizure once in 2005 and never again. My ankle is slightly sore after jogging",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": [
+        "seizure"
+      ]
+    },
+    {
+      "id": "h035",
+      "label": "no_escalate",
+      "category": "personal_history",
+      "text": "Ten years ago I had a bleeding ulcer that was treated. I only have mild heartburn now and then",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "bleeding"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": [
+        "bleeding"
+      ]
+    },
+    {
+      "id": "h036",
+      "label": "no_escalate",
+      "category": "personal_history",
+      "text": "I recovered from a pulmonary embolism four years ago. I have a paper cut that stings",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "pulmonary embolism"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": [
+        "pulmonary embolism"
+      ]
+    },
+    {
+      "id": "h037",
+      "label": "no_escalate",
+      "category": "negated_keyword",
+      "text": "No weakness, no slurred speech, no facial droop. Just a mild headache after a long day",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "h038",
+      "label": "no_escalate",
+      "category": "negated_keyword",
+      "text": "I have a sore throat. I can breathe and swallow normally and there is no swelling",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "h039",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "A tiny bit of blood on the tissue when I blew my nose once this morning, nothing since",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "h040",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "Mild period cramps, normal flow",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "h041",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "My toddler has a runny nose and is playing happily",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.03,
+      "cleared": []
+    },
+    {
+      "id": "h042",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "I felt a little dizzy after skipping breakfast, fine after eating",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "h043",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "My mother suffered a stroke",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.52
+      },
+      "max_signal": 0.52,
+      "cleared": []
+    },
+    {
+      "id": "h044",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "My father had a cardiac arrest",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "cardiac arrest"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.34,
+        "unresponsive": 0.48
+      },
+      "max_signal": 0.48,
+      "cleared": []
+    },
+    {
+      "id": "h045",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "My sister had a seizure",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.6
+      },
+      "max_signal": 0.6,
+      "cleared": []
+    },
+    {
+      "id": "h046",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "My brother was unconscious",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {
+        "unresponsive": 0.95
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "h047",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "My grandmother had a bleed on the brain",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.1,
+      "cleared": []
+    },
+    {
+      "id": "h048",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "Dad had a heart attack and is in hospital",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "heart attack"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.66
+      },
+      "max_signal": 0.66,
+      "cleared": []
+    }
+  ]
+}

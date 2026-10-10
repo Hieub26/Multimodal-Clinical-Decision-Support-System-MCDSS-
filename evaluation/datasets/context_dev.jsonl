@@ -1,0 +1,48 @@
+{"id": "x001", "text": "I don't have chest pain", "mentions": [{"mention": "chest pain", "kind": "negated"}]}
+{"id": "x002", "text": "Patient doesnt have fever", "mentions": [{"mention": "fever", "kind": "negated"}]}
+{"id": "x003", "text": "no fever but has no chest pain", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "chest pain", "kind": "negated"}]}
+{"id": "x004", "text": "no fever but has cough", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "cough", "kind": "present"}]}
+{"id": "x005", "text": "no fever above 38.5 or cough", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "cough", "kind": "negated"}]}
+{"id": "x006", "text": "no fever, chest pain radiating to left arm", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x007", "text": "no fever, has severe chest pain radiating to left arm", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x008", "text": "cough without fever, chest pain", "mentions": [{"mention": "cough", "kind": "present"}, {"mention": "fever", "kind": "negated"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x009", "text": "no fever, cough, or chest pain", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "cough", "kind": "negated"}, {"mention": "chest pain", "kind": "negated"}]}
+{"id": "x010", "text": "no fever, cough or chest pain", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "cough", "kind": "negated"}, {"mention": "chest pain", "kind": "negated"}]}
+{"id": "x011", "text": "no fever or chills, chest pain since morning", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "chills", "kind": "negated"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x012", "text": "denies fever, cough, chest pain", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "cough", "kind": "negated"}, {"mention": "chest pain", "kind": "negated"}]}
+{"id": "x013", "text": "denies fever, chills, nausea, and vomiting", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "chills", "kind": "negated"}, {"mention": "nausea", "kind": "negated"}, {"mention": "vomiting", "kind": "negated"}]}
+{"id": "x014", "text": "denies fever, shortness of breath or wheezing", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "shortness of breath", "kind": "negated"}, {"mention": "wheezing", "kind": "negated"}]}
+{"id": "x015", "text": "denies fever, has cough", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "cough", "kind": "present"}]}
+{"id": "x016", "text": "denies fever, cough. has chest pain", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "cough", "kind": "negated"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x017", "text": "mother had a stroke last year, I have a mild headache", "mentions": [{"mention": "stroke", "kind": "family"}, {"mention": "headache", "kind": "present"}]}
+{"id": "x018", "text": "father died of a heart attack and now I have chest pain", "mentions": [{"mention": "heart attack", "kind": "family"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x019", "text": "my mother had diabetes and my father had hypertension", "mentions": [{"mention": "diabetes", "kind": "family"}, {"mention": "hypertension", "kind": "family"}]}
+{"id": "x020", "text": "family history of diabetes, hypertension and stroke. now has chest pain", "mentions": [{"mention": "diabetes", "kind": "family"}, {"mention": "hypertension", "kind": "family"}, {"mention": "stroke", "kind": "family"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x021", "text": "family history of heart failure, I have a cough", "mentions": [{"mention": "heart failure", "kind": "family"}, {"mention": "cough", "kind": "present"}]}
+{"id": "x022", "text": "diabetes runs in my family, I have a headache", "mentions": [{"mention": "diabetes", "kind": "family"}, {"mention": "headache", "kind": "present"}]}
+{"id": "x023", "text": "brother and sister both had asthma, I have wheezing", "mentions": [{"mention": "asthma", "kind": "family"}, {"mention": "wheezing", "kind": "present"}]}
+{"id": "x024", "text": "last year my mother had a stroke, I have a headache", "mentions": [{"mention": "stroke", "kind": "family"}, {"mention": "headache", "kind": "present"}]}
+{"id": "x025", "text": "my mother has a history of stroke, I have a headache", "mentions": [{"mention": "stroke", "kind": "family"}, {"mention": "headache", "kind": "present"}]}
+{"id": "x026", "text": "my mother's stroke was last year, I have a headache", "mentions": [{"mention": "stroke", "kind": "family"}, {"mention": "headache", "kind": "present"}]}
+{"id": "x027", "text": "my mother has diabetes, I have a headache", "mentions": [{"mention": "diabetes", "kind": "family"}, {"mention": "headache", "kind": "present"}]}
+{"id": "x028", "text": "my mother's diabetes is well controlled, I have blurred vision", "mentions": [{"mention": "diabetes", "kind": "family"}, {"mention": "blurred vision", "kind": "present"}]}
+{"id": "x029", "text": "My mom has high blood pressure and my dad has diabetes. I have had headaches for a week", "mentions": [{"mention": "hypertension", "kind": "family"}, {"mention": "diabetes", "kind": "family"}, {"mention": "headache", "kind": "present"}]}
+{"id": "x030", "text": "my mother's stroke was last year and she has diabetes. I have a cough", "mentions": [{"mention": "stroke", "kind": "family"}, {"mention": "diabetes", "kind": "family"}, {"mention": "cough", "kind": "present"}]}
+{"id": "x031", "text": "mother: diabetes, father: hypertension. I have chest pain", "mentions": [{"mention": "diabetes", "kind": "family"}, {"mention": "hypertension", "kind": "family"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x032", "text": "FHx: MI in father at 55. Pt reports chest pain", "mentions": [{"mention": "myocardial infarction", "kind": "family"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x033", "text": "my mother had a stroke last year and has chest pain", "mentions": [{"mention": "stroke", "kind": "past"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x034", "text": "my mother had a stroke last year and she is having a seizure", "mentions": [{"mention": "stroke", "kind": "past"}, {"mention": "seizure", "kind": "present"}]}
+{"id": "x035", "text": "my wife says my chest pain is getting worse", "mentions": [{"mention": "chest pain", "kind": "present"}]}
+{"id": "x036", "text": "my father is having chest pain and sweating", "mentions": [{"mention": "chest pain", "kind": "present"}, {"mention": "sweating", "kind": "present"}]}
+{"id": "x037", "text": "my mother has chest pain", "mentions": [{"mention": "chest pain", "kind": "present"}]}
+{"id": "x038", "text": "my mother has diabetes and chest pain", "mentions": [{"mention": "diabetes", "kind": "present"}, {"mention": "chest pain", "kind": "present"}]}
+{"id": "x039", "text": "my father has diabetes and he is confused and sweating", "mentions": [{"mention": "diabetes", "kind": "present"}, {"mention": "sweating", "kind": "present"}]}
+{"id": "x040", "text": "my mother's chest pain is getting worse", "mentions": [{"mention": "chest pain", "kind": "present"}]}
+{"id": "x041", "text": "my father has chest pain since last month", "mentions": [{"mention": "chest pain", "kind": "present"}]}
+{"id": "x042", "text": "my mother had a stroke this morning", "mentions": [{"mention": "stroke", "kind": "present"}]}
+{"id": "x043", "text": "my father just had a heart attack", "mentions": [{"mention": "heart attack", "kind": "present"}]}
+{"id": "x044", "text": "my mother had a seizure 2 hours ago", "mentions": [{"mention": "seizure", "kind": "present"}]}
+{"id": "x045", "text": "my mother has tuberculosis, I have a cough", "mentions": [{"mention": "cough", "kind": "present"}]}
+{"id": "x046", "text": "no family history of stroke, has headache", "mentions": [{"mention": "stroke", "kind": "negated"}, {"mention": "headache", "kind": "present"}]}
+{"id": "x047", "text": "I have had headaches and two seizures, no fevers", "mentions": [{"mention": "headache", "kind": "present"}, {"mention": "seizure", "kind": "present"}, {"mention": "fever", "kind": "negated"}]}
+{"id": "x048", "text": "chest pain for 3 hr, hr 110", "mentions": [{"mention": "chest pain", "kind": "present"}]}

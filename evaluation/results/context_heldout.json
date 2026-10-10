@@ -1,0 +1,1387 @@
+{
+  "split": "heldout",
+  "metrics": {
+    "rules": {
+      "n": 133,
+      "accuracy": 0.6842,
+      "sensitivity": 0.8627,
+      "specificity": 0.5732,
+      "precision": 0.557,
+      "f1": 0.6769,
+      "tp": 44,
+      "tn": 47,
+      "fp": 35,
+      "fn": 7
+    },
+    "jev": {
+      "n": 133,
+      "accuracy": 0.9925,
+      "sensitivity": 1.0,
+      "specificity": 0.9878,
+      "precision": 0.9808,
+      "f1": 0.9903,
+      "tp": 51,
+      "tn": 81,
+      "fp": 1,
+      "fn": 0
+    }
+  },
+  "accuracy_by_kind": {
+    "family": {
+      "rules": 0.8235,
+      "jev": 1.0
+    },
+    "hypothetical": {
+      "rules": 0.0,
+      "jev": 1.0
+    },
+    "negated": {
+      "rules": 0.8611,
+      "jev": 1.0
+    },
+    "other_person": {
+      "rules": 0.0,
+      "jev": 0.75
+    },
+    "past": {
+      "rules": 0.1667,
+      "jev": 1.0
+    },
+    "present": {
+      "rules": 0.8627,
+      "jev": 1.0
+    }
+  },
+  "items": [
+    {
+      "id": "c001",
+      "text": "I have had a fever and a dry cough since Monday",
+      "mention": "fever",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c001",
+      "text": "I have had a fever and a dry cough since Monday",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c002",
+      "text": "My chest pain gets worse when I breathe in deeply",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c003",
+      "text": "Experiencing nausea and vomiting after every meal",
+      "mention": "nausea",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c003",
+      "text": "Experiencing nausea and vomiting after every meal",
+      "mention": "vomiting",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c004",
+      "text": "The patient complains of shortness of breath on exertion",
+      "mention": "shortness of breath",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c005",
+      "text": "There is swelling in both ankles by the evening",
+      "mention": "swelling",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c006",
+      "text": "Headache behind the eyes, with some dizziness when I stand up",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c006",
+      "text": "Headache behind the eyes, with some dizziness when I stand up",
+      "mention": "dizziness",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c007",
+      "text": "She has been wheezing all night",
+      "mention": "wheezing",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c008",
+      "text": "Fatigue is the main issue, and I also noticed weight loss",
+      "mention": "fatigue",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c008",
+      "text": "Fatigue is the main issue, and I also noticed weight loss",
+      "mention": "weight loss",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c009",
+      "text": "No fever, but the cough is still there",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c009",
+      "text": "No fever, but the cough is still there",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c010",
+      "text": "I don't have a headache anymore but the dizziness continues",
+      "mention": "headache",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c010",
+      "text": "I don't have a headache anymore but the dizziness continues",
+      "mention": "dizziness",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c011",
+      "text": "No vomiting. Abdominal pain mostly on the right side",
+      "mention": "vomiting",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c011",
+      "text": "No vomiting. Abdominal pain mostly on the right side",
+      "mention": "abdominal pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c012",
+      "text": "Not sure if it is related, but I have night sweats",
+      "mention": "night sweats",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c013",
+      "text": "Denies fever. Reports chills and sweating",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c013",
+      "text": "Denies fever. Reports chills and sweating",
+      "mention": "chills",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c013",
+      "text": "Denies fever. Reports chills and sweating",
+      "mention": "sweating",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c014",
+      "text": "He hasn't complained of pain, only numbness in his fingers",
+      "mention": "pain",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c014",
+      "text": "He hasn't complained of pain, only numbness in his fingers",
+      "mention": "numbness",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c015",
+      "text": "Without treatment my heartburn comes back every night",
+      "mention": "heartburn",
+      "kind": "present",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c016",
+      "text": "I can't sleep because of the back pain",
+      "mention": "back pain",
+      "kind": "present",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c017",
+      "text": "It's not just a cough, there is also sputum now",
+      "mention": "cough",
+      "kind": "present",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c017",
+      "text": "It's not just a cough, there is also sputum now",
+      "mention": "sputum",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c018",
+      "text": "Never had this before: a sudden rash on both arms",
+      "mention": "rash",
+      "kind": "present",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c019",
+      "text": "I have no idea why my joint pain is back",
+      "mention": "joint pain",
+      "kind": "present",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c020",
+      "text": "There is no doubt the fever is higher today",
+      "mention": "fever",
+      "kind": "present",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c021",
+      "text": "Nothing helps my constipation",
+      "mention": "constipation",
+      "kind": "present",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c022",
+      "text": "The cough, which was not there last week, started yesterday",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c023",
+      "text": "My daughter has a fever and a rash on her tummy",
+      "mention": "fever",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c023",
+      "text": "My daughter has a fever and a rash on her tummy",
+      "mention": "rash",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c024",
+      "text": "My father is complaining of chest pain and sweating",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c024",
+      "text": "My father is complaining of chest pain and sweating",
+      "mention": "sweating",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c025",
+      "text": "My mother has diabetes and now has blurred vision",
+      "mention": "diabetes",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c025",
+      "text": "My mother has diabetes and now has blurred vision",
+      "mention": "blurred vision",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c026",
+      "text": "Pt with known hypertension presents with headache and dizziness",
+      "mention": "hypertension",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c026",
+      "text": "Pt with known hypertension presents with headache and dizziness",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c026",
+      "text": "Pt with known hypertension presents with headache and dizziness",
+      "mention": "dizziness",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c027",
+      "text": "Exam notable for bilateral leg edema",
+      "mention": "edema",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c028",
+      "text": "Productive cough with sputum and mild dyspnea",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c028",
+      "text": "Productive cough with sputum and mild dyspnea",
+      "mention": "sputum",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c028",
+      "text": "Productive cough with sputum and mild dyspnea",
+      "mention": "dyspnea",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c029",
+      "text": "I still have diarrhea even though the fever went away",
+      "mention": "diarrhea",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c029",
+      "text": "I still have diarrhea even though the fever went away",
+      "mention": "fever",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c030",
+      "text": "My asthma has been acting up since the weather changed",
+      "mention": "asthma",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c031",
+      "text": "I was diagnosed with pneumonia yesterday and feel worse today",
+      "mention": "pneumonia",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c032",
+      "text": "Bleeding from my gums whenever I brush my teeth",
+      "mention": "bleeding",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c033",
+      "text": "Tingling in both feet that is not going away",
+      "mention": "tingling",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c034",
+      "text": "I do have a sore throat, but no cough",
+      "mention": "sore throat",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c034",
+      "text": "I do have a sore throat, but no cough",
+      "mention": "cough",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c035",
+      "text": "The tremor in my right hand is not improving",
+      "mention": "tremor",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c036",
+      "text": "I don't have a fever",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c037",
+      "text": "No cough or shortness of breath",
+      "mention": "cough",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c037",
+      "text": "No cough or shortness of breath",
+      "mention": "shortness of breath",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c038",
+      "text": "Denies nausea, vomiting and diarrhea",
+      "mention": "nausea",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c038",
+      "text": "Denies nausea, vomiting and diarrhea",
+      "mention": "vomiting",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c038",
+      "text": "Denies nausea, vomiting and diarrhea",
+      "mention": "diarrhea",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c039",
+      "text": "She has not had any chest pain",
+      "mention": "chest pain",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c040",
+      "text": "Negative for headache and dizziness",
+      "mention": "headache",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c040",
+      "text": "Negative for headache and dizziness",
+      "mention": "dizziness",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c041",
+      "text": "I haven't noticed any swelling",
+      "mention": "swelling",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c042",
+      "text": "There was no wheezing on examination",
+      "mention": "wheezing",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c043",
+      "text": "I do not feel any numbness or tingling",
+      "mention": "numbness",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c043",
+      "text": "I do not feel any numbness or tingling",
+      "mention": "tingling",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c044",
+      "text": "Neither fever nor chills",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c044",
+      "text": "Neither fever nor chills",
+      "mention": "chills",
+      "kind": "negated",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c045",
+      "text": "He never complained of chest pain",
+      "mention": "chest pain",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c046",
+      "text": "Absence of fever throughout the admission",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c047",
+      "text": "Chest x-ray ruled out pneumonia",
+      "mention": "pneumonia",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c048",
+      "text": "Pneumonia was ruled out by the chest x-ray",
+      "mention": "pneumonia",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c049",
+      "text": "Tested negative for covid twice",
+      "mention": "covid",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c050",
+      "text": "No evidence of pneumothorax on imaging",
+      "mention": "pneumothorax",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c051",
+      "text": "I am not experiencing any shortness of breath",
+      "mention": "shortness of breath",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c052",
+      "text": "It isn't asthma, the doctor said",
+      "mention": "asthma",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c053",
+      "text": "The doctor does not think it is pneumonia",
+      "mention": "pneumonia",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c054",
+      "text": "Unlikely to be appendicitis given the normal scan",
+      "mention": "appendicitis",
+      "kind": "negated",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c055",
+      "text": "No rash anywhere on the body",
+      "mention": "rash",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c056",
+      "text": "I have zero pain today",
+      "mention": "pain",
+      "kind": "negated",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c057",
+      "text": "Appetite is fine and there is no nausea",
+      "mention": "nausea",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c058",
+      "text": "Lungs clear, no cough",
+      "mention": "cough",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c059",
+      "text": "Not a single episode of vomiting",
+      "mention": "vomiting",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "c060",
+      "text": "The swelling never came back",
+      "mention": "swelling",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c061",
+      "text": "The rash is gone now",
+      "mention": "rash",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c062",
+      "text": "My fever has resolved",
+      "mention": "fever",
+      "kind": "past",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c063",
+      "text": "The cough resolved two days ago",
+      "mention": "cough",
+      "kind": "past",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c064",
+      "text": "I had pneumonia two years ago and fully recovered",
+      "mention": "pneumonia",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c065",
+      "text": "As a child I had asthma, but it went away",
+      "mention": "asthma",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c066",
+      "text": "History of appendicitis, appendix removed in 2015",
+      "mention": "appendicitis",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c067",
+      "text": "I had covid in 2022 and no problems since",
+      "mention": "covid",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c068",
+      "text": "The headache I had last week is completely gone",
+      "mention": "headache",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c069",
+      "text": "Last year I had a fracture of the wrist that healed well",
+      "mention": "fracture",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c070",
+      "text": "I used to get heartburn, but not anymore",
+      "mention": "heartburn",
+      "kind": "past",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c071",
+      "text": "My mother had breast cancer in her fifties",
+      "mention": "cancer",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c072",
+      "text": "Heart failure runs in my family",
+      "mention": "heart failure",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c073",
+      "text": "There is a strong family history of diabetes",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c074",
+      "text": "My grandfather died of lung cancer",
+      "mention": "lung cancer",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c075",
+      "text": "My sister was diagnosed with epilepsy as a teenager",
+      "mention": "epilepsy",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c076",
+      "text": "Asthma is common on my mother's side of the family",
+      "mention": "asthma",
+      "kind": "family",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c077",
+      "text": "My aunt and uncle both have diabetes. I have been feeling very thirsty lately",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c078",
+      "text": "Mother: asthma. Father: hypertension. I have a rash on my leg",
+      "mention": "asthma",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c078",
+      "text": "Mother: asthma. Father: hypertension. I have a rash on my leg",
+      "mention": "hypertension",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c078",
+      "text": "Mother: asthma. Father: hypertension. I have a rash on my leg",
+      "mention": "rash",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c079",
+      "text": "My brother has asthma, I am here because of my cough",
+      "mention": "asthma",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c079",
+      "text": "My brother has asthma, I am here because of my cough",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c080",
+      "text": "Family hx significant for coronary artery disease",
+      "mention": "coronary artery disease",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c081",
+      "text": "My dad passed away from a heart attack at 60",
+      "mention": "heart attack",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "c082",
+      "text": "My cousin had tuberculosis many years ago",
+      "mention": "tuberculosis",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c083",
+      "text": "Dad has high blood pressure. I came in for my headache",
+      "mention": "hypertension",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c083",
+      "text": "Dad has high blood pressure. I came in for my headache",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c084",
+      "text": "Both of my grandparents had strokes late in life",
+      "mention": "stroke",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c085",
+      "text": "My father and his brothers all developed diabetes after 50",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c086",
+      "text": "Cancer on my father's side: two aunts and my grandmother",
+      "mention": "cancer",
+      "kind": "family",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c087",
+      "text": "Could this be pneumonia?",
+      "mention": "pneumonia",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c088",
+      "text": "I am worried about cancer",
+      "mention": "cancer",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c089",
+      "text": "What are the symptoms of diabetes?",
+      "mention": "diabetes",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c090",
+      "text": "If I get a fever, what should I do?",
+      "mention": "fever",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c091",
+      "text": "Should I be concerned about a stroke?",
+      "mention": "stroke",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c092",
+      "text": "Come back if you develop chest pain or shortness of breath",
+      "mention": "chest pain",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c092",
+      "text": "Come back if you develop chest pain or shortness of breath",
+      "mention": "shortness of breath",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c093",
+      "text": "Vaccinated against influenza last month",
+      "mention": "influenza",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c094",
+      "text": "Screening for hepatitis was done at work",
+      "mention": "hepatitis",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c095",
+      "text": "The leaflet lists nausea and dizziness as possible side effects",
+      "mention": "nausea",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c095",
+      "text": "The leaflet lists nausea and dizziness as possible side effects",
+      "mention": "dizziness",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c096",
+      "text": "I want to prevent osteoporosis as I get older",
+      "mention": "osteoporosis",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c097",
+      "text": "Is it true that stress can cause hypertension?",
+      "mention": "hypertension",
+      "kind": "hypothetical",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "hypothetical"
+    },
+    {
+      "id": "c098",
+      "text": "My coworker has covid, I feel fine so far",
+      "mention": "covid",
+      "kind": "other_person",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c099",
+      "text": "A friend of mine had a stroke",
+      "mention": "stroke",
+      "kind": "other_person",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "c100",
+      "text": "The patient in the next bed had a seizure",
+      "mention": "seizure",
+      "kind": "other_person",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "c101",
+      "text": "My roommate has been coughing with tuberculosis, I have no symptoms",
+      "mention": "tuberculosis",
+      "kind": "other_person",
+      "rules": true,
+      "rules_context": "present",
+      "jev": false,
+      "jev_context": "other_person"
+    }
+  ]
+}

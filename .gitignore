@@ -48,3 +48,6 @@ Thumbs.db
 data/huggingface_cache/
 .pytest_cache/
 
+
+# Evaluation cache (raw API responses and downloaded benchmark data)
+evaluation/.cache/
