@@ -40,8 +40,13 @@ class Settings(BaseSettings):
     redoc_url: str = "/redoc"
 
     # --- Server & CORS ---
-    fastapi_host: str = "0.0.0.0"
+    # Both servers listen on this machine only. The case history holds
+    # patient data and the Streamlit UI has no login, so reaching either from
+    # the network is a deliberate choice: set the host to 0.0.0.0 and put
+    # authentication in front (API_KEY for the API, a proxy for the UI).
+    fastapi_host: str = "127.0.0.1"
     fastapi_port: PositiveInt = Field(default=8008, gt=0, le=65535)
+    streamlit_host: str = "127.0.0.1"
     streamlit_port: PositiveInt = Field(default=8501, gt=0, le=65535)
     environment: str = "development"
     cors_origins: list[str] = [
@@ -50,6 +55,13 @@ class Settings(BaseSettings):
         "http://localhost:8008",
         "http://127.0.0.1:8008",
     ]
+    # When set, the endpoints that create or return patient cases (diagnosis,
+    # history, report download) require this value in the X-API-Key header.
+    # Empty = no check (local development).
+    api_key: SecretStr = Field(
+        default=SecretStr(""),
+        description="API key required by the diagnosis and case endpoints"
+    )
     # When set, state-changing endpoints (guideline ingestion) require this
     # value in the X-API-Key header. Empty = no check (local development).
     admin_api_key: SecretStr = Field(

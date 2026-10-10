@@ -4,7 +4,6 @@ Professional dark-themed medical interface with multimodal diagnosis capabilitie
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Add project root to path
@@ -36,9 +35,7 @@ from components.image_upload import render_image_upload
 from components.results_display import render_results
 from components.gradcam_viewer import render_gradcam
 from components.history import render_history
-
-# Constants — API_BASE_URL env var is set by Docker; fallback to localhost for local dev
-API_BASE = os.environ.get("API_BASE_URL", "http://localhost:8008/api")
+from api_client import API_BASE, auth_headers, describe_failure
 
 
 def main():
@@ -131,6 +128,7 @@ def run_diagnosis(symptoms: str, question: str, uploaded_file, mode: str) -> dic
                     "symptoms_text": symptoms or None,
                     "clinical_question": question or None,
                 },
+                headers=auth_headers(),
                 timeout=600,
             )
         elif uploaded_file:
@@ -146,6 +144,7 @@ def run_diagnosis(symptoms: str, question: str, uploaded_file, mode: str) -> dic
                 f"{API_BASE}/cv/diagnose",
                 files=files,
                 data=data,
+                headers=auth_headers(),
                 timeout=600,
             )
         else:
@@ -154,7 +153,7 @@ def run_diagnosis(symptoms: str, question: str, uploaded_file, mode: str) -> dic
         if response.status_code == 200:
             return response.json()
         else:
-            st.error(f"API Error {response.status_code}: {response.text}")
+            st.error(describe_failure(response.status_code, response.text))
             return None
 
     except httpx.ConnectError:

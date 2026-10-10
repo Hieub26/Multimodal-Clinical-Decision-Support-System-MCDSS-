@@ -2,6 +2,12 @@
 # Multimodal Clinical Decision Support System — Docker Compose
 # Services: db (PostgreSQL), backend (FastAPI), frontend (Streamlit)
 # ==============================================================
+#
+# Published ports are bound to this machine only. The case history is
+# patient data and the UI has no login, so reaching them from the network
+# must be a decision: set BIND_ADDRESS=0.0.0.0 in .env together with API_KEY,
+# and put an authenticating proxy in front of the UI. The database is never
+# published beyond localhost.
 
 services:
   # ---- PostgreSQL Database ----
@@ -14,7 +20,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -42,7 +48,7 @@ services:
       # Persist HuggingFace models in the mounted data volume
       HF_HOME: /app/data/huggingface_cache
     ports:
-      - "8008:8008"
+      - "${BIND_ADDRESS:-127.0.0.1}:8008:8008"
     volumes:
       - ./models:/app/models:ro
       - ./data:/app/data
@@ -63,8 +69,10 @@ services:
     restart: unless-stopped
     environment:
       API_BASE_URL: http://backend:8008/api
+      # Sent to the backend as X-API-Key when the backend requires one
+      API_KEY: ${API_KEY:-}
     ports:
-      - "8501:8501"
+      - "${BIND_ADDRESS:-127.0.0.1}:8501:8501"
     volumes:
       - ./storage:/app/storage:ro
     depends_on:

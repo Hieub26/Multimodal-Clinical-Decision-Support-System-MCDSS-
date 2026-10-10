@@ -2,14 +2,12 @@
 Case history viewer component.
 """
 
-import os
 from html import escape
 
 import streamlit as st
 import httpx
 
-
-API_BASE = os.environ.get("API_BASE_URL", "http://localhost:8008/api")
+from api_client import API_BASE, auth_headers, describe_failure
 
 
 def render_history():
@@ -23,7 +21,9 @@ def render_history():
     """, unsafe_allow_html=True)
 
     try:
-        response = httpx.get(f"{API_BASE}/reports/history", timeout=10)
+        response = httpx.get(
+            f"{API_BASE}/reports/history", headers=auth_headers(), timeout=10
+        )
         if response.status_code == 200:
             data = response.json()
             cases = data.get("cases", [])
@@ -70,6 +70,7 @@ def render_history():
                     try:
                         detail_resp = httpx.get(
                             f"{API_BASE}/reports/history/{case_id}",
+                            headers=auth_headers(),
                             timeout=10,
                         )
                         if detail_resp.status_code == 200:
@@ -81,7 +82,7 @@ def render_history():
                         st.warning("Could not load case details")
 
         else:
-            st.error(f"Failed to fetch history: {response.status_code}")
+            st.error(describe_failure(response.status_code, response.text))
 
     except httpx.ConnectError:
         st.error(

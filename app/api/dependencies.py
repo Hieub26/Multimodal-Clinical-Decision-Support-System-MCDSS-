@@ -117,6 +117,26 @@ def get_report_generator() -> ReportGenerator:
     return ReportGenerator()
 
 
+def _key_matches(provided: str | None, expected: str) -> bool:
+    return secrets.compare_digest((provided or "").encode(), expected.encode())
+
+
+def require_api_key(x_api_key: str | None = Header(default=None)) -> None:
+    """Guard for endpoints that create or return patient cases.
+
+    Enforced only when API_KEY is configured, so local development keeps
+    working without credentials. The admin key is accepted as well: whoever
+    may change the guideline library may also use the system.
+    """
+    expected = settings.api_key.get_secret_value()
+    if not expected:
+        return
+    admin = settings.admin_api_key.get_secret_value()
+    if _key_matches(x_api_key, expected) or (admin and _key_matches(x_api_key, admin)):
+        return
+    raise HTTPException(status_code=401, detail="Invalid or missing X-API-Key")
+
+
 def require_admin_key(x_api_key: str | None = Header(default=None)) -> None:
     """Guard for endpoints that change server state.
 
@@ -124,9 +144,7 @@ def require_admin_key(x_api_key: str | None = Header(default=None)) -> None:
     keeps working without credentials.
     """
     expected = settings.admin_api_key.get_secret_value()
-    if expected and not secrets.compare_digest(
-        (x_api_key or "").encode(), expected.encode()
-    ):
+    if expected and not _key_matches(x_api_key, expected):
         raise HTTPException(status_code=401, detail="Invalid or missing X-API-Key")
 
 

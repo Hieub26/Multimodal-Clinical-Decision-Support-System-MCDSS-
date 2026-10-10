@@ -6,7 +6,7 @@ import io
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
+from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException
 from fastapi.concurrency import run_in_threadpool
 from PIL import Image
 
@@ -16,6 +16,7 @@ from app.api.schemas import (
 from app.api.dependencies import (
     get_cv_model, get_fusion_engine, get_guideline_validator,
     get_safety_controller, get_report_generator, get_rag_engine,
+    require_api_key,
 )
 from app.config import settings
 from app.core.cv.cv_model import ModelWeightsNotFoundError
@@ -105,7 +106,10 @@ def _run_image_pipeline(
     return safe_result, nlp_result, cv_result, modality, report_path
 
 
-@router.post("/diagnose", response_model=DiagnosisResponse)
+@router.post(
+    "/diagnose", response_model=DiagnosisResponse,
+    dependencies=[Depends(require_api_key)],
+)
 async def diagnose_image(
     image: UploadFile = File(...),
     symptoms_text: str = Form(None),

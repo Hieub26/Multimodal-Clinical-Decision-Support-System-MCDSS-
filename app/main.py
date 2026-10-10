@@ -59,6 +59,13 @@ async def lifespan(app: FastAPI):
             f"diagnosis will return 503): {e}"
         )
 
+    if not settings.api_key.get_secret_value():
+        api_logger.warning(
+            "API_KEY is not set: diagnosis, case history and report download "
+            "accept requests without authentication. Keep the API on "
+            "localhost, or set API_KEY before exposing it."
+        )
+
     api_logger.info(f"Server ready on http://{settings.fastapi_host}:{settings.fastapi_port}")
     api_logger.info(f"API docs at http://localhost:{settings.fastapi_port}{settings.docs_url}")
 

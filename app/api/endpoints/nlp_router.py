@@ -15,6 +15,7 @@ from app.api.schemas import (
 from app.api.dependencies import (
     get_rag_engine, get_fusion_engine, get_guideline_validator,
     get_safety_controller, get_report_generator, require_admin_key,
+    require_api_key,
 )
 from app.config import settings
 from app.core.nlp.vector_store import GUIDELINE_FILE_ORIGIN
@@ -60,7 +61,10 @@ def _run_text_pipeline(
     return safe_result, nlp_result, report_path
 
 
-@router.post("/diagnose", response_model=DiagnosisResponse)
+@router.post(
+    "/diagnose", response_model=DiagnosisResponse,
+    dependencies=[Depends(require_api_key)],
+)
 async def diagnose_text(request: TextDiagnosisRequest):
     """Perform text-based clinical diagnosis using RAG pipeline."""
     api_logger.info("Text diagnosis request received")

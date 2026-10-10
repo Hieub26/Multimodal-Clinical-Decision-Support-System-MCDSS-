@@ -3,7 +3,7 @@ Report Router: Case history and report retrieval endpoints.
 """
 
 import json
-from fastapi import APIRouter, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse
 
@@ -12,13 +12,17 @@ from app.api.schemas import (
 )
 from app.config import settings
 from app.db.database import get_case, get_all_cases, get_case_count
-from app.api.dependencies import get_rag_engine, get_db_manager
+from app.api.dependencies import get_rag_engine, get_db_manager, require_api_key
 from pathlib import Path
 
 router = APIRouter(prefix="/reports", tags=["Reports & History"])
 
+# Stored cases are patient data: every endpoint that returns them takes this
+# guard. The health check stays open for container probes.
+_case_access = [Depends(require_api_key)]
 
-@router.get("/history", response_model=CaseHistoryResponse)
+
+@router.get("/history", response_model=CaseHistoryResponse, dependencies=_case_access)
 async def get_history(
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
@@ -42,7 +46,7 @@ async def get_history(
     return CaseHistoryResponse(total=total, cases=items)
 
 
-@router.get("/history/{case_id}")
+@router.get("/history/{case_id}", dependencies=_case_access)
 async def get_case_detail(case_id: str):
     """Get detailed case information."""
     case = await get_case(case_id)
@@ -65,7 +69,7 @@ async def get_case_detail(case_id: str):
     return result
 
 
-@router.get("/download/{case_id}")
+@router.get("/download/{case_id}", dependencies=_case_access)
 async def download_report(case_id: str):
     """Download the clinical report file for a case."""
     case = await get_case(case_id)
