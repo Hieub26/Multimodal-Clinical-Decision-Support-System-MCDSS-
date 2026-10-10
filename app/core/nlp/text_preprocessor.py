@@ -85,10 +85,7 @@ MEDICAL_ABBREVIATIONS = {
 
 # Synonym mapping to canonical clinical terms
 SYNONYM_MAP = {
-    "breathlessness": "shortness of breath",
     "dyspnoea": "dyspnea",
-    "difficulty breathing": "dyspnea",
-    "trouble breathing": "dyspnea",
     "febrile": "fever",
     "high temperature": "fever",
     "pyrexia": "fever",
@@ -104,6 +101,176 @@ SYNONYM_MAP = {
     "high blood sugar": "diabetes",
 }
 
+# Everyday wording for symptoms the vocabulary names clinically: patients
+# write "I keep coughing", "it burns when I pee", "I'm always tired", not
+# "cough", "dysuria", "fatigue". Each entry is (regex, canonical symptom).
+#
+# The text they are matched against is already lower-cased, has its negative
+# contractions spelled out ("can't" -> "can not") and its apostrophes removed
+# ("I'm" -> "im"). All entries are applied in one pass, leftmost match first
+# and in list order at the same position, and replaced text is not scanned
+# again. So a longer phrase listed earlier wins ("coughing up blood" before
+# "coughing", "night sweats" before "sweats"), and the order of the list
+# matters. Patterns must not contain capturing groups.
+LAY_PHRASES = [
+    # --- Breathing and chest ---
+    (r"cough(?:ing|ed|s)? up (?:\w+ ){0,3}blood"
+     r"|blood(?:y|[- ]tinged| in (?:my|the))? (?:sputum|phlegm|mucus)", "hemoptysis"),
+    (r"night sweats?|sweat(?:s|ing|y)? (?:\w+ ){0,2}at night"
+     r"|sweating through the night", "night sweats"),
+    (r"(?:short of breath|breathless|trouble breathing|hard to breathe|can not breathe)"
+     r" (?:when|while) (?:i )?(?:lie|lying|lay|laying) (?:down|flat)", "orthopnea"),
+    (r"short(?:ness)? of breath|out of breath|breathless(?:ness)?|winded"
+     r"|can not (?:catch my breath|breathe(?: properly| well| deeply| right)?|get enough air)"
+     r"|(?:hard|harder|difficult|tough) to breathe|hard time breathing"
+     r"|(?:difficulty|trouble|problems?|struggl\w+) (?:with |in )?breathing"
+     r"|breathing (?:is|has been|has become|is getting|gets|feels)"
+     r" (?:very |really |more |so )?(?:difficult|hard|harder|labou?red|heavy)"
+     r"|labou?red breathing|gasping(?: for (?:air|breath))?", "shortness of breath"),
+    (r"wheez(?:e|es|ed|y)", "wheezing"),
+    (r"chest (?:feels? |is |was |gets |felt |has been )?(?:very |really |so )?tight(?:ness)?"
+     r"|tight(?:ness)? (?:in|across) (?:my|the) chest|tight chest", "chest tightness"),
+    (r"chest (?:hurts|aches|is hurting|is sore|discomfort|pressure|heaviness)"
+     r"|(?:pains?|ache|aching|pressure|discomfort|heaviness) in (?:my|the) chest"
+     r"|hurts in (?:my|the) chest", "chest pain"),
+    (r"cough(?:ing|ed)", "cough"),
+    (r"phlegm|mucus|mucous", "sputum"),
+    (r"throat (?:hurts|is sore|is scratchy|pain|feels (?:sore|scratchy|raw))"
+     r"|scratchy throat|painful throat", "sore throat"),
+    (r"stuffy nose|blocked nose|stuffed up|nasal congestion|congested"
+     r"|nose is (?:stuffy|blocked)", "congestion"),
+    (r"nose (?:is|keeps|has been) running|rhinorrhea", "runny nose"),
+    (r"(?:los[ts]|losing|loss of|lost my)(?: my| the)?(?: sense of)? (?:taste|smell)"
+     r"(?: (?:and|or) (?:taste|smell))?"
+     r"|can not (?:taste|smell)(?: (?:or|and) (?:taste|smell))?(?: anything)?"
+     r"|anosmia|ageusia", "loss of taste/smell"),
+
+    # --- General ---
+    (r"tired(?:ness)?|fatigued|exhaust(?:ed|ion)|worn out|run down|drained"
+     r"|letharg(?:y|ic)|(?:no|low|little|lack of) energy|sluggish", "fatigue"),
+    (r"weak", "weakness"),
+    (r"running a temperature|burning up|(?:high|elevated|raised) temperatures?", "fever"),
+    (r"chill(?:ed)?|shiver(?:s|ing|ed|y)?|rigors?", "chills"),
+    (r"sweat(?:s|y|ed)?|perspir\w+|diaphore\w+", "sweating"),
+    (r"dizzy|light[- ]?headed(?:ness)?|woozy|vertigo", "dizziness"),
+    (r"head (?:hurts|aches|is pounding|is throbbing|has been (?:hurting|pounding))"
+     r"|migraines?", "headache"),
+    (r"los(?:t|ing|e) (?:a lot of |some |so much |a bit of )?weight"
+     r"|weight (?:has been |is )?dropping|drop(?:ped|ping) weight", "weight loss"),
+    (r"gain(?:ed|ing)? (?:a lot of |some |so much )?weight|put(?:ting)? on weight", "weight gain"),
+    (r"thirsty|polydipsia|drinking (?:a lot|lots)(?: more)?(?: of)? water", "thirst"),
+    (r"(?:loss|lack) of appetite|no appetite|lost my appetite|poor appetite"
+     r"|appetite (?:is|has been) (?:poor|low|gone|down)"
+     r"|not (?:been )?(?:hungry|eating much)|do not feel like eating", "loss of appetite"),
+    (r"hungr(?:y|ier)|increased (?:appetite|hunger)|excessive hunger|polyphagia"
+     r"|eating (?:a lot )?more than usual", "increased appetite"),
+    (r"heart (?:is |was |keeps |has been |feels like it is |feels like its )?"
+     r"(?:racing|pounding|fluttering|skipping beats?"
+     r"|beating (?:really |very |so )?(?:fast|rapidly|hard|irregularly))"
+     r"|racing heart|rapid heart ?beat|fast heart ?(?:beat|rate)|heart flutters?", "palpitation"),
+
+    # --- Head, nerves, eyes ---
+    (r"numb", "numbness"),
+    (r"tingl(?:e|es|ed|y)|pins and needles", "tingling"),
+    (r"confused|disoriented|disorientation", "confusion"),
+    (r"loss of balance|lost my balance|los(?:e|ing) my balance"
+     r"|(?:trouble|difficulty|problems?) (?:balancing|with (?:my )?balance|keeping my balance)"
+     r"|balance (?:is|has been) off|off balance|unsteady", "loss of balance"),
+    (r"face (?:is |was )?droop\w*|facial droop\w*|droop\w* (?:face|mouth)", "facial droop"),
+    (r"slurr\w+ (?:speech|words)|speech (?:is |was |has been )?slurr\w+"
+     r"|(?:trouble|difficulty) speaking|can not speak", "slurred speech"),
+    (r"blurr?y (?:vision|eyesight|sight)"
+     r"|(?:vision|eyesight|sight) (?:is |has been |gets |got |becomes |became |has become )?"
+     r"(?:very |a bit |so )?blurr?(?:y|ed)"
+     r"|blurred (?:eyesight|sight)|trouble seeing|visual (?:changes|disturbances?)", "blurred vision"),
+    (r"nose ?bleeds?|bleeding from (?:my |the )?nose|epistaxis", "nosebleed"),
+
+    # --- Urinary ---
+    (r"dysuria"
+     r"|(?:burn(?:s|ing)?|sting(?:s|ing)?|pain(?:ful)?|hurts?)(?: sensation| feeling)?"
+     r" (?:when|while|during|whenever) (?:i |im )?(?:do )?"
+     r"(?:pee|peeing|urinat\w+|go to the bathroom)"
+     r"|(?:painful|burning) (?:urination|peeing)|(?:burns|hurts|stings) to (?:pee|urinate)"
+     r"|when i (?:do )?(?:pee|urinate|go),? it (?:burns|hurts|stings)", "dysuria"),
+    (r"hematuria|blood in (?:my |the )?(?:urine|pee)|bloody urine"
+     r"|(?:urinating|peeing|passing) blood"
+     r"|(?:urine|pee) (?:sometimes |also |often )?(?:has|had) blood", "hematuria"),
+    (r"(?:cloudy|foul[- ]smelling|strong[- ]smelling|smelly|dark) (?:urine|pee)"
+     r"|(?:urine|pee) (?:is|has been|looks|was)(?: also| often| sometimes)?"
+     r" (?:cloudy|dark|foul|smelly)"
+     r"|(?:urine|pee) (?:\w+ ){0,5}(?:smells?|odou?r)"
+     r"|(?:smell|odou?r) (?:in|of|to) (?:my |the )?(?:urine|pee)", "cloudy urine"),
+    (r"polyuria|urinary (?:frequency|urgency)|frequent(?:ly)? urinat\w+"
+     r"|urinat\w+ (?:more |very )?(?:frequently|often|a lot)"
+     r"|(?:pee|peeing|urinate|urinating)"
+     r" (?:a lot|all the time|more often|frequently|more than usual|constantly)"
+     r"|(?:have|having|need|needing|urge) to (?:pee|urinate|go)(?: to the bathroom)?"
+     r" (?:\w+ ){0,2}(?:all the time|constantly|frequently|often|a lot)"
+     r"|(?:constant|strong|frequent|sudden|urgent|persistent) (?:urge|need)s? to (?:urinate|pee)"
+     r"|frequent (?:trips|visits) to the (?:bathroom|toilet|restroom)"
+     r"|go(?:ing)? to the (?:bathroom|toilet|restroom)"
+     r" (?:a lot|all the time|more often|frequently|constantly)",
+     "frequent urination"),
+    (r"flank pain|pain in (?:my |the )?flanks?|kidney pain", "flank pain"),
+    (r"pelvic pain|suprapubic pain|lower abdominal pain"
+     r"|(?:pain|ache|pressure|cramps?|discomfort) in (?:my |the )?"
+     r"(?:pelvis|pelvic area|pelvic region|lower abdomen|lower belly|bladder)", "pelvic pain"),
+
+    # --- Stomach and gut ---
+    (r"stomach (?:hurts|pains?|aches?|cramps?)|tummy (?:ache|hurts|pain)"
+     r"|(?:pains?|ache|cramps?|cramping|discomfort) in (?:my |the )?(?:upper )?"
+     r"(?:stomach|abdomen|belly|tummy)"
+     r"|abdominal (?:cramps?|discomfort|cramping)", "abdominal pain"),
+    (r"heart burn|acid reflux|reflux|sour taste|acid(?:ic)? taste|indigestion"
+     r"|regurgitat\w+"
+     r"|burning (?:sensation |feeling )?in (?:my |the )?(?:chest|throat|stomach)", "heartburn"),
+    (r"(?:trouble|difficulty|hard time|problems?) swallowing"
+     r"|(?:hard|difficult|painful|hurts) to swallow"
+     r"|food (?:gets|is getting|getting|keeps getting) stuck|dysphagia", "difficulty swallowing"),
+    (r"nauseous|nauseated|queasy|sick to (?:my|the) stomach", "nausea"),
+    (r"vomit(?:s|ed)?|throw(?:ing)? up|threw up|thrown up|puk(?:e|ed|ing)", "vomiting"),
+    (r"diarrhoea|loose (?:stools?|bowels?|motions?)|watery stools?", "diarrhea"),
+    (r"constipated", "constipation"),
+
+    # --- Skin, muscles, joints ---
+    (r"(?:cuts?|wounds?|sores?|bruises?|scrapes?|injuries) (?:\w+ ){0,6}"
+     r"(?:slow to heal|heal(?:s|ing)? (?:very |really |so )?slowly|a long time to heal"
+     r"|longer to heal|(?:do|does) not heal|not healing)"
+     r"|slow[- ]healing|heal(?:s|ing)? (?:very |really |so )?slowly"
+     r"|(?:trouble|difficulty) healing"
+     r"|(?:cuts?|wounds?|sores?|infections?) (?:\w+ ){0,5}(?:not|never) (?:seem to )?heal(?:ing)?",
+     "slow healing"),
+    (r"itch(?:y|es|ed|iness)?|pruritus", "itching"),
+    # Before the skin entry: "sore joints" and "sore muscles" are not sores
+    (r"joint (?:aches?|stiffness)|sore joints|achy joints|arthralgia"
+     r"|joints (?:\w+ )?(?:hurt|ache|are sore|are painful|are stiff)", "joint pain"),
+    (r"muscle (?:aches?|soreness)|sore muscles|muscles (?:ache|hurt|are sore)"
+     r"|body aches?|achy|aching (?:all over|muscles|body)|myalgia", "muscle pain"),
+    (r"back (?:hurts|aches)|backache", "back pain"),
+    # "sore" alone is an adjective ("sore throat"); the plural is the noun
+    (r"sores|(?:open|skin|cold|crusty|painful) sore|blisters?|scal(?:y|es|ing)"
+     r"|flak(?:y|ing)|peeling skin|pustules?|scabs?"
+     r"|skin (?:lesions?|patches|irritation|plaques)"
+     r"|(?:red|dry|discolou?red|scaly) patch(?:es)?|patch(?:es)? of (?:\w+ )?skin", "skin lesion"),
+    (r"swollen|swell(?:s|ed)?|puff(?:y|iness)", "swelling"),
+]
+for _pattern, _canonical in LAY_PHRASES:
+    assert re.compile(_pattern).groups == 0, f"capturing group in the pattern for {_canonical}"
+
+_LAY_PHRASE_PATTERN = re.compile("|".join(
+    rf"(?P<lay{index}>\b(?:{pattern})\b)"
+    for index, (pattern, _) in enumerate(LAY_PHRASES)
+))
+_LAY_CANONICAL = {
+    f"lay{index}": canonical for index, (_, canonical) in enumerate(LAY_PHRASES)
+}
+
+
+def normalize_lay_phrases(text: str) -> str:
+    """Replace everyday wording with the clinical term the vocabulary uses."""
+    return _LAY_PHRASE_PATTERN.sub(lambda match: _LAY_CANONICAL[match.lastgroup], text)
+
+
 # Canonical symptom keywords for extraction
 SYMPTOM_KEYWORDS = [
     "pain", "ache", "fever", "cough", "fatigue", "weakness", "nausea",
@@ -117,6 +284,11 @@ SYMPTOM_KEYWORDS = [
     "difficulty swallowing", "heartburn", "bloating", "chills", "sweating",
     "tremor", "stiffness", "cramp", "bruising", "pallor", "jaundice",
     "sputum", "hemoptysis", "night sweats", "edema", "dyspnea", "orthopnea",
+    # Named in the guideline library's symptom lists
+    "chest tightness", "dysuria", "hematuria", "cloudy urine",
+    "frequent urination", "flank pain", "pelvic pain", "loss of appetite",
+    "increased appetite", "slow healing", "loss of taste/smell", "nosebleed",
+    "loss of balance", "facial droop", "slurred speech", "skin lesion",
 ]
 
 # Disease / condition keywords for extraction (includes red-flag conditions)
@@ -658,8 +830,8 @@ class TextPreprocessor:
         """
         text_lower = text.lower()
 
-        # Step A: Apply synonym normalization to text
-        normalized_text = text_lower
+        # Step A: Bring everyday wording and synonyms to the canonical terms
+        normalized_text = normalize_lay_phrases(text_lower)
         for synonym, canonical in self.synonyms.items():
             pattern = r"\b" + re.escape(synonym) + r"\b"
             normalized_text = re.sub(pattern, canonical, normalized_text)
@@ -669,8 +841,8 @@ class TextPreprocessor:
         raw_candidates = []
 
         for kw in all_keywords:
-            # Plural allowed: "headaches", "seizures", "kidney stones"
-            pattern = r"\b" + re.escape(kw) + r"s?\b"
+            # Plural allowed: "headaches", "seizures", "kidney stones", "rashes"
+            pattern = r"\b" + re.escape(kw) + r"(?:e?s)?\b"
             for match in re.finditer(pattern, normalized_text):
                 raw_candidates.append({
                     "symptom": kw,

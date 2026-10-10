@@ -96,7 +96,8 @@ def test_family_history_is_not_a_patient_symptom(preprocessor, text, active, fam
     ("my mother has chest pain", ["chest pain"]),
     ("my mother had chest pain and sweating", ["chest pain", "sweating"]),
     ("my mother has diabetes and chest pain", ["diabetes", "chest pain"]),
-    ("my father has diabetes and he is confused and sweating", ["diabetes", "sweating"]),
+    ("my father has diabetes and he is confused and sweating",
+     ["diabetes", "confusion", "sweating"]),
     ("my mother's chest pain is getting worse", ["chest pain"]),
     ("my father has chest pain since last month", ["chest pain"]),
     ("my son had a seizure", ["seizure"]),
@@ -125,6 +126,71 @@ def test_plural_symptoms_are_recognized(preprocessor):
     result = preprocessor.preprocess("I have had headaches and two seizures, no fevers")
     assert result["extracted_symptoms"] == ["headache", "seizure"]
     assert result["negated_symptoms"] == ["fever"]
+    assert preprocessor.preprocess("I keep getting rashes")["extracted_symptoms"] == ["rash"]
+
+
+# ----------------------------------------------------------------------
+# Everyday wording
+# ----------------------------------------------------------------------
+
+@pytest.mark.parametrize("text, active", [
+    # Inflections of a symptom word
+    ("I've been coughing a lot and I feel dizzy", ["cough", "dizziness"]),
+    ("I'm always tired and I feel weak", ["fatigue", "weakness"]),
+    ("my skin is itchy and my ankles are swollen", ["itching", "swelling"]),
+    ("I vomited twice and feel nauseous", ["vomiting", "nausea"]),
+    ("I'm wheezing and sweaty", ["wheezing", "sweating"]),
+    # Phrases
+    ("I have a hard time breathing and my chest feels tight",
+     ["shortness of breath", "chest tightness"]),
+    ("I can't catch my breath", ["shortness of breath"]),
+    ("I'm coughing up yellow phlegm", ["cough", "sputum"]),
+    ("my heart is racing", ["palpitation"]),
+    ("my chest hurts when I breathe in", ["chest pain"]),
+    ("I've lost a lot of weight and I'm thirsty all the time", ["weight loss", "thirst"]),
+    ("I lost my sense of taste and smell", ["loss of taste/smell"]),
+    ("it burns when I pee and I have to pee all the time", ["dysuria", "frequent urination"]),
+    ("there is blood in my urine and my urine is cloudy", ["hematuria", "cloudy urine"]),
+    ("I get acid reflux and it's hard to swallow", ["heartburn", "difficulty swallowing"]),
+    ("my vision is blurry and my cuts heal slowly", ["blurred vision", "slow healing"]),
+    ("my face is drooping and my speech is slurred", ["facial droop", "slurred speech"]),
+    ("I have sores and blisters on my arm", ["skin lesion"]),
+    # The longer phrase wins over the word inside it
+    ("I'm coughing up blood", ["hemoptysis"]),
+    ("I get night sweats", ["night sweats"]),
+    ("I get short of breath when I lie down", ["orthopnea"]),
+    # An adjective is not the noun
+    ("I have a sore throat and sore muscles", ["sore throat", "muscle pain"]),
+])
+def test_everyday_wording_is_read_as_the_clinical_symptom(preprocessor, text, active):
+    result = preprocessor.preprocess(text)
+    assert result["extracted_symptoms"] == active
+    assert result["negated_symptoms"] == []
+
+
+@pytest.mark.parametrize("text, negated", [
+    ("I haven't been coughing", ["cough"]),
+    ("I'm not tired or dizzy", ["fatigue", "dizziness"]),
+    ("no trouble breathing", ["shortness of breath"]),
+    ("I don't have to pee all the time", ["frequent urination"]),
+])
+def test_negation_still_applies_to_everyday_wording(preprocessor, text, negated):
+    result = preprocessor.preprocess(text)
+    assert result["negated_symptoms"] == negated
+    assert result["extracted_symptoms"] == []
+
+
+def test_a_phrase_built_on_a_negative_is_not_a_negation(preprocessor):
+    """ "can't breathe" and "not hungry" state a symptom; they do not deny one."""
+    result = preprocessor.preprocess("I can't breathe properly and I'm not hungry")
+    assert result["extracted_symptoms"] == ["shortness of breath", "loss of appetite"]
+    assert result["negated_symptoms"] == []
+
+
+def test_text_given_to_the_llm_keeps_the_patients_wording(preprocessor):
+    result = preprocessor.preprocess("I keep coughing up phlegm")
+    assert "coughing up phlegm" in result["expanded_text"]
+    assert result["search_query"].endswith("active symptoms: cough, sputum")
 
 
 def test_hr_after_number_is_a_duration(preprocessor):
