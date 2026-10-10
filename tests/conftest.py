@@ -14,6 +14,7 @@ _TMP = Path(tempfile.mkdtemp(prefix="mcdss_tests_"))
 
 os.environ.update({
     "GEMINI_API_KEY": "",
+    "OPENAI_API_KEY": "",
     "TYPESAFE_API_KEY": "",
     "ADMIN_API_KEY": "",
     "STORAGE_DIR": str(_TMP / "storage"),

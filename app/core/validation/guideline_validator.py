@@ -2,77 +2,67 @@
 Guideline Validation Layer.
 Cross-references combined diagnosis against retrieved clinical guidelines
 using LLM-as-a-Judge for semantic understanding (negation, synonyms, context).
-Falls back to token-based matching when LLM is unavailable.
+Falls back to token-based matching when the judge is unavailable.
 """
 
-import json
-
-try:
-    from google import genai
-    from google.genai import types
-    HAS_GENAI = True
-except ImportError:
-    HAS_GENAI = False
-    genai = None
-    types = None
+import re
 
 from app.config import settings
 from app.core.nlp.vector_store import VectorStore
+from app.core.validation.guideline_judge import (
+    GeminiJudge, GuidelineJudge, OpenAIJudge,
+)
 from app.utils.logger import nlp_logger
 
 
-VALIDATION_PROMPT = """You are a clinical guideline validation expert. Your task is to determine whether a given diagnosis is SUPPORTED or CONTRADICTED by the provided clinical guidelines.
-
-## Diagnosis to validate:
-{diagnosis}
-
-## Retrieved Clinical Guidelines:
-{guidelines}
-
-## Instructions:
-1. Read the diagnosis and each guideline carefully.
-2. Pay close attention to NEGATIONS (e.g., "no evidence of", "rules out", "negative for").
-3. Recognize medical SYNONYMS and ACRONYMS (e.g., "CVA" = "Stroke", "MI" = "Heart Attack").
-4. Evaluate whether the guidelines genuinely support, partially support, or contradict the diagnosis.
-
-Respond in this exact JSON format ONLY (no extra text):
-{{
-    "is_consistent": true,
-    "support_score": 0.75,
-    "reasoning": "Brief explanation of why the diagnosis is or is not supported",
-    "negation_detected": false,
-    "synonym_matches": ["term1 = term2"]
-}}
-
-Rules for support_score:
-- 0.0 to 0.2: Guidelines CONTRADICT or explicitly rule out the diagnosis
-- 0.2 to 0.4: No meaningful support found in guidelines
-- 0.4 to 0.6: Partial or indirect support
-- 0.6 to 0.8: Good support with relevant guideline evidence
-- 0.8 to 1.0: Strong, direct support from guidelines
-
-Rules for is_consistent:
-- true: support_score >= 0.4
-- false: support_score < 0.4
-"""
-
-
-# Unified threshold for guideline consistency — same for LLM and fallback
+# Unified threshold for guideline consistency — same for the judge and fallback
 VALIDATION_THRESHOLD = 0.4
+
+# How a validation result was reached (the "validation_method" output field)
+METHOD_JUDGE = "llm_judge"
+METHOD_TOKENS = "token_matching"
+METHOD_SKIPPED = "skipped"
+METHOD_NO_GUIDELINES = "no_guidelines"
+
+
+# Words that say nothing about which condition a diagnosis names
+_GENERIC_WORDS = frozenset({
+    "a", "an", "and", "of", "or", "the", "to", "with", "no", "not",
+    "acute", "chronic", "mild", "moderate", "severe", "exacerbation",
+    "suspected", "possible", "probable", "likely",
+})
+
+
+def _words(text: str) -> set[str]:
+    """Lower-cased words of two or more characters, plural "s" dropped."""
+    return {
+        word[:-1] if len(word) > 3 and word.endswith("s") else word
+        for word in re.findall(r"[a-z0-9]{2,}", text.lower())
+    }
+
+
+def default_judge() -> GuidelineJudge:
+    """The OpenAI judge when a key is configured, otherwise the generator's model.
+
+    With a key configured the choice is final: if that judge fails, validation
+    falls back to token matching, never quietly to the generator grading
+    itself.
+    """
+    if settings.openai_api_key.get_secret_value():
+        return OpenAIJudge()
+    return GeminiJudge()
 
 
 class GuidelineValidator:
     """Validates diagnoses against retrieved clinical guidelines."""
 
-    def __init__(self, vector_store: VectorStore = None):
+    def __init__(self, vector_store: VectorStore = None, judge: GuidelineJudge = None):
         self.vector_store = vector_store or VectorStore()
-        self._client = None
-        nlp_logger.info("GuidelineValidator initialized")
-
-    def _ensure_llm(self):
-        """Configure the LLM client on first use."""
-        if self._client is None and settings.gemini_api_key_str and HAS_GENAI:
-            self._client = genai.Client(api_key=settings.gemini_api_key_str)
+        self.judge = judge or default_judge()
+        nlp_logger.info(
+            f"GuidelineValidator initialized (judge={self.judge.provider}:"
+            f"{self.judge.model}, available={self.judge.available})"
+        )
 
     def validate(self, combined_diagnosis: dict) -> dict:
         """
@@ -99,6 +89,8 @@ class GuidelineValidator:
                 "validation_notes": [
                     "Guideline validation skipped for CV-only image classification."
                 ],
+                "validation_method": METHOD_SKIPPED,
+                "judge_model": None,
                 "referenced_guidelines": [],
             }
 
@@ -108,6 +100,7 @@ class GuidelineValidator:
         else:
             related_docs = []
 
+        judge_model = None
         if not related_docs:
             validation_notes = [
                 "No relevant guidelines found for validation. "
@@ -115,11 +108,22 @@ class GuidelineValidator:
             ]
             is_consistent = False
             guideline_support = 0.0
+            method = METHOD_NO_GUIDELINES
         else:
             # Try LLM-as-a-Judge first, fall back to token matching
-            is_consistent, guideline_support, validation_notes = (
-                self._validate_with_llm(primary, related_docs)
+            verdict = self.judge.judge(
+                primary, [doc.get("text", "") for doc in related_docs]
             )
+            if verdict is not None:
+                method, judge_model = METHOD_JUDGE, self.judge.model
+                is_consistent, guideline_support, validation_notes = (
+                    self._read_verdict(verdict)
+                )
+            else:
+                method = METHOD_TOKENS
+                is_consistent, guideline_support, validation_notes = (
+                    self._validate_with_tokens(primary, related_docs)
+                )
 
         # Check for conflict flags from fusion
         if combined_diagnosis.get("conflict_flag"):
@@ -134,6 +138,8 @@ class GuidelineValidator:
             "is_guideline_consistent": is_consistent,
             "guideline_support_score": guideline_support,
             "validation_notes": validation_notes,
+            "validation_method": method,
+            "judge_model": judge_model,
             "referenced_guidelines": [
                 {
                     "text": d.get("text", "")[:200],
@@ -145,7 +151,7 @@ class GuidelineValidator:
 
         nlp_logger.info(
             f"Validation: consistent={is_consistent}, "
-            f"support={guideline_support:.2f}"
+            f"support={guideline_support:.2f}, method={method}"
         )
         return validated_output
 
@@ -153,121 +159,39 @@ class GuidelineValidator:
     # LLM-as-a-Judge (primary)
     # ------------------------------------------------------------------
 
-    def _validate_with_llm(
-        self, diagnosis: str, docs: list[dict]
-    ) -> tuple[bool, float, list[str]]:
-        """Use Gemini to semantically validate the diagnosis against guidelines."""
-        self._ensure_llm()
+    def _read_verdict(self, verdict: dict) -> tuple[bool, float, list[str]]:
+        """Turn a judge verdict into the consistency decision and its notes."""
+        support_score = verdict["support_score"]
+        # Deterministic: consistency is ALWAYS derived from the score, never
+        # from a boolean the model could return in contradiction with it.
+        is_consistent = support_score >= VALIDATION_THRESHOLD
+        notes = [f"Guideline judge ({self.judge.model}): {verdict['reasoning']}"]
 
-        if not (settings.gemini_api_key_str and HAS_GENAI and self._client):
-            nlp_logger.warning("LLM unavailable — falling back to token matching")
-            return self._validate_with_tokens(diagnosis, docs)
-
-        guidelines_text = "\n\n".join(
-            f"[Guideline {i+1}] {doc['text']}" for i, doc in enumerate(docs)
-        )
-        prompt = VALIDATION_PROMPT.format(
-            diagnosis=diagnosis, guidelines=guidelines_text
-        )
-
-        try:
-            response = self._client.models.generate_content(
-                model=settings.llm_model_name,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                ),
+        if verdict.get("negation_detected"):
+            notes.append(
+                "⚠️ Negation detected: guidelines may contradict this diagnosis."
             )
-            result = self._parse_llm_response(response.text)
 
-            is_consistent = result["is_consistent"]
-            support_score = result["support_score"]
-            notes = [f"LLM validation: {result['reasoning']}"]
+        if verdict.get("synonym_matches"):
+            notes.append(
+                f"Synonym matches found: {', '.join(verdict['synonym_matches'])}"
+            )
 
-            if result.get("negation_detected"):
-                notes.append(
-                    "⚠️ Negation detected: guidelines may contradict this diagnosis."
-                )
+        if support_score >= 0.6:
+            notes.append(
+                f"Diagnosis is supported by clinical guidelines "
+                f"(support score: {support_score:.0%})"
+            )
+        elif support_score >= VALIDATION_THRESHOLD:
+            notes.append(
+                "Partial guideline support found. Additional review recommended."
+            )
+        else:
+            notes.append(
+                "Limited guideline support. Diagnosis may require further investigation."
+            )
 
-            if result.get("synonym_matches"):
-                notes.append(
-                    f"Synonym matches found: {', '.join(result['synonym_matches'])}"
-                )
-
-            if support_score >= 0.6:
-                notes.append(
-                    f"Diagnosis is supported by clinical guidelines "
-                    f"(support score: {support_score:.0%})"
-                )
-            elif support_score >= 0.4:
-                notes.append(
-                    "Partial guideline support found. Additional review recommended."
-                )
-            else:
-                notes.append(
-                    "Limited guideline support. Diagnosis may require further investigation."
-                )
-
-            nlp_logger.info(f"LLM validation complete: consistent={is_consistent}, score={support_score:.2f}")
-            return is_consistent, support_score, notes
-
-        except Exception as e:
-            nlp_logger.error(f"LLM validation failed: {e} — falling back to token matching")
-            return self._validate_with_tokens(diagnosis, docs)
-
-    def _parse_llm_response(self, response_text: str) -> dict:
-        """Parse the JSON response from the validation LLM."""
-        import re
-        text = response_text.strip()
-
-        # Strip markdown code fences
-        if text.startswith("```json"):
-            text = text[7:]
-        if text.startswith("```"):
-            text = text[3:]
-        if text.endswith("```"):
-            text = text[:-3]
-        text = text.strip()
-
-        # Try direct parse
-        try:
-            parsed = json.loads(text)
-            return self._sanitize_llm_result(parsed)
-        except json.JSONDecodeError:
-            pass
-
-        # Try regex extraction
-        match = re.search(r'\{.*\}', text, re.DOTALL)
-        if match:
-            try:
-                parsed = json.loads(match.group(0))
-                return self._sanitize_llm_result(parsed)
-            except json.JSONDecodeError:
-                pass
-
-        nlp_logger.warning("Could not parse LLM validation response")
-        return {
-            "is_consistent": False,
-            "support_score": 0.3,
-            "reasoning": "Could not parse LLM response — treating as uncertain.",
-            "negation_detected": False,
-            "synonym_matches": [],
-        }
-
-    def _sanitize_llm_result(self, parsed: dict) -> dict:
-        """Ensure all expected fields are present with correct types."""
-        score = float(parsed.get("support_score", 0.3))
-        score = max(0.0, min(1.0, score))
-        # Deterministic: is_consistent is ALWAYS derived from score,
-        # never trusting the LLM's boolean to avoid contradictory outputs
-        # (e.g. score=0.3 but is_consistent=true).
-        return {
-            "is_consistent": score >= VALIDATION_THRESHOLD,
-            "support_score": score,
-            "reasoning": str(parsed.get("reasoning", "No reasoning provided.")),
-            "negation_detected": bool(parsed.get("negation_detected", False)),
-            "synonym_matches": list(parsed.get("synonym_matches", [])),
-        }
+        return is_consistent, support_score, notes
 
     # ------------------------------------------------------------------
     # Token-based matching (fallback)
@@ -276,32 +200,47 @@ class GuidelineValidator:
     def _validate_with_tokens(
         self, diagnosis: str, docs: list[dict]
     ) -> tuple[bool, float, list[str]]:
-        """Fallback: simple keyword matching when LLM is unavailable."""
+        """Fallback: whole-word matching when the judge is unavailable.
+
+        The score is the share of the diagnosis's words found in the single
+        passage that has most of them. It errs towards review: word matching
+        knows no synonyms, so it rejects some supported diagnoses, but it
+        should not pass one the guidelines do not describe.
+        """
         nlp_logger.info("Using token-based fallback for validation")
 
-        diagnosis_terms = set(
-            term.strip(",.;:")
-            for term in diagnosis.lower().split()
-            if len(term.strip(",.;:")) > 2
-        )
+        # A parenthesis qualifies the diagnosis ("Stroke (CVA)", "(possible
+        # STEMI)") and is not required in the passage. One that states a
+        # measurement cannot be checked against the guideline's criteria by
+        # matching words, so such a label is never passed.
+        qualifiers = re.findall(r"\(([^)]*)\)", diagnosis)
+        unverifiable = any(re.search(r"\d", q) for q in qualifiers)
+        diagnosis_terms = _words(re.sub(r"\([^)]*\)", " ", diagnosis)) - _GENERIC_WORDS
 
         guideline_support = 0.0
         for doc in docs:
-            doc_text = doc.get("text", "").lower()
-            matches = sum(1 for term in diagnosis_terms if term in doc_text)
-            if matches > 0:
-                # Cosine distance can exceed 1; a dissimilar doc must not
-                # subtract from the support of the others.
-                similarity = max(0.0, 1.0 - doc.get("distance", 0.0))
-                guideline_support += (
-                    similarity * (matches / max(len(diagnosis_terms), 1))
-                )
+            # Cosine distance of 1 or more: the passage is unrelated
+            if doc.get("distance", 0.0) >= 1.0 or not diagnosis_terms:
+                continue
+            coverage = (
+                len(diagnosis_terms & _words(doc.get("text", "")))
+                / len(diagnosis_terms)
+            )
+            # Half the words or fewer ("Heart block" in a passage on heart
+            # failure) means the passage is about something else. Passages
+            # are not added up: one of them has to describe the diagnosis.
+            if coverage > 0.5:
+                guideline_support = max(guideline_support, coverage)
 
-        guideline_support = min(1.0, guideline_support)
-        is_consistent = guideline_support >= VALIDATION_THRESHOLD
-        notes = ["Validation method: token matching (LLM unavailable)"]
+        is_consistent = guideline_support >= VALIDATION_THRESHOLD and not unverifiable
+        notes = ["Validation method: token matching (guideline judge unavailable)"]
 
-        if guideline_support >= VALIDATION_THRESHOLD:
+        if unverifiable:
+            notes.append(
+                "The diagnosis states a measurement that word matching cannot "
+                "check against the guidelines. Review recommended."
+            )
+        elif guideline_support >= VALIDATION_THRESHOLD:
             notes.append(
                 f"Diagnosis is supported by clinical guidelines "
                 f"(support score: {guideline_support:.0%})"
@@ -316,4 +255,3 @@ class GuidelineValidator:
             )
 
         return is_consistent, guideline_support, notes
-

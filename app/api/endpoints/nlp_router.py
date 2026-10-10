@@ -97,6 +97,8 @@ async def diagnose_text(request: TextDiagnosisRequest):
             guideline_consistent=safe_result.get("is_guideline_consistent", False),
             support_score=safe_result.get("guideline_support_score", 0),
             notes=safe_result.get("validation_notes", []),
+            method=safe_result.get("validation_method", ""),
+            judge_model=safe_result.get("judge_model"),
         ),
         nlp_details=nlp_result,
         report_path=report_path,

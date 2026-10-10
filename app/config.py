@@ -65,6 +65,19 @@ class Settings(BaseSettings):
     )
     llm_model_name: str = "gemini-2.5-flash"
 
+    # --- Guideline judge (LLM-as-a-Judge) ---
+    # A model from a different provider than the one that writes the
+    # diagnosis, so the generator does not grade its own output. Without a
+    # key the validator uses llm_model_name as the judge, as it did before.
+    openai_api_key: SecretStr = Field(
+        default=SecretStr(""),
+        description="API key for the OpenAI model that judges guideline support"
+    )
+    judge_model_name: str = "gpt-6-luna"
+    # The judgment is narrow (one diagnosis label against three passages).
+    judge_reasoning_effort: str = "low"
+    judge_timeout_seconds: float = Field(default=10.0, gt=0.0)
+
     # --- Jev (TypeSafe System One): typed context judgments ---
     # Used only when a key is set; every caller falls back to rules without it.
     typesafe_api_key: SecretStr = Field(
