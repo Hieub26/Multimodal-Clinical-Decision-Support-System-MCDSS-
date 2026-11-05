@@ -99,6 +99,8 @@ class ValidationInfo(BaseModel):
     guideline_consistent: bool = Field(False, description="Whether diagnosis aligns with guidelines")
     support_score: float = Field(0.0, ge=0.0, le=1.0, description="Guideline support score (0 to 1)")
     notes: list[str] = Field(default_factory=list, description="Validation notes and warnings")
+    method: str = Field("", description="How the result was reached: llm_judge, token_matching, skipped or no_guidelines")
+    judge_model: str | None = Field(None, description="Model that judged guideline support, when an LLM judge was used")
 
 
 class DiagnosisResponse(BaseModel):

@@ -1,0 +1,7 @@
+# Everything the Streamlit frontend imports. Kept apart from requirements.txt
+# so that its Docker image does not carry torch, chromadb and the embedding
+# stack. The versions must match requirements.txt (tests/test_packaging.py).
+
+streamlit==1.51.0
+httpx==0.28.1
+Pillow==12.2.0

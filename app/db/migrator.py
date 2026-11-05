@@ -45,4 +45,16 @@ class SchemaMigrator:
         except Exception as e:
             db_logger.debug(f"Schema column alteration migration note: {e}")
 
+        # Earlier versions serialized diagnosis_json twice, leaving a JSON
+        # string scalar in the JSONB column. Unwrap those rows into objects.
+        try:
+            status = await conn.execute("""
+                UPDATE cases
+                SET diagnosis_json = (diagnosis_json #>> '{}')::jsonb
+                WHERE jsonb_typeof(diagnosis_json) = 'string';
+            """)
+            db_logger.info(f"Double-encoded diagnosis_json rows repaired: {status}")
+        except Exception as e:
+            db_logger.warning(f"Could not repair double-encoded diagnosis_json rows: {e}")
+
         db_logger.info("Database schema migrations applied successfully.")

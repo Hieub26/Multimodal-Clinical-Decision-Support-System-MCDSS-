@@ -1,0 +1,119 @@
+{"id": "g001", "symptoms": "I think I'm having a heart attack, my chest feels tight and I'm sweating", "label": "escalate", "category": "keyword_current"}
+{"id": "g002", "symptoms": "I had a seizure about an hour ago and I still feel confused", "label": "escalate", "category": "keyword_current"}
+{"id": "g003", "symptoms": "There is heavy bleeding from a cut on my arm that won't stop", "label": "escalate", "category": "keyword_current"}
+{"id": "g004", "symptoms": "I am 30 weeks pregnant and have started bleeding heavily", "label": "escalate", "category": "keyword_current"}
+{"id": "g005", "symptoms": "My throat is swelling after a bee sting, I think it's anaphylaxis", "label": "escalate", "category": "keyword_current"}
+{"id": "g006", "symptoms": "I was diagnosed with a pulmonary embolism last week and now the chest pain is back and I can't catch my breath", "label": "escalate", "category": "keyword_current"}
+{"id": "g007", "symptoms": "My son is unconscious and I can't wake him up", "label": "escalate", "category": "keyword_current"}
+{"id": "g008", "symptoms": "My husband collapsed and is unconscious on the floor", "label": "escalate", "category": "keyword_current"}
+{"id": "g009", "symptoms": "My daughter is having a seizure right now", "label": "escalate", "category": "keyword_current"}
+{"id": "g010", "symptoms": "My father is having a stroke, his face is drooping", "label": "escalate", "category": "keyword_current"}
+{"id": "g011", "symptoms": "My wife is hemorrhaging after giving birth at home", "label": "escalate", "category": "keyword_current"}
+{"id": "g012", "symptoms": "Patient presents with signs of sepsis: fever 39.5, heart rate 130, confusion", "label": "escalate", "category": "keyword_current"}
+{"id": "g013", "symptoms": "Pt found unconscious at home, possible stroke", "label": "escalate", "category": "keyword_current"}
+{"id": "g014", "symptoms": "I think my baby has meningitis, she has a fever, a stiff neck and a rash that doesn't fade", "label": "escalate", "category": "keyword_current"}
+{"id": "g015", "symptoms": "Severe chest pain for the last 20 minutes", "label": "escalate", "category": "keyword_current"}
+{"id": "g016", "symptoms": "The left side of my face is drooping and I can't lift my left arm", "label": "escalate", "category": "paraphrase"}
+{"id": "g017", "symptoms": "My speech suddenly became slurred and my right hand went numb ten minutes ago", "label": "escalate", "category": "paraphrase"}
+{"id": "g018", "symptoms": "My dad suddenly can't speak properly and one side of his mouth is hanging down", "label": "escalate", "category": "paraphrase"}
+{"id": "g019", "symptoms": "Sudden loss of vision in one eye and I feel weak on one side", "label": "escalate", "category": "paraphrase"}
+{"id": "g020", "symptoms": "Crushing pressure in the middle of my chest that spreads to my jaw and left arm", "label": "escalate", "category": "paraphrase"}
+{"id": "g021", "symptoms": "Chest tightness with cold sweat and nausea, started 30 minutes ago and is getting worse", "label": "escalate", "category": "paraphrase"}
+{"id": "g022", "symptoms": "My mother is clutching her chest, she is pale and sweaty and says the pain goes down her arm", "label": "escalate", "category": "paraphrase"}
+{"id": "g023", "symptoms": "I can't breathe, I can only say a few words at a time and my lips are turning blue", "label": "escalate", "category": "paraphrase"}
+{"id": "g024", "symptoms": "My toddler is struggling to breathe, his ribs are sucking in with every breath", "label": "escalate", "category": "paraphrase"}
+{"id": "g025", "symptoms": "Gasping for air and wheezing badly, my inhaler is not helping at all", "label": "escalate", "category": "paraphrase"}
+{"id": "g026", "symptoms": "My lips and tongue are swelling up and I'm getting hives all over after eating shrimp", "label": "escalate", "category": "paraphrase"}
+{"id": "g027", "symptoms": "After taking the antibiotic my face swelled and I feel like my throat is closing", "label": "escalate", "category": "paraphrase"}
+{"id": "g028", "symptoms": "I am vomiting blood", "label": "escalate", "category": "paraphrase"}
+{"id": "g029", "symptoms": "I'm coughing up cups of bright red blood", "label": "escalate", "category": "paraphrase"}
+{"id": "g030", "symptoms": "My stool is black and tarry and I feel faint when I stand up", "label": "escalate", "category": "paraphrase"}
+{"id": "g031", "symptoms": "Blood is soaking through the bandage every few minutes and it won't stop", "label": "escalate", "category": "paraphrase"}
+{"id": "g032", "symptoms": "My grandfather passed out and we can't wake him", "label": "escalate", "category": "paraphrase"}
+{"id": "g033", "symptoms": "She fainted and is not responding to her name", "label": "escalate", "category": "paraphrase"}
+{"id": "g034", "symptoms": "He collapsed and isn't breathing normally", "label": "escalate", "category": "paraphrase"}
+{"id": "g035", "symptoms": "My child's whole body is shaking and jerking, his eyes rolled back and he won't respond", "label": "escalate", "category": "paraphrase"}
+{"id": "g036", "symptoms": "The worst headache of my life came on suddenly like a thunderclap", "label": "escalate", "category": "paraphrase"}
+{"id": "g037", "symptoms": "Hit my head in a fall an hour ago, now I'm vomiting repeatedly and getting very drowsy", "label": "escalate", "category": "paraphrase"}
+{"id": "g038", "symptoms": "High fever with a stiff neck, light hurts my eyes and there's a purple rash that doesn't fade when pressed", "label": "escalate", "category": "paraphrase"}
+{"id": "g039", "symptoms": "I don't want to live anymore and I have a plan to end my life tonight", "label": "escalate", "category": "paraphrase"}
+{"id": "g040", "symptoms": "I took a whole bottle of paracetamol an hour ago", "label": "escalate", "category": "paraphrase"}
+{"id": "g041", "symptoms": "Sudden terrible belly pain, my abdomen is rigid like a board and I can't move", "label": "escalate", "category": "paraphrase"}
+{"id": "g042", "symptoms": "I'm 34 weeks pregnant with a pounding headache, blurry vision and swollen face and hands", "label": "escalate", "category": "paraphrase"}
+{"id": "g043", "symptoms": "My diabetic brother is confused, sweating heavily and not making sense", "label": "escalate", "category": "paraphrase"}
+{"id": "g044", "symptoms": "My 3 week old baby has a temperature of 38.5 and is not feeding", "label": "escalate", "category": "paraphrase"}
+{"id": "g045", "symptoms": "My toddler swallowed some of grandma's heart pills", "label": "escalate", "category": "paraphrase"}
+{"id": "g046", "symptoms": "My mother had a stroke last year and now she can't move her right arm and her speech is slurred", "label": "escalate", "category": "history_plus_current"}
+{"id": "g047", "symptoms": "Family history of heart attack. For the last hour I've had heavy pressure in my chest and my left arm feels numb", "label": "escalate", "category": "history_plus_current"}
+{"id": "g048", "symptoms": "I had a seizure as a child and I just had another one this morning", "label": "escalate", "category": "history_plus_current"}
+{"id": "g049", "symptoms": "My father died of a heart attack and now I am having the same crushing chest pain he had", "label": "escalate", "category": "history_plus_current"}
+{"id": "g050", "symptoms": "Dad had a stroke in 2019. Tonight his face started drooping again", "label": "escalate", "category": "history_plus_current"}
+{"id": "g051", "symptoms": "No history of seizures, but he is convulsing right now", "label": "escalate", "category": "negation_plus_current"}
+{"id": "g052", "symptoms": "No fever, but I am coughing up blood", "label": "escalate", "category": "negation_plus_current"}
+{"id": "g053", "symptoms": "No chest pain, but I suddenly can't feel the left side of my body", "label": "escalate", "category": "negation_plus_current"}
+{"id": "g054", "symptoms": "I don't have a headache but my vision suddenly went black in one eye", "label": "escalate", "category": "negation_plus_current"}
+{"id": "g055", "symptoms": "Denies chest pain. Sudden onset slurred speech and facial droop 20 minutes ago", "label": "escalate", "category": "negation_plus_current"}
+{"id": "g056", "symptoms": "Mild cough and runny nose for three days, no fever, no bleeding, no chest pain", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g057", "symptoms": "I have never had a seizure", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g058", "symptoms": "Headache for two days, no loss of consciousness, no seizures, no vomiting", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g059", "symptoms": "Patient denies any history of stroke or heart attack. Here for routine blood pressure check", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g060", "symptoms": "Sore throat and mild fever. Not coughing up blood, breathing normally", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g061", "symptoms": "Stomach ache after eating, no blood in stool, no vomiting", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g062", "symptoms": "My doctor ruled out a heart attack last month, I just want to understand my cholesterol results", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g063", "symptoms": "CT was negative for hemorrhage. Mild headache persists", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g064", "symptoms": "Twisted my ankle yesterday, it's swollen but I can walk on it, no numbness", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g065", "symptoms": "No signs of sepsis; afebrile, vitals stable, wound healing well", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g066", "symptoms": "I was worried about meningitis but the doctor said it is not, just a viral cold", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g067", "symptoms": "Rash on my arm that itches, I am not having any trouble breathing and no swelling of the face", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "g068", "symptoms": "My grandmother had a stroke ten years ago. I have had a mild tension headache since yesterday", "label": "no_escalate", "category": "family_history"}
+{"id": "g069", "symptoms": "Both of my parents had heart attacks in their seventies. I want to know if my occasional heartburn is anything to worry about", "label": "no_escalate", "category": "family_history"}
+{"id": "g070", "symptoms": "Family history of epilepsy and seizures on my mother's side. I have trouble sleeping lately", "label": "no_escalate", "category": "family_history"}
+{"id": "g071", "symptoms": "My uncle died of a pulmonary embolism in 2015. I have had a runny nose and sneezing for two days", "label": "no_escalate", "category": "family_history"}
+{"id": "g072", "symptoms": "Mom's stroke was back in 2018, she recovered well. I'm here about my seasonal allergies", "label": "no_escalate", "category": "family_history"}
+{"id": "g073", "symptoms": "My late father had a cardiac arrest at 80. I have mild knee pain when climbing stairs", "label": "no_escalate", "category": "family_history"}
+{"id": "g074", "symptoms": "Sister was diagnosed with meningitis as a child, years ago. I have a mild sore throat", "label": "no_escalate", "category": "family_history"}
+{"id": "g075", "symptoms": "FHx: MI in father at 62, stroke in grandmother. Pt presents for routine physical, no complaints", "label": "no_escalate", "category": "family_history"}
+{"id": "g076", "symptoms": "There is a history of sepsis in my family, my aunt had it after surgery long ago. I have dry skin on my hands", "label": "no_escalate", "category": "family_history"}
+{"id": "g077", "symptoms": "My brother had a seizure disorder when he was little. I just have a stuffy nose", "label": "no_escalate", "category": "family_history"}
+{"id": "g078", "symptoms": "I had a stroke five years ago and recovered fully. I have had a runny nose since yesterday", "label": "no_escalate", "category": "personal_history"}
+{"id": "g079", "symptoms": "History of heart attack in 2012, stable on medication. Here because of a mild skin rash on my arm", "label": "no_escalate", "category": "personal_history"}
+{"id": "g080", "symptoms": "I used to have seizures as a child but none for 20 years. I have a sore throat today", "label": "no_escalate", "category": "personal_history"}
+{"id": "g081", "symptoms": "I had a pulmonary embolism in 2019 and finished treatment. Now I have mild seasonal allergy symptoms", "label": "no_escalate", "category": "personal_history"}
+{"id": "g082", "symptoms": "Past medical history: sepsis in 2010 after appendectomy. Presents with athlete's foot", "label": "no_escalate", "category": "personal_history"}
+{"id": "g083", "symptoms": "I had heavy bleeding after surgery three years ago. Today I only have a mild cold", "label": "no_escalate", "category": "personal_history"}
+{"id": "g084", "symptoms": "Runny nose, sneezing and itchy eyes every spring", "label": "no_escalate", "category": "benign"}
+{"id": "g085", "symptoms": "Mild lower back ache after gardening yesterday", "label": "no_escalate", "category": "benign"}
+{"id": "g086", "symptoms": "Dry cough for two days, no fever, feeling fine otherwise", "label": "no_escalate", "category": "benign"}
+{"id": "g087", "symptoms": "I have had trouble falling asleep for the past week", "label": "no_escalate", "category": "benign"}
+{"id": "g088", "symptoms": "Small itchy rash on my wrist where my new watch sits", "label": "no_escalate", "category": "benign"}
+{"id": "g089", "symptoms": "Occasional heartburn after spicy meals", "label": "no_escalate", "category": "benign"}
+{"id": "g090", "symptoms": "My knee is a little stiff in the mornings", "label": "no_escalate", "category": "benign"}
+{"id": "g091", "symptoms": "Mild sore throat and a blocked nose since yesterday", "label": "no_escalate", "category": "benign"}
+{"id": "g092", "symptoms": "Feeling tired this week, probably from working late", "label": "no_escalate", "category": "benign"}
+{"id": "g093", "symptoms": "Slight headache in the afternoon that goes away after drinking water", "label": "no_escalate", "category": "benign"}
+{"id": "g094", "symptoms": "Constipation for three days, otherwise well", "label": "no_escalate", "category": "benign"}
+{"id": "g095", "symptoms": "A few mouth ulcers that sting when I eat", "label": "no_escalate", "category": "benign"}
+{"id": "g096", "symptoms": "I'm dying to know whether this mole is normal, it hasn't changed in years", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g097", "symptoms": "This cold is killing me, my nose won't stop running", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g098", "symptoms": "My heart skipped a beat when I saw the bill, otherwise I feel fine", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g099", "symptoms": "The nurse said my blood pressure is not critical, just slightly raised", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g100", "symptoms": "I watched a documentary about people who had seizures and it made me anxious, but I feel physically fine", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g101", "symptoms": "My neighbor had a heart attack yesterday, it scared me. I just have a mild headache from stress", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g102", "symptoms": "My father survived a heart attack last year and is doing well. I am asking about my own acne", "label": "no_escalate", "category": "family_history"}
+{"id": "g103", "symptoms": "I get anxious thinking I might have a seizure someday, though I have never had one", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g104", "symptoms": "Pain is not severe, about 2 out of 10, in my lower back", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g105", "symptoms": "It's not an emergency, I just need advice about a wart on my finger", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g106", "symptoms": "I finished a first aid course where we practiced helping someone who is unconscious. Now my wrist is a little sore", "label": "no_escalate", "category": "tricky_wording"}
+{"id": "g107", "symptoms": "My mother had a stroke", "label": "ambiguous", "category": "undated_relative"}
+{"id": "g108", "symptoms": "My father had a heart attack", "label": "ambiguous", "category": "undated_relative"}
+{"id": "g109", "symptoms": "My dad had a seizure", "label": "ambiguous", "category": "undated_relative"}
+{"id": "g110", "symptoms": "", "question": "What are the warning signs of a stroke?", "label": "ambiguous", "category": "informational_question"}
+{"id": "g111", "symptoms": "", "question": "What causes a heart attack?", "label": "ambiguous", "category": "informational_question"}
+{"id": "g112", "symptoms": "", "question": "Is sepsis contagious?", "label": "ambiguous", "category": "informational_question"}
+{"id": "g113", "symptoms": "I read an article about stroke prevention and want to improve my diet", "label": "ambiguous", "category": "informational_question"}
+{"id": "g114", "symptoms": "Severe sore throat for three days", "label": "ambiguous", "category": "severity_word"}
+{"id": "g115", "symptoms": "Severe period cramps every month", "label": "ambiguous", "category": "severity_word"}
+{"id": "g116", "symptoms": "I have had a bad headache all day", "label": "ambiguous", "category": "borderline_symptom"}
+{"id": "g117", "symptoms": "My chest hurts when I press on it after the gym yesterday", "label": "ambiguous", "category": "borderline_symptom"}
+{"id": "g118", "symptoms": "Feeling a bit short of breath when climbing stairs lately", "label": "ambiguous", "category": "borderline_symptom"}
+{"id": "g119", "symptoms": "Could my mild indigestion be a heart attack? I have no chest pain, no sweating and no shortness of breath, it only happens after big meals", "label": "ambiguous", "category": "borderline_symptom"}

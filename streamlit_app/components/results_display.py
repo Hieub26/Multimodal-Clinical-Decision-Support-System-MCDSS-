@@ -2,10 +2,20 @@
 Results display component for diagnosis output.
 """
 
-import json
+from html import escape
+
 import streamlit as st
 from PIL import Image
 from pathlib import Path
+
+
+def _esc(value) -> str:
+    """Escape a value for interpolation into unsafe_allow_html markup.
+
+    Diagnosis text comes from an LLM and from user input; it must render as
+    text, not as HTML.
+    """
+    return escape(str(value))
 
 
 def _build_clinical_explanation(base_explanation: str, vlm_review: dict | None) -> str:
@@ -32,22 +42,6 @@ def _build_clinical_explanation(base_explanation: str, vlm_review: dict | None) 
 def render_results(response: dict, gradcam_path: str = None):
     """Render the full diagnosis results."""
     if not response:
-        cv = response.get("cv_details")
-        if cv:
-            with st.expander("Computer Vision Debug Details", expanded=True):
-                st.markdown(f"**Predicted Class:** {cv.get('predicted_class', 'N/A')}")
-                st.markdown(f"**Confidence:** {cv.get('confidence', 0):.1%}")
-                st.markdown(f"**Abnormality Score:** {cv.get('abnormality_score', 0):.1%}")
-                st.markdown(f"**Decision Threshold:** {cv.get('decision_threshold', 0):.1%}")
-
-                preds = cv.get("top_predictions", [])
-                if preds:
-                    st.markdown("**Top Raw Class Probabilities:**")
-                    for p in preds:
-                        st.markdown(
-                            f"- {p.get('class', 'Unknown')}: "
-                            f"{p.get('probability', 0):.1%}"
-                        )
         return
 
     st.markdown("""
@@ -64,13 +58,13 @@ def render_results(response: dict, gradcam_path: str = None):
     if safety.get("is_approved"):
         st.markdown(f"""
         <div class="safety-banner safety-approved animate-in">
-            ✅ <b>APPROVED OUTPUT</b> — {safety.get("message", "")}
+            ✅ <b>APPROVED OUTPUT</b> — {_esc(safety.get("message", ""))}
         </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown(f"""
         <div class="safety-banner safety-fallback animate-in">
-            ⚠️ <b>CONSULT A DOCTOR</b> — {safety.get("message", "")}
+            ⚠️ <b>CONSULT A DOCTOR</b> — {_esc(safety.get("message", ""))}
         </div>
         """, unsafe_allow_html=True)
 
@@ -100,34 +94,42 @@ def render_results(response: dict, gradcam_path: str = None):
     st.markdown(f"""
     <div class="diagnosis-primary animate-in">
         <h3>Primary Diagnosis</h3>
-        <div class="diagnosis-name">{diagnosis.get("primary_diagnosis", "N/A")}</div>
+        <div class="diagnosis-name">{_esc(diagnosis.get("primary_diagnosis", "N/A"))}</div>
     </div>
     """, unsafe_allow_html=True)
 
     # === Metrics Row ===
     col1, col2, col3, col4 = st.columns(4)
 
+    # For an image-only result the number is the classifier's score for the
+    # flagged class, which is not the chance that the flag is right (that is
+    # shown with the image analysis below).
+    confidence_label = "Model score" if response.get("modality") == "image" else "Confidence"
+
     with col1:
         st.markdown(f"""
         <div class="metric-card">
             <div class="metric-value">{confidence:.0%}</div>
-            <div class="metric-label">Confidence</div>
+            <div class="metric-label">{confidence_label}</div>
         </div>
         """, unsafe_allow_html=True)
 
     with col2:
         st.markdown(f"""
         <div class="metric-card">
-            <div class="metric-value" style="color: {sev_color};">{severity.upper()}</div>
+            <div class="metric-value" style="color: {sev_color};">{_esc(severity.upper())}</div>
             <div class="metric-label">Severity</div>
         </div>
         """, unsafe_allow_html=True)
 
     with col3:
-        urgency_color = "#ef4444" if urgency in ("urgent", "emergency") else "#f59e0b" if urgency == "urgent" else "#22c55e"
+        urgency_colors = {
+            "emergency": "#ef4444", "emergent": "#ef4444", "urgent": "#f59e0b",
+        }
+        urgency_color = urgency_colors.get(urgency, "#22c55e")
         st.markdown(f"""
         <div class="metric-card">
-            <div class="metric-value" style="color: {urgency_color};">{urgency.upper()}</div>
+            <div class="metric-value" style="color: {urgency_color};">{_esc(urgency.upper())}</div>
             <div class="metric-label">Urgency</div>
         </div>
         """, unsafe_allow_html=True)
@@ -136,7 +138,7 @@ def render_results(response: dict, gradcam_path: str = None):
         modality = response.get("modality", "unknown")
         st.markdown(f"""
         <div class="metric-card">
-            <div class="metric-value" style="font-size: 1.2rem;">{modality.upper()}</div>
+            <div class="metric-value" style="font-size: 1.2rem;">{_esc(modality.upper())}</div>
             <div class="metric-label">Modality</div>
         </div>
         """, unsafe_allow_html=True)
@@ -146,11 +148,13 @@ def render_results(response: dict, gradcam_path: str = None):
     if question_answer and question_answer.strip().upper() != "N/A":
         st.markdown("---")
         st.markdown("#### 💬 Clinical Question Answer")
+        # Escaped, with line breaks kept as <br> (a blank line would end the HTML block)
+        answer_html = _esc(question_answer.strip()).replace("\n", "<br>")
         st.markdown(f"""
         <div style="padding: 16px 20px; background: rgba(59, 130, 246, 0.08);
                     border-left: 4px solid #3b82f6; border-radius: 8px;
                     color: #e2e8f0; line-height: 1.7;">
-            {question_answer}
+            {answer_html}
         </div>
         """, unsafe_allow_html=True)
 
@@ -174,7 +178,7 @@ def render_results(response: dict, gradcam_path: str = None):
                         margin-bottom: 6px; background: rgba(34, 197, 94, 0.08);
                         border-left: 3px solid #22c55e; border-radius: 6px;">
                 <span style="color: #22c55e; font-size: 1.1rem;">→</span>
-                <span style="color: #e2e8f0;">{action}</span>
+                <span style="color: #e2e8f0;">{_esc(action)}</span>
             </div>
             """, unsafe_allow_html=True)
 
@@ -200,7 +204,7 @@ def render_results(response: dict, gradcam_path: str = None):
                     st.markdown(f"""
                     <div class="prob-bar-container">
                         <div class="prob-bar-label">
-                            <span style="color: #f0f4f8;">{name}</span>
+                            <span style="color: #f0f4f8;">{_esc(name)}</span>
                             <span style="color: #94a3b8;">{prob:.0%}</span>
                         </div>
                         <div class="prob-bar-track">
@@ -221,19 +225,31 @@ def render_results(response: dict, gradcam_path: str = None):
     if cv:
         with st.expander("🩻 Computer Vision Analysis", expanded=False):
             st.markdown(f"**Predicted Class:** {cv.get('predicted_class', 'N/A')}")
-            st.markdown(f"**Confidence:** {cv.get('confidence', 0):.0%}")
+            st.markdown(f"**Model score:** {cv.get('confidence', 0):.0%}")
+
+            # What a flag of this class was worth on the model's validation set
+            reliability = cv.get("reliability")
+            if reliability:
+                precision = reliability.get("validated_precision")
+                recall = reliability.get("validated_recall")
+                flagged = str(reliability.get("class", "")).replace("_", " ")
+                st.markdown(
+                    f"**Validated precision ({flagged}):** {precision:.0%}"
+                    + (f" · **recall:** {recall:.0%}" if recall is not None else "")
+                )
+                st.warning(reliability.get("note", ""))
 
             # Top predictions
             preds = cv.get("top_predictions", [])
             if preds:
-                st.markdown("**Class Probabilities:**")
+                st.markdown("**Model scores per class** (not calibrated probabilities):")
                 for p in preds:
                     prob = p.get("probability", 0)
                     name = p.get("class", "Unknown")
                     st.markdown(f"""
                     <div class="prob-bar-container">
                         <div class="prob-bar-label">
-                            <span style="color: #f0f4f8;">{name}</span>
+                            <span style="color: #f0f4f8;">{_esc(name)}</span>
                             <span style="color: #94a3b8;">{prob:.0%}</span>
                         </div>
                         <div class="prob-bar-track">

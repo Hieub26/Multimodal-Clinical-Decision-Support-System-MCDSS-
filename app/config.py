@@ -40,8 +40,13 @@ class Settings(BaseSettings):
     redoc_url: str = "/redoc"
 
     # --- Server & CORS ---
-    fastapi_host: str = "0.0.0.0"
+    # Both servers listen on this machine only. The case history holds
+    # patient data and the Streamlit UI has no login, so reaching either from
+    # the network is a deliberate choice: set the host to 0.0.0.0 and put
+    # authentication in front (API_KEY for the API, a proxy for the UI).
+    fastapi_host: str = "127.0.0.1"
     fastapi_port: PositiveInt = Field(default=8008, gt=0, le=65535)
+    streamlit_host: str = "127.0.0.1"
     streamlit_port: PositiveInt = Field(default=8501, gt=0, le=65535)
     environment: str = "development"
     cors_origins: list[str] = [
@@ -50,6 +55,20 @@ class Settings(BaseSettings):
         "http://localhost:8008",
         "http://127.0.0.1:8008",
     ]
+    # When set, the endpoints that create or return patient cases (diagnosis,
+    # history, report download) require this value in the X-API-Key header.
+    # Empty = no check (local development).
+    api_key: SecretStr = Field(
+        default=SecretStr(""),
+        description="API key required by the diagnosis and case endpoints"
+    )
+    # When set, state-changing endpoints (guideline ingestion) require this
+    # value in the X-API-Key header. Empty = no check (local development).
+    admin_api_key: SecretStr = Field(
+        default=SecretStr(""),
+        description="API key required by administrative endpoints"
+    )
+    max_upload_size_mb: PositiveInt = Field(default=20, gt=0)
 
     # --- LLM Provider ---
     gemini_api_key: SecretStr = Field(
@@ -57,6 +76,35 @@ class Settings(BaseSettings):
         description="API key for Gemini LLM/VLM services"
     )
     llm_model_name: str = "gemini-2.5-flash"
+
+    # --- Guideline judge (LLM-as-a-Judge) ---
+    # A model from a different provider than the one that writes the
+    # diagnosis, so the generator does not grade its own output. Without a
+    # key the validator uses llm_model_name as the judge, as it did before.
+    openai_api_key: SecretStr = Field(
+        default=SecretStr(""),
+        description="API key for the OpenAI model that judges guideline support"
+    )
+    judge_model_name: str = "gpt-6-luna"
+    # The judgment is narrow (one diagnosis label against three passages).
+    judge_reasoning_effort: str = "low"
+    judge_timeout_seconds: float = Field(default=10.0, gt=0.0)
+
+    # --- Jev (TypeSafe System One): typed context judgments ---
+    # Used only when a key is set; every caller falls back to rules without it.
+    typesafe_api_key: SecretStr = Field(
+        default=SecretStr(""),
+        description="API key for TypeSafe's Jev model"
+    )
+    jev_enabled: bool = True
+    # Pinned: the decision thresholds were tuned against this version.
+    jev_model: str = "jev-1.13.0"
+    # A normal call takes about 0.3 s; a slower one falls back to the rules.
+    jev_timeout_seconds: float = Field(default=2.5, gt=0.0)
+    # Whether Jev may drop a keyword red flag when it is close to certain the
+    # mention is history ("I had a stroke five years ago"). It can always add
+    # red flags; this only controls removing them.
+    jev_clear_history_red_flags: bool = True
 
     # --- Embedding Model ---
     embedding_model_name: str = "pritamdeka/S-BioBert-snli-multinli-stsb"
@@ -69,7 +117,8 @@ class Settings(BaseSettings):
     cv_image_size: PositiveInt = Field(default=224, gt=0)
     cv_logit_temperature: float = Field(default=1.0, gt=0.0)
     cv_top_k: PositiveInt = Field(default=5, gt=0)
-    cv_threshold_relaxation: float = Field(default=0.84, ge=0.0, le=1.0)
+    # 1.0 = flag at the thresholds the precision and recall were measured at
+    cv_threshold_relaxation: float = Field(default=1.0, ge=0.0, le=1.0)
     cv_negative_screen_ratio_threshold: float = Field(default=0.65, ge=0.0, le=1.0)
 
     # Immutable tuple for class names
@@ -98,9 +147,12 @@ class Settings(BaseSettings):
     vlm_safety_model: str = "gemini-2.5-flash"
 
     # --- Database ---
+    # Holds the database password, so it is left out of the settings repr
+    # (which ends up in tracebacks and test failure output).
     database_url: str = Field(
         default="postgresql://postgres:postgres@localhost:5432/clinical_dss",
-        description="Async SQLAlchemy database connection URL"
+        description="Async SQLAlchemy database connection URL",
+        repr=False,
     )
     db_pool_min_size: PositiveInt = Field(default=2, gt=0)
     db_pool_max_size: PositiveInt = Field(default=10, gt=0)

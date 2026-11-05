@@ -17,16 +17,18 @@ from app.utils.logger import db_logger
 
 
 async def _init_connection(conn: asyncpg.Connection) -> None:
-    """Callback to set up custom asyncpg JSONB codecs per connection."""
-    try:
-        await conn.set_type_codec(
-            "jsonb",
-            encoder=json.dumps,
-            decoder=json.loads,
-            schema="pg_catalog",
-        )
-    except Exception as e:
-        db_logger.debug(f"JSONB codec registration note: {e}")
+    """Callback to set up custom asyncpg JSONB codecs per connection.
+
+    With this codec JSONB parameters are passed as Python objects and the
+    codec serializes them. CaseRepository relies on it, so a registration
+    failure must fail pool initialization rather than be swallowed.
+    """
+    await conn.set_type_codec(
+        "jsonb",
+        encoder=json.dumps,
+        decoder=json.loads,
+        schema="pg_catalog",
+    )
 
 
 class DatabaseManager:
@@ -73,6 +75,11 @@ class DatabaseManager:
             raise DatabaseError("Database pool not initialized. Call initialize() first.")
         return self._pool.acquire()
 
+    async def ping(self) -> None:
+        """Run a trivial query; raises if the database is unreachable."""
+        async with self.acquire() as conn:
+            await conn.fetchval("SELECT 1")
+
 
 class CaseRepository:
     """Repository handling CRUD operations for Case History records with CaseMapper & Exception handling."""
@@ -84,12 +91,16 @@ class CaseRepository:
         """Save a diagnosis case using ACID transaction safety and CaseMapper."""
         record = CaseMapper.to_record(case_input)
 
-        if isinstance(record.diagnosis_json, (dict, list)):
-            diag_val = json.dumps(record.diagnosis_json)
-        elif isinstance(record.diagnosis_json, str):
-            diag_val = record.diagnosis_json
-        else:
-            diag_val = "{}"
+        # Pass a Python object: the JSONB codec does the serialization.
+        # Serializing here as well would store a JSON *string* in the column.
+        diag_val = record.diagnosis_json
+        if isinstance(diag_val, str):
+            try:
+                diag_val = json.loads(diag_val)
+            except json.JSONDecodeError:
+                diag_val = {"raw": diag_val}
+        elif diag_val is None:
+            diag_val = {}
 
         try:
             async with self.db.acquire() as conn:

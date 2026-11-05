@@ -14,6 +14,8 @@ The engine also produces a full explainability breakdown (fallback_reasoning) fo
 debugging and audit purposes.
 """
 
+import math
+import re
 from collections import defaultdict
 from app.core.nlp.text_preprocessor import TextPreprocessor
 from app.utils.logger import nlp_logger
@@ -203,6 +205,47 @@ SYMPTOM_WEIGHTS = {
     "orthopnea":           {"heart_failure": 3, "pulmonary_edema": 2},
     "pallor":              {"anemia": 2},
     "jaundice":            {},
+    # The entries below complete the table from the symptom lists of the
+    # guideline library (data/guidelines): before them the hallmark symptoms
+    # of several diseases the engine can output carried no weight at all.
+    # UTI: dysuria, frequency, urgency, suprapubic pain; pyelonephritis adds
+    # fever, chills, flank pain
+    "dysuria":             {"uti": 4},
+    "frequent urination":  {"uti": 3, "diabetes": 3},
+    "hematuria":           {"uti": 2},
+    "cloudy urine":        {"uti": 2},
+    "pelvic pain":         {"uti": 2, "appendicitis": 1},
+    "flank pain":          {"uti": 3},
+    # Diabetes: polyuria, polydipsia, polyphagia, weight loss, fatigue,
+    # blurred vision, slow-healing wounds
+    "thirst":              {"diabetes": 3},
+    "increased appetite":  {"diabetes": 2, "hyperthyroidism": 1},
+    "blurred vision":      {"diabetes": 2, "hypertension": 1, "stroke": 1},
+    "slow healing":        {"diabetes": 3},
+    # Asthma: wheezing, shortness of breath, chest tightness, cough
+    "chest tightness":     {"asthma": 3, "acs": 2, "copd": 1},
+    # COVID-19: new loss of taste or smell; diarrhea (also listed for pneumonia)
+    "loss of taste/smell": {"covid19": 4},
+    "diarrhea":            {"covid19": 1, "pneumonia": 1},
+    # Tuberculosis: loss of appetite
+    "loss of appetite":    {"tuberculosis": 2, "appendicitis": 1},
+    # Heart failure: sudden weight gain
+    "weight gain":         {"heart_failure": 2, "hypothyroidism": 2},
+    # Hypertension, severe: nosebleeds
+    "nosebleed":           {"hypertension": 2},
+    # Stroke: facial droop, speech difficulty, loss of balance
+    "facial droop":        {"stroke": 4},
+    "slurred speech":      {"stroke": 4},
+    "loss of balance":     {"stroke": 2},
+    # Skin: plaques, scales, sores
+    "skin lesion":         {"skin_condition": 3},
+    "difficulty swallowing": {"gerd": 2},
+}
+
+# Two names of one symptom score as one, so that the combination rules below
+# see it whichever word the patient or clinician used.
+SYMPTOM_ALIASES = {
+    "dyspnea": "shortness of breath",
 }
 
 
@@ -242,6 +285,27 @@ COMBINATION_RULES = [
     # GI cluster
     ({"abdominal pain", "fever", "nausea"},                 {"appendicitis": 4}),
     ({"heartburn", "chest pain"},                           {"gerd": 4}),
+    ({"heartburn", "difficulty swallowing"},                {"gerd": 3}),
+
+    # Urinary cluster
+    ({"dysuria", "frequent urination"},                     {"uti": 4}),
+    ({"dysuria", "fever"},                                  {"uti": 2}),
+    ({"fever", "flank pain"},                               {"uti": 4}),
+
+    # Diabetes cluster (the classic triad and its pairs)
+    ({"frequent urination", "thirst"},                      {"diabetes": 5}),
+    ({"thirst", "increased appetite"},                      {"diabetes": 3}),
+    ({"thirst", "weight loss"},                             {"diabetes": 3}),
+
+    # Asthma cluster
+    ({"wheezing", "chest tightness"},                       {"asthma": 4}),
+
+    # Stroke cluster
+    ({"facial droop", "slurred speech"},                    {"stroke": 5}),
+
+    # Skin cluster
+    ({"rash", "itching"},                                   {"skin_condition": 3}),
+    ({"skin lesion", "itching"},                            {"skin_condition": 2}),
 ]
 
 
@@ -250,7 +314,10 @@ COMBINATION_RULES = [
 # ---------------------------------------------------------------------------
 
 RETRIEVAL_BOOST_FACTOR = 3.0
-MIN_SIMILARITY_FOR_BOOST = 0.65  # Skip docs below this similarity to prevent leak
+# Skip docs below this cosine similarity to prevent boost leak. Calibrated on
+# the bundled guidelines with S-BioBert: symptom queries score ~0.48-0.59
+# against relevant chunks, vague or off-topic text stays below ~0.33.
+MIN_SIMILARITY_FOR_BOOST = 0.45
 NEGATION_WINDOW_WORDS = 12
 
 NEGATION_PATTERNS = [
@@ -300,11 +367,29 @@ GENERIC_LABELS = {
 # ---------------------------------------------------------------------------
 # CONFIDENCE — Fallback should never be as confident as LLM
 # ---------------------------------------------------------------------------
+# Confidence is read off how clearly the evidence singles out one disease:
+# the margin of the leading score over the runner-up, as a share of the
+# leading score. It used to grow with the leading score alone, which made a
+# long list of symptoms shared by three diseases look more certain than two
+# symptoms that fit only one.
+#
+# The curve is fitted to the development split of a public benchmark
+# (evaluation/fallback_eval.py): with at least two supporting symptoms the
+# leading diagnosis was right in 97% of cases at a margin of 0.7 or more, in
+# about half between 0.6 and 0.7, in a quarter between 0.5 and 0.6 and in
+# one case in eight below that. It stays below the measured figure at the
+# top on purpose (see the cap): the benchmark covers 9 of the 22 diseases
+# the engine can name.
 
 FALLBACK_CONFIDENCE_CAP = 0.75
-FALLBACK_CONFIDENCE_BASE = 0.35
-FALLBACK_CONFIDENCE_RANGE = 0.40  # max added on top of base
-FALLBACK_SATURATION_CONSTANT = 3.0  # soft-saturation constant (lower = higher confidence for clear cases)
+# (relative margin, confidence), linear in between. The NLP confidence
+# threshold of 0.70 is met from a margin of 0.7.
+CONFIDENCE_BY_MARGIN = [(0.0, 0.10), (0.5, 0.25), (0.7, 0.70), (0.9, 0.75), (1.0, 0.75)]
+# One symptom is not a diagnosis, however exclusively it points to a disease
+SINGLE_SYMPTOM_CONFIDENCE_CAP = 0.60
+# No reported symptom counts towards the disease: only retrieved guideline
+# text raised it
+NO_SYMPTOM_CONFIDENCE_CAP = 0.20
 
 
 # ---------------------------------------------------------------------------
@@ -339,6 +424,15 @@ def _validate_config():
 
 _validate_config()
 
+# Order among diseases with the same score: the more severe first, so that a
+# tie is reported with the more cautious severity and urgency, then the order
+# of DISEASE_PROFILES.
+_SEVERITY_ORDER = {"critical": 0, "high": 1, "moderate": 2, "low": 3}
+_TIE_ORDER = {
+    key: (_SEVERITY_ORDER[profile["severity"]], position)
+    for position, (key, profile) in enumerate(DISEASE_PROFILES.items())
+}
+
 
 # ---------------------------------------------------------------------------
 # ENGINE
@@ -347,8 +441,8 @@ _validate_config()
 class ClinicalFallbackEngine:
     """4-layer resilient clinical fallback when LLM is unavailable."""
 
-    def __init__(self):
-        self._preprocessor = TextPreprocessor()
+    def __init__(self, preprocessor: TextPreprocessor | None = None):
+        self._preprocessor = preprocessor or TextPreprocessor()
 
     # ---------------------------------------------------------------
     # Public API
@@ -368,9 +462,12 @@ class ClinicalFallbackEngine:
 
         # Extract symptoms from the input
         preprocessed = self._preprocessor.preprocess(user_input)
-        symptoms = set(preprocessed["extracted_symptoms"])
+        symptoms = {
+            SYMPTOM_ALIASES.get(symptom, symptom)
+            for symptom in preprocessed["extracted_symptoms"]
+        }
 
-        nlp_logger.info(f"Fallback symptoms: {sorted(symptoms)}")
+        nlp_logger.info(f"Fallback symptoms: {len(symptoms)}")
 
         # Initialize scores for all known diseases
         scores = defaultdict(float)
@@ -395,8 +492,13 @@ class ClinicalFallbackEngine:
             nlp_logger.info("No disease scored — returning generic assessment")
             return self._empty_fallback(symptoms, preprocessed)
 
-        # Rank diseases
-        ranked = sorted(final_scores.items(), key=lambda x: x[1], reverse=True)
+        # Rank diseases. Equal scores are common (one symptom often gives
+        # the same weight to several diseases), so the order among them is
+        # fixed: without it the leading disease followed the iteration order
+        # of a set and changed from one server start to the next.
+        ranked = sorted(
+            final_scores.items(), key=lambda item: (-item[1], _TIE_ORDER[item[0]])
+        )
         top_key, top_score = ranked[0]
         second_key = ranked[1][0] if len(ranked) > 1 else None
         second_score = ranked[1][1] if len(ranked) > 1 else 0.0
@@ -406,12 +508,15 @@ class ClinicalFallbackEngine:
             top_key, top_score, second_score
         )
 
-        # Calculate confidence (clinical-grade formula, capped)
-        # confidence = base + range * (top / (top + saturation)), capped at 0.75
-        max_score_in_ranking = max(top_score, 1e-6)
-        normalized = min(top_score / (max_score_in_ranking + FALLBACK_SATURATION_CONSTANT), 1.0)
-        confidence = FALLBACK_CONFIDENCE_BASE + FALLBACK_CONFIDENCE_RANGE * normalized
-        confidence = min(round(confidence, 2), FALLBACK_CONFIDENCE_CAP)
+        # The reported symptoms that count towards the leading disease
+        supporting_symptoms = sorted(
+            symptom for symptom in symptoms
+            if SYMPTOM_WEIGHTS.get(symptom, {}).get(top_key, 0) > 0
+        )
+
+        confidence = self._confidence(
+            top_score, second_score, len(supporting_symptoms)
+        )
 
         profile = DISEASE_PROFILES[top_key]
 
@@ -424,6 +529,7 @@ class ClinicalFallbackEngine:
             "final_scores": final_scores,
             "top_disease": top_key,
             "top_score": round(top_score, 2),
+            "supporting_symptoms": supporting_symptoms,
             "runner_up_disease": second_key,
             "runner_up_score": round(second_score, 2),
             "promotion_applied": was_promoted,
@@ -438,7 +544,6 @@ class ClinicalFallbackEngine:
             f"(score={top_score:.1f}, runner_up={second_key}:{second_score:.1f}, "
             f"promoted={was_promoted})"
         )
-        nlp_logger.info(f"Fallback reasoning: {fallback_reasoning}")
 
         # Build differential diagnoses from ranked scores
         differentials = []
@@ -476,6 +581,27 @@ class ClinicalFallbackEngine:
             "urgency": profile["urgency"],
             "fallback_reasoning": fallback_reasoning,
         }
+
+    @staticmethod
+    def _confidence(top_score: float, second_score: float, supporting: int) -> float:
+        """Confidence in the leading disease (see CONFIDENCE_BY_MARGIN)."""
+        margin = (top_score - second_score) / max(top_score, 1e-6)
+        margin = min(max(margin, 0.0), 1.0)
+
+        confidence = CONFIDENCE_BY_MARGIN[-1][1]
+        for (low, at_low), (high, at_high) in zip(CONFIDENCE_BY_MARGIN, CONFIDENCE_BY_MARGIN[1:]):
+            if margin <= high:
+                confidence = at_low + (at_high - at_low) * (margin - low) / (high - low)
+                break
+
+        cap = FALLBACK_CONFIDENCE_CAP
+        if supporting == 1:
+            cap = SINGLE_SYMPTOM_CONFIDENCE_CAP
+        elif supporting == 0:
+            cap = NO_SYMPTOM_CONFIDENCE_CAP
+        # Rounded down: a margin just short of a knot must not be lifted
+        # onto it, and over the threshold it marks
+        return math.floor(min(confidence, cap) * 100 + 1e-9) / 100
 
     # ---------------------------------------------------------------
     # Layer 1: Weighted Symptom Scoring
@@ -529,41 +655,46 @@ class ClinicalFallbackEngine:
 
         for doc in retrieved_docs:
             text = doc.get("text", "").lower()
-            similarity = 1.0 - doc.get("distance", 1.0)
+            # Vector store uses cosine distance, so 1 - distance is the
+            # cosine similarity (clamped: distance can exceed 1).
+            similarity = min(max(1.0 - doc.get("distance", 1.0), 0.0), 1.0)
 
             # Gate: skip low-similarity docs to prevent boost leak
             if similarity < MIN_SIMILARITY_FOR_BOOST:
                 continue
 
-            text_words = text.split()
-
             for disease_key, profile in DISEASE_PROFILES.items():
-                boosted_this_doc = False
                 for keyword in profile["guideline_keywords"]:
-                    if keyword not in text:
-                        continue
-                    if boosted_this_doc:
-                        break
-
-                    # Negation check: find keyword position in word list
-                    # and inspect NEGATION_WINDOW_WORDS words before it
-                    if self._is_negated(text, text_words, keyword):
+                    if not self._has_affirmed_mention(text, keyword):
                         continue
 
                     # Use similarity² decay — low similarity decays quadratically
                     boost = (similarity ** 2) * RETRIEVAL_BOOST_FACTOR
                     scores[disease_key] += boost
                     retrieval_deltas[disease_key] += round(boost, 2)
-                    boosted_this_doc = True
+                    break  # one boost per disease per document
 
         return (
             {k: v for k, v in scores.items() if v > 0},
             dict(retrieval_deltas),
         )
 
+    @classmethod
+    def _has_affirmed_mention(cls, text: str, keyword: str) -> bool:
+        """True if the keyword occurs as a whole word at least once un-negated.
+
+        Whole-word matching matters: as substrings "tb" hits "heartburn" and
+        "uti" hits "routine".
+        """
+        pattern = r"\b" + re.escape(keyword) + r"\b"
+        return any(
+            not cls._is_negated(text, match.start())
+            for match in re.finditer(pattern, text)
+        )
+
     @staticmethod
-    def _is_negated(text: str, text_words: list, keyword: str) -> bool:
-        """Check if a keyword is negated using a two-tier word-based approach.
+    def _is_negated(text: str, kw_pos: int) -> bool:
+        """Check if the keyword at kw_pos is negated using a two-tier word-based approach.
 
         Tier 1: Multi-word patterns (e.g., "no evidence of", "ruled out")
                 — high precision, catches exact clinical negation phrases.
@@ -574,11 +705,6 @@ class ClinicalFallbackEngine:
 
         Both tiers use a NEGATION_WINDOW_WORDS word window before the keyword.
         """
-        # Find the character position of the keyword
-        kw_pos = text.find(keyword)
-        if kw_pos < 0:
-            return False
-
         # Get the text before the keyword, split into words,
         # then take the last NEGATION_WINDOW_WORDS words
         prefix_text = text[:kw_pos]
@@ -634,9 +760,10 @@ class ClinicalFallbackEngine:
         """Return a minimal diagnosis when no disease scored."""
         return {
             "primary_diagnosis": "General clinical assessment needed",
-            "confidence": 0.3,
+            # The low end of CONFIDENCE_BY_MARGIN: nothing points anywhere
+            "confidence": CONFIDENCE_BY_MARGIN[0][1],
             "differential_diagnoses": [
-                {"condition": "Requires further evaluation", "probability": 0.2}
+                {"condition": "Requires further evaluation", "probability": 0.05}
             ],
             "explanation": (
                 f"Based on reported symptoms "
@@ -661,6 +788,7 @@ class ClinicalFallbackEngine:
                 "final_scores": {},
                 "top_disease": None,
                 "top_score": 0,
+                "supporting_symptoms": [],
                 "runner_up_disease": None,
                 "runner_up_score": 0,
                 "promotion_applied": False,

@@ -1,0 +1,48 @@
+{"id": "h001", "symptoms": "My husband had a stroke two years ago. This evening his words are coming out jumbled and his left hand has gone weak", "label": "escalate", "category": "history_plus_current"}
+{"id": "h002", "symptoms": "I had a mini-stroke in 2020 and since an hour ago I can't feel my right leg and my face feels lopsided", "label": "escalate", "category": "history_plus_current"}
+{"id": "h003", "symptoms": "Grandma had a stroke last spring; tonight she suddenly cannot lift her arm and she is dribbling from one side of her mouth", "label": "escalate", "category": "history_plus_current"}
+{"id": "h004", "symptoms": "After her stroke last year she recovered completely, but this morning her speech is slurred again and one eyelid is drooping", "label": "escalate", "category": "history_plus_current"}
+{"id": "h005", "symptoms": "My dad has had two heart attacks before and now he is grey, sweating and holding his chest", "label": "escalate", "category": "history_plus_current"}
+{"id": "h006", "symptoms": "I had a heart attack in 2018. For the past half hour there is a heavy weight on my chest and my jaw aches", "label": "escalate", "category": "history_plus_current"}
+{"id": "h007", "symptoms": "He has epilepsy and has been fitting continuously for ten minutes", "label": "escalate", "category": "history_plus_current"}
+{"id": "h008", "symptoms": "She has asthma and tonight she is so breathless she cannot finish a sentence, her inhaler does nothing", "label": "escalate", "category": "history_plus_current"}
+{"id": "h009", "symptoms": "I am allergic to nuts, I ate a cookie and now my throat feels tight and my tongue is swelling", "label": "escalate", "category": "history_plus_current"}
+{"id": "h010", "symptoms": "My mother has diabetes, she is drowsy, sweaty and we cannot wake her properly", "label": "escalate", "category": "history_plus_current"}
+{"id": "h011", "symptoms": "I have a stomach ulcer and I just vomited a lot of dark blood", "label": "escalate", "category": "history_plus_current"}
+{"id": "h012", "symptoms": "He had a head injury last week and today he keeps vomiting and is very sleepy and confused", "label": "escalate", "category": "history_plus_current"}
+{"id": "h013", "symptoms": "My left arm and leg suddenly went weak and I can't speak clearly", "label": "escalate", "category": "paraphrase"}
+{"id": "h014", "symptoms": "There's a squeezing pain across my chest going into my left shoulder and I feel breathless and sweaty", "label": "escalate", "category": "paraphrase"}
+{"id": "h015", "symptoms": "My baby's lips are blue and she is grunting with every breath", "label": "escalate", "category": "paraphrase"}
+{"id": "h016", "symptoms": "He is lying on the floor and does not react when I shake him", "label": "escalate", "category": "paraphrase"}
+{"id": "h017", "symptoms": "I have been bleeding heavily for an hour and feel dizzy and faint", "label": "escalate", "category": "keyword_current"}
+{"id": "h018", "symptoms": "I want to kill myself and I have the pills ready", "label": "escalate", "category": "paraphrase"}
+{"id": "h019", "symptoms": "My son drank bleach by accident", "label": "escalate", "category": "paraphrase"}
+{"id": "h020", "symptoms": "Sudden severe pain in my head, the worst I have ever had, and my neck is stiff", "label": "escalate", "category": "paraphrase"}
+{"id": "h021", "symptoms": "My mother had a stroke last year and still has weakness in her right arm, unchanged since then. I am asking about her diet", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "h022", "symptoms": "Since my stroke three years ago my speech has been a little slurred, it has not changed. Today I have a cold", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "h023", "symptoms": "I have had numbness in two fingers for years after an old injury, nothing new. I need advice on dry skin", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "h024", "symptoms": "My father has had a slightly drooping eyelid since birth. He has a mild cough this week", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "h025", "symptoms": "I have had stable angina for years, well controlled with medication, no recent chest pain. I want to ask about my vitamin D", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "h026", "symptoms": "Dad's heart attack was back in 2009 and he has been healthy since. I have a blister on my heel", "label": "no_escalate", "category": "family_history"}
+{"id": "h027", "symptoms": "Both grandparents on my mother's side had strokes in their eighties. I am 25 and have hay fever", "label": "no_escalate", "category": "family_history"}
+{"id": "h028", "symptoms": "My aunt had meningitis when she was a baby. I have a mild earache", "label": "no_escalate", "category": "family_history"}
+{"id": "h029", "symptoms": "My late mother had seizures for most of her life. I get occasional tension headaches", "label": "no_escalate", "category": "family_history"}
+{"id": "h030", "symptoms": "My brother was unconscious for a day after an accident ten years ago. I have a sore shoulder from the gym", "label": "no_escalate", "category": "family_history"}
+{"id": "h031", "symptoms": "Heart attacks and strokes are common in my father's family. I'd like tips on eating healthier", "label": "no_escalate", "category": "family_history"}
+{"id": "h032", "symptoms": "My grandfather died of a hemorrhage in the 1990s. I have a small wart on my hand", "label": "no_escalate", "category": "family_history"}
+{"id": "h033", "symptoms": "I had sepsis as a newborn. Now I'm 30 with a mild cold", "label": "no_escalate", "category": "personal_history"}
+{"id": "h034", "symptoms": "I had a seizure once in 2005 and never again. My ankle is slightly sore after jogging", "label": "no_escalate", "category": "personal_history"}
+{"id": "h035", "symptoms": "Ten years ago I had a bleeding ulcer that was treated. I only have mild heartburn now and then", "label": "no_escalate", "category": "personal_history"}
+{"id": "h036", "symptoms": "I recovered from a pulmonary embolism four years ago. I have a paper cut that stings", "label": "no_escalate", "category": "personal_history"}
+{"id": "h037", "symptoms": "No weakness, no slurred speech, no facial droop. Just a mild headache after a long day", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "h038", "symptoms": "I have a sore throat. I can breathe and swallow normally and there is no swelling", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "h039", "symptoms": "A tiny bit of blood on the tissue when I blew my nose once this morning, nothing since", "label": "no_escalate", "category": "benign"}
+{"id": "h040", "symptoms": "Mild period cramps, normal flow", "label": "no_escalate", "category": "benign"}
+{"id": "h041", "symptoms": "My toddler has a runny nose and is playing happily", "label": "no_escalate", "category": "benign"}
+{"id": "h042", "symptoms": "I felt a little dizzy after skipping breakfast, fine after eating", "label": "no_escalate", "category": "benign"}
+{"id": "h043", "symptoms": "My mother suffered a stroke", "label": "ambiguous", "category": "undated_relative"}
+{"id": "h044", "symptoms": "My father had a cardiac arrest", "label": "ambiguous", "category": "undated_relative"}
+{"id": "h045", "symptoms": "My sister had a seizure", "label": "ambiguous", "category": "undated_relative"}
+{"id": "h046", "symptoms": "My brother was unconscious", "label": "ambiguous", "category": "undated_relative"}
+{"id": "h047", "symptoms": "My grandmother had a bleed on the brain", "label": "ambiguous", "category": "undated_relative"}
+{"id": "h048", "symptoms": "Dad had a heart attack and is in hospital", "label": "ambiguous", "category": "undated_relative"}

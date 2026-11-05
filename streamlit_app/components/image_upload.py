@@ -2,6 +2,8 @@
 Image upload component for medical images.
 """
 
+from html import escape
+
 import streamlit as st
 from PIL import Image
 
@@ -37,7 +39,7 @@ def render_image_upload():
                             letter-spacing: 0.05em; margin-bottom: 12px;">Image Details</div>
                 <div style="margin-bottom: 8px;">
                     <span style="color: #94a3b8; font-size: 0.85rem;">Filename:</span><br>
-                    <span style="color: #f0f4f8; font-weight: 500;">{uploaded_file.name}</span>
+                    <span style="color: #f0f4f8; font-weight: 500;">{escape(uploaded_file.name)}</span>
                 </div>
                 <div style="margin-bottom: 8px;">
                     <span style="color: #94a3b8; font-size: 0.85rem;">Size:</span><br>

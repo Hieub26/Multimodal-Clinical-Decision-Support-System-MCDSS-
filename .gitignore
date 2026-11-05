@@ -46,4 +46,12 @@ Thumbs.db
 
 # Caches
 data/huggingface_cache/
+.pytest_cache/
 
+
+# Evaluation cache (raw API responses and downloaded benchmark data)
+evaluation/.cache/
+
+# Earlier model versions and downloaded training output
+models/archive_*/
+/results.zip

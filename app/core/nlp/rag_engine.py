@@ -4,6 +4,7 @@ for clinical diagnosis generation.
 """
 
 import json
+import math
 try:
     from google import genai
     from google.genai import types
@@ -17,7 +18,7 @@ from app.core.nlp.vector_store import VectorStore
 from app.core.nlp.text_preprocessor import TextPreprocessor
 from app.core.nlp.question_understanding import QuestionUnderstanding
 from app.core.nlp.clinical_fallback import ClinicalFallbackEngine
-from app.utils.logger import nlp_logger
+from app.utils.logger import describe_error, nlp_logger
 
 
 RAG_PROMPT_TEMPLATE = """You are an expert clinical decision support system. Based on the clinical guidelines provided and the patient's input, provide a detailed clinical analysis.
@@ -126,7 +127,10 @@ class RAGEngine:
         ])
 
         # Generate diagnosis using LLM (pass retrieved_docs for fallback)
-        diagnosis = self._generate_diagnosis(context, processed_input, retrieved_docs)
+        raw_input = " ".join(t for t in (symptoms_text, clinical_question) if t)
+        diagnosis = self._generate_diagnosis(
+            context, processed_input, retrieved_docs, raw_input=raw_input
+        )
         diagnosis["retrieved_documents"] = [
             {"text": d["text"][:200], "distance": d["distance"]}
             for d in retrieved_docs
@@ -137,12 +141,17 @@ class RAGEngine:
         return diagnosis
 
     def _generate_diagnosis(self, context: str, user_input: str,
-                            retrieved_docs: list[dict] = None) -> dict:
+                            retrieved_docs: list[dict] = None,
+                            raw_input: str = None) -> dict:
         """Call LLM to generate diagnosis from context and input.
 
-        Falls back to ClinicalFallbackEngine when LLM is unavailable
+        Falls back to ClinicalFallbackEngine when LLM is unavailable. The
+        fallback reads the text as the patient wrote it (raw_input): its
+        symptom extraction then repeats the request already made for this
+        text instead of issuing a new one for the expanded form.
         """
         self._ensure_llm()
+        fallback_input = raw_input or user_input
 
         prompt = RAG_PROMPT_TEMPLATE.format(context=context, user_input=user_input)
 
@@ -156,13 +165,14 @@ class RAGEngine:
                     ),
                 )
                 result = self._parse_llm_response(response.text)
+                result = self._sanitize_llm_result(result)
                 return self._normalize_urgency(result)
             else:
                 nlp_logger.warning("No API key — using clinical fallback engine")
-                return self._fallback.diagnose(user_input, retrieved_docs or [])
+                return self._fallback.diagnose(fallback_input, retrieved_docs or [])
         except Exception as e:
-            nlp_logger.error(f"LLM generation failed: {e}")
-            return self._fallback.diagnose(user_input, retrieved_docs or [])
+            nlp_logger.error(f"LLM generation failed: {describe_error(e)}")
+            return self._fallback.diagnose(fallback_input, retrieved_docs or [])
 
     def _parse_llm_response(self, response_text: str) -> dict:
         """Parse the JSON response from the LLM."""
@@ -242,7 +252,11 @@ class RAGEngine:
             nlp_logger.info(f"Parsed LLM response with regex fallback: {result['primary_diagnosis']}")
             return result
         except Exception as e2:
-            nlp_logger.error(f"All JSON parsing strategies failed: {e2}\nRaw response: {response_text}")
+            # The response restates the patient's text, so it is not logged
+            nlp_logger.error(
+                f"All JSON parsing strategies failed: {type(e2).__name__} "
+                f"(response of {len(response_text)} characters)"
+            )
 
         return {
             "primary_diagnosis": "Analysis completed",
@@ -256,9 +270,65 @@ class RAGEngine:
             "urgency": "routine",
         }
 
-    # Severity -> maximum allowed urgency mapping.
-    # Prevents LLM from over-escalating urgency beyond severity justification.
-    # E.g. severity="high" + urgency="emergency" -> clamped to "urgent"
+    def _sanitize_llm_result(self, result) -> dict:
+        """Coerce LLM output to the types the rest of the pipeline expects.
+
+        The response is JSON but not schema-checked: fields can come back
+        null, as strings ("85%") or on a 0-100 scale, which would otherwise
+        surface as a 500 further down the pipeline.
+        """
+        if not isinstance(result, dict):
+            raise ValueError(
+                f"LLM returned {type(result).__name__}, expected a JSON object"
+            )
+
+        result["primary_diagnosis"] = str(
+            result.get("primary_diagnosis") or "Analysis completed"
+        )
+        result["confidence"] = self._coerce_score(result.get("confidence"))
+        for key in ("explanation", "question_answer"):
+            result[key] = str(result.get(key) or "")
+
+        for key in ("supporting_evidence", "recommended_actions"):
+            value = result.get(key)
+            if isinstance(value, str):
+                value = [value]
+            result[key] = [str(v) for v in value] if isinstance(value, list) else []
+
+        differentials = result.get("differential_diagnoses")
+        result["differential_diagnoses"] = [
+            {
+                "condition": str(d.get("condition") or "Unknown"),
+                "probability": self._coerce_score(d.get("probability")),
+            }
+            for d in (differentials if isinstance(differentials, list) else [])
+            if isinstance(d, dict)
+        ]
+        return result
+
+    @staticmethod
+    def _coerce_score(value) -> float:
+        """Parse a 0-1 score, tolerating "85%" and 85.
+
+        Unparseable values become 0.0 so the case is treated as low confidence.
+        """
+        try:
+            if isinstance(value, str):
+                value = value.strip().rstrip("%")
+            score = float(value)
+        except (TypeError, ValueError):
+            return 0.0
+        if math.isnan(score):
+            return 0.0
+        if 1.0 < score <= 100.0:
+            score /= 100.0
+        return min(max(score, 0.0), 1.0)
+
+    # Severity -> minimum urgency mapping.
+    # Keeps the two fields consistent in the safe direction: urgency is
+    # raised to what the severity implies, never lowered below what the
+    # LLM asked for.
+    # E.g. severity="critical" + urgency="routine" -> raised to "emergency"
     SEVERITY_URGENCY_MAP = {
         "critical": "emergency",
         "high": "urgent",
@@ -271,16 +341,17 @@ class RAGEngine:
     _URGENCY_RANK = {"routine": 0, "urgent": 1, "emergency": 2}
 
     def _normalize_urgency(self, result: dict) -> dict:
-        """Clamp LLM urgency to severity-appropriate maximum.
+        """Raise LLM urgency to the severity-appropriate minimum.
 
         Clinical guideline:
-          critical -> emergency
-          high     -> urgent
-          moderate -> routine
-          low      -> routine
+          critical -> at least emergency
+          high     -> at least urgent
+          moderate -> routine or above
+          low      -> routine or above
 
-        If LLM returns urgency that exceeds the severity-appropriate
-        level, clamp it down. This prevents over-escalation.
+        If the LLM returns an urgency below what its own severity implies,
+        raise it. An urgency above that level is kept: de-escalating an
+        "emergency" is the unsafe direction for a triage aid.
 
         Also sanitizes invalid values (e.g. 'N/A') from LLM output.
         """
@@ -306,21 +377,19 @@ class RAGEngine:
             urgency = "routine"
         result["urgency"] = urgency
 
-        max_urgency = self.SEVERITY_URGENCY_MAP.get(severity, "routine")
-        max_rank = self._URGENCY_RANK.get(max_urgency, 0)
+        min_urgency = self.SEVERITY_URGENCY_MAP.get(severity, "routine")
+        min_rank = self._URGENCY_RANK.get(min_urgency, 0)
         current_rank = self._URGENCY_RANK.get(urgency, 0)
 
-        if current_rank > max_rank:
+        if current_rank < min_rank:
             nlp_logger.info(
-                f"Urgency clamped: severity={severity} allows max "
-                f"urgency={max_urgency}, LLM returned {urgency} -> {max_urgency}"
+                f"Urgency raised: severity={severity} requires at least "
+                f"urgency={min_urgency}, LLM returned {urgency} -> {min_urgency}"
             )
-            result["urgency"] = max_urgency
-            result["_urgency_clamped"] = True
+            result["urgency"] = min_urgency
+            result["_urgency_raised"] = True
 
         return result
-
-
 
     def _empty_diagnosis(self, reason: str) -> dict:
         return {
@@ -338,9 +407,7 @@ class RAGEngine:
         }
 
     def initialize_guidelines(self):
-        """Load sample guidelines into ChromaDB if empty."""
-        if self.vector_store.get_document_count() == 0:
-            guidelines_dir = settings.data_dir / "guidelines"
-            for file_path in guidelines_dir.rglob("*.txt"):
-                count = self.vector_store.ingest_from_file(str(file_path))
-                nlp_logger.info(f"Ingested {count} chunks from {file_path.name}")
+        """Sync ChromaDB with the guideline files (no-op when already current)."""
+        count = self.vector_store.sync_guidelines(settings.data_dir / "guidelines")
+        if count:
+            nlp_logger.info(f"Guideline index rebuilt: {count} chunks")

@@ -3,10 +3,14 @@ API Dependencies: shared dependency injection for auth, DB sessions,
 and common service instances.
 """
 
+import secrets
 from functools import lru_cache
+from fastapi import Header, HTTPException
+from app.config import settings
 from app.core.nlp.vector_store import VectorStore
 from app.core.nlp.rag_engine import RAGEngine
 from app.core.nlp.text_preprocessor import TextPreprocessor
+from app.core.nlp.jev_judge import JevJudge
 from app.core.nlp.question_understanding import QuestionUnderstanding
 from app.core.nlp.clinical_fallback import ClinicalFallbackEngine
 from app.core.cv.cv_model import MedicalCVModel
@@ -27,9 +31,15 @@ def get_vector_store() -> VectorStore:
 
 
 @lru_cache()
+def get_jev_judge() -> JevJudge:
+    """Singleton Jev judge (inactive without a TypeSafe API key)."""
+    return JevJudge()
+
+
+@lru_cache()
 def get_text_preprocessor() -> TextPreprocessor:
     """Singleton TextPreprocessor instance."""
-    return TextPreprocessor()
+    return TextPreprocessor(context_judge=get_jev_judge())
 
 
 @lru_cache()
@@ -41,7 +51,7 @@ def get_question_understanding() -> QuestionUnderstanding:
 @lru_cache()
 def get_clinical_fallback_engine() -> ClinicalFallbackEngine:
     """Singleton ClinicalFallbackEngine instance."""
-    return ClinicalFallbackEngine()
+    return ClinicalFallbackEngine(preprocessor=get_text_preprocessor())
 
 
 @lru_cache()
@@ -98,13 +108,44 @@ def get_guideline_validator() -> GuidelineValidator:
 @lru_cache()
 def get_safety_controller() -> SafetyController:
     """Singleton Safety controller instance."""
-    return SafetyController()
+    return SafetyController(context_judge=get_jev_judge())
 
 
 @lru_cache()
 def get_report_generator() -> ReportGenerator:
     """Singleton Report generator instance."""
     return ReportGenerator()
+
+
+def _key_matches(provided: str | None, expected: str) -> bool:
+    return secrets.compare_digest((provided or "").encode(), expected.encode())
+
+
+def require_api_key(x_api_key: str | None = Header(default=None)) -> None:
+    """Guard for endpoints that create or return patient cases.
+
+    Enforced only when API_KEY is configured, so local development keeps
+    working without credentials. The admin key is accepted as well: whoever
+    may change the guideline library may also use the system.
+    """
+    expected = settings.api_key.get_secret_value()
+    if not expected:
+        return
+    admin = settings.admin_api_key.get_secret_value()
+    if _key_matches(x_api_key, expected) or (admin and _key_matches(x_api_key, admin)):
+        return
+    raise HTTPException(status_code=401, detail="Invalid or missing X-API-Key")
+
+
+def require_admin_key(x_api_key: str | None = Header(default=None)) -> None:
+    """Guard for endpoints that change server state.
+
+    Enforced only when ADMIN_API_KEY is configured, so local development
+    keeps working without credentials.
+    """
+    expected = settings.admin_api_key.get_secret_value()
+    if expected and not _key_matches(x_api_key, expected):
+        raise HTTPException(status_code=401, detail="Invalid or missing X-API-Key")
 
 
 def get_db_manager() -> DatabaseManager:

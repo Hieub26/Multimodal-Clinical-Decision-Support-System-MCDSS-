@@ -1,0 +1,101 @@
+{"id": "c001", "text": "I have had a fever and a dry cough since Monday", "mentions": [{"mention": "fever", "kind": "present"}, {"mention": "cough", "kind": "present"}]}
+{"id": "c002", "text": "My chest pain gets worse when I breathe in deeply", "mentions": [{"mention": "chest pain", "kind": "present"}]}
+{"id": "c003", "text": "Experiencing nausea and vomiting after every meal", "mentions": [{"mention": "nausea", "kind": "present"}, {"mention": "vomiting", "kind": "present"}]}
+{"id": "c004", "text": "The patient complains of shortness of breath on exertion", "mentions": [{"mention": "shortness of breath", "kind": "present"}]}
+{"id": "c005", "text": "There is swelling in both ankles by the evening", "mentions": [{"mention": "swelling", "kind": "present"}]}
+{"id": "c006", "text": "Headache behind the eyes, with some dizziness when I stand up", "mentions": [{"mention": "headache", "kind": "present"}, {"mention": "dizziness", "kind": "present"}]}
+{"id": "c007", "text": "She has been wheezing all night", "mentions": [{"mention": "wheezing", "kind": "present"}]}
+{"id": "c008", "text": "Fatigue is the main issue, and I also noticed weight loss", "mentions": [{"mention": "fatigue", "kind": "present"}, {"mention": "weight loss", "kind": "present"}]}
+{"id": "c009", "text": "No fever, but the cough is still there", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "cough", "kind": "present"}]}
+{"id": "c010", "text": "I don't have a headache anymore but the dizziness continues", "mentions": [{"mention": "headache", "kind": "negated"}, {"mention": "dizziness", "kind": "present"}]}
+{"id": "c011", "text": "No vomiting. Abdominal pain mostly on the right side", "mentions": [{"mention": "vomiting", "kind": "negated"}, {"mention": "abdominal pain", "kind": "present"}]}
+{"id": "c012", "text": "Not sure if it is related, but I have night sweats", "mentions": [{"mention": "night sweats", "kind": "present"}]}
+{"id": "c013", "text": "Denies fever. Reports chills and sweating", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "chills", "kind": "present"}, {"mention": "sweating", "kind": "present"}]}
+{"id": "c014", "text": "He hasn't complained of pain, only numbness in his fingers", "mentions": [{"mention": "pain", "kind": "negated"}, {"mention": "numbness", "kind": "present"}]}
+{"id": "c015", "text": "Without treatment my heartburn comes back every night", "mentions": [{"mention": "heartburn", "kind": "present"}]}
+{"id": "c016", "text": "I can't sleep because of the back pain", "mentions": [{"mention": "back pain", "kind": "present"}]}
+{"id": "c017", "text": "It's not just a cough, there is also sputum now", "mentions": [{"mention": "cough", "kind": "present"}, {"mention": "sputum", "kind": "present"}]}
+{"id": "c018", "text": "Never had this before: a sudden rash on both arms", "mentions": [{"mention": "rash", "kind": "present"}]}
+{"id": "c019", "text": "I have no idea why my joint pain is back", "mentions": [{"mention": "joint pain", "kind": "present"}]}
+{"id": "c020", "text": "There is no doubt the fever is higher today", "mentions": [{"mention": "fever", "kind": "present"}]}
+{"id": "c021", "text": "Nothing helps my constipation", "mentions": [{"mention": "constipation", "kind": "present"}]}
+{"id": "c022", "text": "The cough, which was not there last week, started yesterday", "mentions": [{"mention": "cough", "kind": "present"}]}
+{"id": "c023", "text": "My daughter has a fever and a rash on her tummy", "mentions": [{"mention": "fever", "kind": "present"}, {"mention": "rash", "kind": "present"}]}
+{"id": "c024", "text": "My father is complaining of chest pain and sweating", "mentions": [{"mention": "chest pain", "kind": "present"}, {"mention": "sweating", "kind": "present"}]}
+{"id": "c025", "text": "My mother has diabetes and now has blurred vision", "mentions": [{"mention": "diabetes", "kind": "present"}, {"mention": "blurred vision", "kind": "present"}]}
+{"id": "c026", "text": "Pt with known hypertension presents with headache and dizziness", "mentions": [{"mention": "hypertension", "kind": "present"}, {"mention": "headache", "kind": "present"}, {"mention": "dizziness", "kind": "present"}]}
+{"id": "c027", "text": "Exam notable for bilateral leg edema", "mentions": [{"mention": "edema", "kind": "present"}]}
+{"id": "c028", "text": "Productive cough with sputum and mild dyspnea", "mentions": [{"mention": "cough", "kind": "present"}, {"mention": "sputum", "kind": "present"}, {"mention": "dyspnea", "kind": "present"}]}
+{"id": "c029", "text": "I still have diarrhea even though the fever went away", "mentions": [{"mention": "diarrhea", "kind": "present"}, {"mention": "fever", "kind": "past"}]}
+{"id": "c030", "text": "My asthma has been acting up since the weather changed", "mentions": [{"mention": "asthma", "kind": "present"}]}
+{"id": "c031", "text": "I was diagnosed with pneumonia yesterday and feel worse today", "mentions": [{"mention": "pneumonia", "kind": "present"}]}
+{"id": "c032", "text": "Bleeding from my gums whenever I brush my teeth", "mentions": [{"mention": "bleeding", "kind": "present"}]}
+{"id": "c033", "text": "Tingling in both feet that is not going away", "mentions": [{"mention": "tingling", "kind": "present"}]}
+{"id": "c034", "text": "I do have a sore throat, but no cough", "mentions": [{"mention": "sore throat", "kind": "present"}, {"mention": "cough", "kind": "negated"}]}
+{"id": "c035", "text": "The tremor in my right hand is not improving", "mentions": [{"mention": "tremor", "kind": "present"}]}
+{"id": "c036", "text": "I don't have a fever", "mentions": [{"mention": "fever", "kind": "negated"}]}
+{"id": "c037", "text": "No cough or shortness of breath", "mentions": [{"mention": "cough", "kind": "negated"}, {"mention": "shortness of breath", "kind": "negated"}]}
+{"id": "c038", "text": "Denies nausea, vomiting and diarrhea", "mentions": [{"mention": "nausea", "kind": "negated"}, {"mention": "vomiting", "kind": "negated"}, {"mention": "diarrhea", "kind": "negated"}]}
+{"id": "c039", "text": "She has not had any chest pain", "mentions": [{"mention": "chest pain", "kind": "negated"}]}
+{"id": "c040", "text": "Negative for headache and dizziness", "mentions": [{"mention": "headache", "kind": "negated"}, {"mention": "dizziness", "kind": "negated"}]}
+{"id": "c041", "text": "I haven't noticed any swelling", "mentions": [{"mention": "swelling", "kind": "negated"}]}
+{"id": "c042", "text": "There was no wheezing on examination", "mentions": [{"mention": "wheezing", "kind": "negated"}]}
+{"id": "c043", "text": "I do not feel any numbness or tingling", "mentions": [{"mention": "numbness", "kind": "negated"}, {"mention": "tingling", "kind": "negated"}]}
+{"id": "c044", "text": "Neither fever nor chills", "mentions": [{"mention": "fever", "kind": "negated"}, {"mention": "chills", "kind": "negated"}]}
+{"id": "c045", "text": "He never complained of chest pain", "mentions": [{"mention": "chest pain", "kind": "negated"}]}
+{"id": "c046", "text": "Absence of fever throughout the admission", "mentions": [{"mention": "fever", "kind": "negated"}]}
+{"id": "c047", "text": "Chest x-ray ruled out pneumonia", "mentions": [{"mention": "pneumonia", "kind": "negated"}]}
+{"id": "c048", "text": "Pneumonia was ruled out by the chest x-ray", "mentions": [{"mention": "pneumonia", "kind": "negated"}]}
+{"id": "c049", "text": "Tested negative for covid twice", "mentions": [{"mention": "covid", "kind": "negated"}]}
+{"id": "c050", "text": "No evidence of pneumothorax on imaging", "mentions": [{"mention": "pneumothorax", "kind": "negated"}]}
+{"id": "c051", "text": "I am not experiencing any shortness of breath", "mentions": [{"mention": "shortness of breath", "kind": "negated"}]}
+{"id": "c052", "text": "It isn't asthma, the doctor said", "mentions": [{"mention": "asthma", "kind": "negated"}]}
+{"id": "c053", "text": "The doctor does not think it is pneumonia", "mentions": [{"mention": "pneumonia", "kind": "negated"}]}
+{"id": "c054", "text": "Unlikely to be appendicitis given the normal scan", "mentions": [{"mention": "appendicitis", "kind": "negated"}]}
+{"id": "c055", "text": "No rash anywhere on the body", "mentions": [{"mention": "rash", "kind": "negated"}]}
+{"id": "c056", "text": "I have zero pain today", "mentions": [{"mention": "pain", "kind": "negated"}]}
+{"id": "c057", "text": "Appetite is fine and there is no nausea", "mentions": [{"mention": "nausea", "kind": "negated"}]}
+{"id": "c058", "text": "Lungs clear, no cough", "mentions": [{"mention": "cough", "kind": "negated"}]}
+{"id": "c059", "text": "Not a single episode of vomiting", "mentions": [{"mention": "vomiting", "kind": "negated"}]}
+{"id": "c060", "text": "The swelling never came back", "mentions": [{"mention": "swelling", "kind": "past"}]}
+{"id": "c061", "text": "The rash is gone now", "mentions": [{"mention": "rash", "kind": "past"}]}
+{"id": "c062", "text": "My fever has resolved", "mentions": [{"mention": "fever", "kind": "past"}]}
+{"id": "c063", "text": "The cough resolved two days ago", "mentions": [{"mention": "cough", "kind": "past"}]}
+{"id": "c064", "text": "I had pneumonia two years ago and fully recovered", "mentions": [{"mention": "pneumonia", "kind": "past"}]}
+{"id": "c065", "text": "As a child I had asthma, but it went away", "mentions": [{"mention": "asthma", "kind": "past"}]}
+{"id": "c066", "text": "History of appendicitis, appendix removed in 2015", "mentions": [{"mention": "appendicitis", "kind": "past"}]}
+{"id": "c067", "text": "I had covid in 2022 and no problems since", "mentions": [{"mention": "covid", "kind": "past"}]}
+{"id": "c068", "text": "The headache I had last week is completely gone", "mentions": [{"mention": "headache", "kind": "past"}]}
+{"id": "c069", "text": "Last year I had a fracture of the wrist that healed well", "mentions": [{"mention": "fracture", "kind": "past"}]}
+{"id": "c070", "text": "I used to get heartburn, but not anymore", "mentions": [{"mention": "heartburn", "kind": "past"}]}
+{"id": "c071", "text": "My mother had breast cancer in her fifties", "mentions": [{"mention": "cancer", "kind": "family"}]}
+{"id": "c072", "text": "Heart failure runs in my family", "mentions": [{"mention": "heart failure", "kind": "family"}]}
+{"id": "c073", "text": "There is a strong family history of diabetes", "mentions": [{"mention": "diabetes", "kind": "family"}]}
+{"id": "c074", "text": "My grandfather died of lung cancer", "mentions": [{"mention": "lung cancer", "kind": "family"}]}
+{"id": "c075", "text": "My sister was diagnosed with epilepsy as a teenager", "mentions": [{"mention": "epilepsy", "kind": "family"}]}
+{"id": "c076", "text": "Asthma is common on my mother's side of the family", "mentions": [{"mention": "asthma", "kind": "family"}]}
+{"id": "c077", "text": "My aunt and uncle both have diabetes. I have been feeling very thirsty lately", "mentions": [{"mention": "diabetes", "kind": "family"}]}
+{"id": "c078", "text": "Mother: asthma. Father: hypertension. I have a rash on my leg", "mentions": [{"mention": "asthma", "kind": "family"}, {"mention": "hypertension", "kind": "family"}, {"mention": "rash", "kind": "present"}]}
+{"id": "c079", "text": "My brother has asthma, I am here because of my cough", "mentions": [{"mention": "asthma", "kind": "family"}, {"mention": "cough", "kind": "present"}]}
+{"id": "c080", "text": "Family hx significant for coronary artery disease", "mentions": [{"mention": "coronary artery disease", "kind": "family"}]}
+{"id": "c081", "text": "My dad passed away from a heart attack at 60", "mentions": [{"mention": "heart attack", "kind": "family"}]}
+{"id": "c082", "text": "My cousin had tuberculosis many years ago", "mentions": [{"mention": "tuberculosis", "kind": "family"}]}
+{"id": "c083", "text": "Dad has high blood pressure. I came in for my headache", "mentions": [{"mention": "hypertension", "kind": "family"}, {"mention": "headache", "kind": "present"}]}
+{"id": "c084", "text": "Both of my grandparents had strokes late in life", "mentions": [{"mention": "stroke", "kind": "family"}]}
+{"id": "c085", "text": "My father and his brothers all developed diabetes after 50", "mentions": [{"mention": "diabetes", "kind": "family"}]}
+{"id": "c086", "text": "Cancer on my father's side: two aunts and my grandmother", "mentions": [{"mention": "cancer", "kind": "family"}]}
+{"id": "c087", "text": "Could this be pneumonia?", "mentions": [{"mention": "pneumonia", "kind": "hypothetical"}]}
+{"id": "c088", "text": "I am worried about cancer", "mentions": [{"mention": "cancer", "kind": "hypothetical"}]}
+{"id": "c089", "text": "What are the symptoms of diabetes?", "mentions": [{"mention": "diabetes", "kind": "hypothetical"}]}
+{"id": "c090", "text": "If I get a fever, what should I do?", "mentions": [{"mention": "fever", "kind": "hypothetical"}]}
+{"id": "c091", "text": "Should I be concerned about a stroke?", "mentions": [{"mention": "stroke", "kind": "hypothetical"}]}
+{"id": "c092", "text": "Come back if you develop chest pain or shortness of breath", "mentions": [{"mention": "chest pain", "kind": "hypothetical"}, {"mention": "shortness of breath", "kind": "hypothetical"}]}
+{"id": "c093", "text": "Vaccinated against influenza last month", "mentions": [{"mention": "influenza", "kind": "hypothetical"}]}
+{"id": "c094", "text": "Screening for hepatitis was done at work", "mentions": [{"mention": "hepatitis", "kind": "hypothetical"}]}
+{"id": "c095", "text": "The leaflet lists nausea and dizziness as possible side effects", "mentions": [{"mention": "nausea", "kind": "hypothetical"}, {"mention": "dizziness", "kind": "hypothetical"}]}
+{"id": "c096", "text": "I want to prevent osteoporosis as I get older", "mentions": [{"mention": "osteoporosis", "kind": "hypothetical"}]}
+{"id": "c097", "text": "Is it true that stress can cause hypertension?", "mentions": [{"mention": "hypertension", "kind": "hypothetical"}]}
+{"id": "c098", "text": "My coworker has covid, I feel fine so far", "mentions": [{"mention": "covid", "kind": "other_person"}]}
+{"id": "c099", "text": "A friend of mine had a stroke", "mentions": [{"mention": "stroke", "kind": "other_person"}]}
+{"id": "c100", "text": "The patient in the next bed had a seizure", "mentions": [{"mention": "seizure", "kind": "other_person"}]}
+{"id": "c101", "text": "My roommate has been coughing with tuberculosis, I have no symptoms", "mentions": [{"mention": "tuberculosis", "kind": "other_person"}]}

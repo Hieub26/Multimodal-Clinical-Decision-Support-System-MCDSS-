@@ -8,58 +8,84 @@ import re
 from app.utils.logger import nlp_logger
 
 
-# Intent classification patterns
-INTENT_PATTERNS = {
-    "diagnosis": [
-        r"what (?:is|are|could be|might be)",
-        r"diagnos[ei]",
-        r"what (?:condition|disease|disorder)",
-        r"differential",
-        r"could (?:this|it|these) be",
-        r"is (?:this|it) (?:a sign|an indication|related to)",
-    ],
-    "treatment": [
-        r"how (?:to|do (?:you|we)) treat",
-        r"treatment (?:for|of|option)",
-        r"therap[iy]",
-        r"medication (?:for|to)",
-        r"prescri[bp]",
-        r"manage(?:ment)?",
-        r"what (?:drug|medicine)",
-    ],
-    "prognosis": [
-        r"prognosis",
-        r"outloo?k",
-        r"surviv(?:al|e)",
-        r"recover[iy]",
-        r"how long",
-        r"life expectancy",
-    ],
-    "risk_factors": [
-        r"risk (?:factor|of)",
-        r"cause[sd]?",
-        r"etiology",
-        r"predispos",
-        r"susceptib",
-        r"what (?:causes|leads to)",
-    ],
-    "drug_interaction": [
-        r"interact(?:ion)?",
-        r"contraindic",
-        r"side effect",
-        r"adverse",
-        r"combin(?:e|ation|ing)",
-        r"(?:can|should) (?:i|we|they) take .* (?:with|and)",
-    ],
-    "prevention": [
-        r"preven(?:t|tion)",
-        r"avoid",
-        r"protect",
-        r"screen(?:ing)?",
-        r"vaccin",
-        r"prophylax",
-    ],
-}
+# Intent classification rules, checked in this order: the first intent with a
+# matching pattern wins.
+#
+# Most clinical questions open with "what is/are", so that pattern says
+# nothing about the intent and comes last: "What is the treatment for
+# pneumonia?" is a treatment question. The specific intents are ordered so
+# that a question naming two of them goes to the narrower one ("What are the
+# side effects of the treatment for ...?" asks about side effects).
+#
+# Patterns are anchored on word boundaries: "cause" must not match
+# "because", nor "treat" match "untreated".
+INTENT_RULES = [
+    # Asking which condition explains the complaint, even when the word
+    # "cause" is used ("What could be causing my chest pain?")
+    ("diagnosis", [
+        r"\bwhat (?:condition|disease|disorder|illness)\b",
+        r"\bwhat (?:is|could be|might be|may be) (?:causing|wrong)\b",
+        r"\bcould (?:this|it|these|that) be\b",
+        r"\bdo i have\b",
+        r"\bdifferential\b",
+    ]),
+    ("drug_interaction", [
+        r"\binteract",
+        r"\bcontraindicat",
+        r"\bside[- ]effects?\b",
+        r"\badverse\b",
+        r"\b(?:can|should|may) (?:i|we|they|you|he|she) (?:take|use|combine)\b.*\b(?:with|and)\b",
+        r"\b(?:take|taken|use|used|combine|combined) together\b",
+    ]),
+    ("prognosis", [
+        r"\bprognos[ie]s\b",
+        r"\boutlook\b",
+        r"\bsurviv(?:al|e)\b",
+        r"\blife expectancy\b",
+        r"\bhow long (?:does|will|do|until|before|can)\b",
+        r"\brecovery\b",
+        r"\bwill (?:i|he|she|it|they|this) (?:recover|get better|go away|heal|come back)\b",
+        r"\bcomplications?\b",
+    ]),
+    ("prevention", [
+        r"\bprevent",
+        r"\bavoid",
+        r"\bprotect",
+        r"\bscreen(?:ing|ed)?\b",
+        r"\bvaccin",
+        r"\bprophyla",
+    ]),
+    ("risk_factors", [
+        r"\brisk factors?\b",
+        r"\b(?:at|increased?|higher|high) (?:the )?risk\b",
+        r"\brisk of\b",
+        r"\bcauses?\b",
+        r"\bcaused by\b",
+        r"\betiolog",
+        r"\bpredispos",
+        r"\bsusceptib",
+        r"\bheredit",
+        r"\bgenetic",
+        r"\bwhy (?:do|does|did|am|is|are)\b",
+    ]),
+    ("treatment", [
+        r"\btreat(?:s|ed|ing|ments?)?\b",
+        r"\btherap(?:y|ies|eutic)",
+        r"\bmedications?\b",
+        r"\bmedicines?\b",
+        r"\bdrugs?\b",
+        r"\bantibiotics?\b",
+        r"\bprescri",
+        r"\bmanag(?:e|es|ed|ing|ement)\b",
+        r"\bdos(?:e|es|age|ing)\b",
+    ]),
+    ("diagnosis", [
+        r"\bdiagnos",
+        r"\bis (?:this|it) (?:a sign|an indication|related to)\b",
+        r"\b(?:signs?|symptoms?) of\b",
+        r"\bwhat (?:is|are|could be|might be)\b",
+    ]),
+]
 
 # Medical entity patterns
 BODY_PARTS = [
@@ -106,7 +132,7 @@ class QuestionUnderstanding:
     """Parses and understands clinical questions for better retrieval."""
 
     def __init__(self):
-        self.intent_patterns = INTENT_PATTERNS
+        self.intent_rules = INTENT_RULES
         self.body_parts = BODY_PARTS
         self.condition_keywords = CONDITION_KEYWORDS
         nlp_logger.info("QuestionUnderstanding module initialized")
@@ -122,7 +148,8 @@ class QuestionUnderstanding:
         Returns:
             Dictionary with intent, entities, and search query
         """
-        nlp_logger.info(f"Analyzing question: {question[:100]}...")
+        # The question is patient text: its length is logged, never its content
+        nlp_logger.info(f"Analyzing question ({len(question)} characters)")
 
         question_clean = question.lower().strip()
 
@@ -142,12 +169,15 @@ class QuestionUnderstanding:
             "search_query": search_query,
         }
 
-        nlp_logger.info(f"Question analysis: intent={intent}, entities={entities}")
+        nlp_logger.info(
+            f"Question analysis: intent={intent}, "
+            f"entities={sum(len(found) for found in entities.values())}"
+        )
         return result
 
     def _classify_intent(self, question: str) -> str:
         """Classify the clinical intent of the question."""
-        for intent, patterns in self.intent_patterns.items():
+        for intent, patterns in self.intent_rules:
             for pattern in patterns:
                 if re.search(pattern, question, re.IGNORECASE):
                     return intent
@@ -178,7 +208,7 @@ class QuestionUnderstanding:
             r"sudden|gradual|recurring|worsening|improving)\b",
             question,
         )
-        entities["keywords"] = list(set(medical_keywords))
+        entities["keywords"] = sorted(set(medical_keywords))
 
         return entities
 
@@ -187,7 +217,7 @@ class QuestionUnderstanding:
         query_parts = [question]
 
         if intent != "general":
-            query_parts.append(f"clinical {intent}")
+            query_parts.append(f"clinical {intent.replace('_', ' ')}")
 
         if entities.get("conditions"):
             query_parts.append("conditions: " + ", ".join(entities["conditions"]))

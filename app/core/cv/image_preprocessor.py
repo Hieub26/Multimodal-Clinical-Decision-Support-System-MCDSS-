@@ -31,6 +31,8 @@ class ImagePreprocessResult:
     original_image: Image.Image
     preprocessed_image: Image.Image
     metadata: dict[str, Any]
+    # (left, top, right, bottom) of the image content inside the padded square
+    content_box: tuple[int, int, int, int]
 
     def __getitem__(self, item: str) -> Any:
         """Subscripting fallback for backward compatibility with dictionary access."""
@@ -77,7 +79,7 @@ class ImagePreprocessor:
             cv_logger.info(f"Converted image mode from {metadata['mode']} to RGB")
 
         # Step 4: Aspect Ratio Preserving Resize + Square Padding
-        resized_image = self._resize_with_aspect_ratio(image)
+        resized_image, content_box = self._resize_with_aspect_ratio(image)
 
         # Step 5: Convert PIL Image to PyTorch Tensor [C, H, W]
         img_array = np.array(resized_image, dtype=np.float32) / 255.0  # Range [0.0, 1.0]
@@ -99,10 +101,16 @@ class ImagePreprocessor:
             original_image=original,
             preprocessed_image=resized_image,
             metadata=metadata,
+            content_box=content_box,
         )
 
-    def _resize_with_aspect_ratio(self, image: Image.Image) -> Image.Image:
-        """Resize image preserving aspect ratio and pad to square target dimensions."""
+    def _resize_with_aspect_ratio(
+        self, image: Image.Image
+    ) -> tuple[Image.Image, tuple[int, int, int, int]]:
+        """Resize image preserving aspect ratio and pad to square target dimensions.
+
+        Returns the padded image and the box the original content occupies in it.
+        """
         image_copy = image.copy()
         image_copy.thumbnail((self.image_size, self.image_size), Image.LANCZOS)
 
@@ -114,7 +122,13 @@ class ImagePreprocessor:
             delta_w - (delta_w // 2),
             delta_h - (delta_h // 2),
         )
-        return ImageOps.expand(image_copy, padding, fill=(0, 0, 0))
+        content_box = (
+            padding[0],
+            padding[1],
+            padding[0] + image_copy.width,
+            padding[1] + image_copy.height,
+        )
+        return ImageOps.expand(image_copy, padding, fill=(0, 0, 0)), content_box
 
     def _load_and_validate_image(
         self,

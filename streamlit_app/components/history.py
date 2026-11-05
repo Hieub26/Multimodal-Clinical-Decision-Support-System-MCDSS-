@@ -2,13 +2,12 @@
 Case history viewer component.
 """
 
-import os
+from html import escape
+
 import streamlit as st
 import httpx
-import json
 
-
-API_BASE = os.environ.get("API_BASE_URL", "http://localhost:8008/api")
+from api_client import API_BASE, auth_headers, describe_failure
 
 
 def render_history():
@@ -22,7 +21,9 @@ def render_history():
     """, unsafe_allow_html=True)
 
     try:
-        response = httpx.get(f"{API_BASE}/reports/history", timeout=10)
+        response = httpx.get(
+            f"{API_BASE}/reports/history", headers=auth_headers(), timeout=10
+        )
         if response.status_code == 200:
             data = response.json()
             cases = data.get("cases", [])
@@ -39,20 +40,21 @@ def render_history():
                 safety_status = case.get("safety_status", "unknown")
                 badge_class = "badge-safe" if safety_status == "approved" else "badge-warning"
                 confidence = case.get("confidence", 0)
+                case_id = case.get("case_id", "")
 
                 st.markdown(f"""
                 <div class="glass-card" style="margin-bottom: 12px;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div>
                             <div style="font-weight: 600; color: #f0f4f8; font-size: 1.05rem;">
-                                {case.get("primary_diagnosis", "N/A")}
+                                {escape(str(case.get("primary_diagnosis", "N/A")))}
                             </div>
                             <div style="color: #64748b; font-size: 0.8rem; margin-top: 4px;">
-                                {case.get("created_at", "")} · {case.get("input_type", "").upper()}
+                                {escape(str(case.get("created_at", "")))} · {escape(str(case.get("input_type", "")).upper())}
                             </div>
                         </div>
                         <div style="text-align: right;">
-                            <span class="badge {badge_class}">{safety_status.upper()}</span>
+                            <span class="badge {badge_class}">{escape(str(safety_status).upper())}</span>
                             <div style="color: #14b8a6; font-weight: 700; font-size: 1.1rem; margin-top: 8px;">
                                 {confidence:.0%}
                             </div>
@@ -61,21 +63,26 @@ def render_history():
                 </div>
                 """, unsafe_allow_html=True)
 
-                # Detail button
-                with st.expander(f"View details — {case.get('case_id', '')}", expanded=False):
+                # Details are fetched only for cases the user opens. An
+                # expander would run its body (one request per case) on
+                # every rerun, whether or not it is expanded.
+                if st.toggle(f"View details — {case_id}", key=f"details_{case_id}"):
                     try:
                         detail_resp = httpx.get(
-                            f"{API_BASE}/reports/history/{case['case_id']}",
+                            f"{API_BASE}/reports/history/{case_id}",
+                            headers=auth_headers(),
                             timeout=10,
                         )
                         if detail_resp.status_code == 200:
                             detail = detail_resp.json()
                             st.json(detail)
+                        else:
+                            st.warning("Could not load case details")
                     except Exception:
                         st.warning("Could not load case details")
 
         else:
-            st.error(f"Failed to fetch history: {response.status_code}")
+            st.error(describe_failure(response.status_code, response.text))
 
     except httpx.ConnectError:
         st.error(

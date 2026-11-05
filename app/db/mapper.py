@@ -3,11 +3,30 @@ Data mapper for converting between DTOs, Dicts, Database Rows, and CaseRecord do
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 import asyncpg
 
 from app.db.models import CaseRecord
+
+
+def _as_utc_datetime(value: Any) -> datetime:
+    """Coerce a timestamp to a timezone-aware UTC datetime.
+
+    Naive values are taken to be UTC. They must not reach asyncpg as-is: for
+    TIMESTAMPTZ it interprets a naive datetime in the machine's local zone,
+    which shifts stored times by the UTC offset.
+    """
+    if isinstance(value, str):
+        try:
+            value = datetime.fromisoformat(value)
+        except ValueError:
+            value = None
+    if not isinstance(value, datetime):
+        return datetime.now(timezone.utc)
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value
 
 
 class CaseMapper:
@@ -19,20 +38,11 @@ class CaseMapper:
         if isinstance(data, CaseRecord):
             record = data
         else:
-            created_at_val = data.get("created_at")
-            if isinstance(created_at_val, str):
-                try:
-                    created_at_val = datetime.fromisoformat(created_at_val)
-                except ValueError:
-                    created_at_val = datetime.utcnow()
-            elif not isinstance(created_at_val, datetime):
-                created_at_val = datetime.utcnow()
-
             diagnosis_data = data.get("diagnosis") or data.get("diagnosis_json") or {}
 
             record = CaseRecord(
                 case_id=data["case_id"],
-                created_at=created_at_val,
+                created_at=_as_utc_datetime(data.get("created_at")),
                 input_type=data.get("input_type", "unknown"),
                 symptoms_text=data.get("symptoms_text"),
                 clinical_question=data.get("clinical_question"),
@@ -44,14 +54,8 @@ class CaseMapper:
                 report_path=data.get("report_path"),
             )
 
-        # Guarantee created_at is a python datetime object
-        if isinstance(record.created_at, str):
-            try:
-                record.created_at = datetime.fromisoformat(record.created_at)
-            except ValueError:
-                record.created_at = datetime.utcnow()
-        elif not isinstance(record.created_at, datetime):
-            record.created_at = datetime.utcnow()
+        # Guarantee created_at is a timezone-aware datetime object
+        record.created_at = _as_utc_datetime(record.created_at)
 
         return record
 
@@ -61,24 +65,16 @@ class CaseMapper:
         r = dict(row)
         diag = r.get("diagnosis_json")
         if isinstance(diag, str):
+            # Rows written before the JSONB double-encoding fix
             try:
                 diag = json.loads(diag)
             except json.JSONDecodeError:
                 diag = {}
 
-        created_at = r.get("created_at")
-        if isinstance(created_at, str):
-            try:
-                created_at = datetime.fromisoformat(created_at)
-            except ValueError:
-                created_at = datetime.utcnow()
-        elif not isinstance(created_at, datetime):
-            created_at = datetime.utcnow()
-
         return CaseRecord(
             id=r.get("id"),
             case_id=r["case_id"],
-            created_at=created_at,
+            created_at=_as_utc_datetime(r.get("created_at")),
             input_type=r.get("input_type", "unknown"),
             symptoms_text=r.get("symptoms_text"),
             clinical_question=r.get("clinical_question"),

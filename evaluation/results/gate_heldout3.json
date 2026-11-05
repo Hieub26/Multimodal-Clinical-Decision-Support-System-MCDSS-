@@ -1,0 +1,550 @@
+{
+  "split": "heldout3",
+  "metrics": {
+    "rules": {
+      "n": 24,
+      "accuracy": 0.5417,
+      "sensitivity": 0.3,
+      "specificity": 0.7143,
+      "precision": 0.4286,
+      "f1": 0.353,
+      "tp": 3,
+      "tn": 10,
+      "fp": 4,
+      "fn": 7
+    },
+    "jev signs only": {
+      "n": 24,
+      "accuracy": 0.9167,
+      "sensitivity": 0.9,
+      "specificity": 0.9286,
+      "precision": 0.9,
+      "f1": 0.9,
+      "tp": 9,
+      "tn": 13,
+      "fp": 1,
+      "fn": 1
+    },
+    "rules + jev signs": {
+      "n": 24,
+      "accuracy": 0.7917,
+      "sensitivity": 1.0,
+      "specificity": 0.6429,
+      "precision": 0.6667,
+      "f1": 0.8,
+      "tp": 10,
+      "tn": 9,
+      "fp": 5,
+      "fn": 0
+    },
+    "rules + jev signs + clearing": {
+      "n": 24,
+      "accuracy": 0.8333,
+      "sensitivity": 1.0,
+      "specificity": 0.7143,
+      "precision": 0.7143,
+      "f1": 0.8333,
+      "tp": 10,
+      "tn": 10,
+      "fp": 4,
+      "fn": 0
+    }
+  },
+  "by_category": {
+    "benign": {
+      "label": "no_escalate",
+      "n": 5,
+      "rules": 0.0,
+      "jev signs only": 0.2,
+      "rules + jev signs": 0.2,
+      "rules + jev signs + clearing": 0.2
+    },
+    "chronic_stable": {
+      "label": "no_escalate",
+      "n": 6,
+      "rules": 0.5,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.5,
+      "rules + jev signs + clearing": 0.5
+    },
+    "family_history": {
+      "label": "no_escalate",
+      "n": 1,
+      "rules": 0.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.0,
+      "rules + jev signs + clearing": 0.0
+    },
+    "history_plus_current": {
+      "label": "escalate",
+      "n": 6,
+      "rules": 0.5,
+      "jev signs only": 0.8333,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 1.0
+    },
+    "negated_keyword": {
+      "label": "no_escalate",
+      "n": 1,
+      "rules": 0.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.0,
+      "rules + jev signs + clearing": 0.0
+    },
+    "paraphrase": {
+      "label": "escalate",
+      "n": 4,
+      "rules": 0.0,
+      "jev signs only": 1.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 1.0
+    },
+    "personal_history": {
+      "label": "no_escalate",
+      "n": 1,
+      "rules": 1.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 0.0
+    }
+  },
+  "items": [
+    {
+      "id": "k001",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "Dad had a stroke in 2022 and now his left leg won't move and he is mumbling",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.6
+      },
+      "max_signal": 0.6,
+      "cleared": []
+    },
+    {
+      "id": "k002",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "I had a stroke two years ago and now my right hand is weak and I can't find my words",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.27,
+      "cleared": []
+    },
+    {
+      "id": "k003",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "My wife had a stroke before. Now her face looks crooked and she can't hold a cup with her left hand",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.91
+      },
+      "max_signal": 0.91,
+      "cleared": []
+    },
+    {
+      "id": "k004",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "Grandpa had a stroke years ago and now he can't see out of his left eye and his arm hangs limp",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.38,
+        "unresponsive": 0.35
+      },
+      "max_signal": 0.38,
+      "cleared": []
+    },
+    {
+      "id": "k005",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "She had a mini-stroke last month and now her speech is garbled and her right side is weak",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.72
+      },
+      "max_signal": 0.72,
+      "cleared": []
+    },
+    {
+      "id": "k006",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "My father, who had a stroke last year, can't lift his arm now and is drooling from one side",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.83
+      },
+      "max_signal": 0.83,
+      "cleared": []
+    },
+    {
+      "id": "k007",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "My right arm and leg have gone numb and heavy and I'm slurring my words",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.97
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "k008",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "Her mouth is drooping on one side and she doesn't understand what we say",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.95
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "k009",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "I can't move my left arm and half of my face feels frozen",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.97
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "k010",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "He woke up unable to speak and his right side is paralysed",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "k011",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "After his stroke in 2019 my father walks with a limp and his left hand is weak, this has been the same for years. He has a cold now",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.06,
+      "cleared": []
+    },
+    {
+      "id": "k012",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "My speech has been slightly slurred ever since my stroke five years ago, no change. I'm here about a sore throat",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.06,
+      "cleared": []
+    },
+    {
+      "id": "k013",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "She has had a weak left arm since childhood polio, nothing new. She needs advice about dry eyes",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "k014",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "My right eye has been blind since an accident twenty years ago. I have itchy skin",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "k015",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "He has a long-standing facial droop from Bell's palsy ten years ago, unchanged. He has heartburn",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "k016",
+      "label": "no_escalate",
+      "category": "chronic_stable",
+      "text": "Since my stroke last year my left leg is weak, stable with physiotherapy. I have a mild cough",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.2,
+      "cleared": []
+    },
+    {
+      "id": "k017",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "My foot fell asleep after sitting cross-legged, it was fine after I walked around",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "k018",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "My fingers tingle a little when I type for hours, it goes away with rest",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.03,
+      "cleared": []
+    },
+    {
+      "id": "k019",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "I slurred my words a bit after two glasses of wine last night, fine this morning",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.54
+      },
+      "max_signal": 0.54,
+      "cleared": []
+    },
+    {
+      "id": "k020",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "My eyelid twitches now and then when I'm tired",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "k021",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "My hand felt weak after carrying heavy bags, it's fine today",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.19,
+      "cleared": []
+    },
+    {
+      "id": "k022",
+      "label": "no_escalate",
+      "category": "negated_keyword",
+      "text": "No numbness, no weakness and my speech is normal. I just want to ask about vitamins",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "k023",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "My grandfather had a stroke in 2005. I have a mild rash",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.09,
+      "cleared": []
+    },
+    {
+      "id": "k024",
+      "label": "no_escalate",
+      "category": "personal_history",
+      "text": "I had a stroke in 2015 and made a full recovery. Today I have hay fever",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.06,
+      "cleared": [
+        "stroke"
+      ]
+    },
+    {
+      "id": "k025",
+      "label": "ambiguous",
+      "category": "borderline_symptom",
+      "text": "My mother had a stroke last year and since then she can't move her right arm",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.32
+      },
+      "max_signal": 0.32,
+      "cleared": []
+    },
+    {
+      "id": "k026",
+      "label": "ambiguous",
+      "category": "borderline_symptom",
+      "text": "Dad can't move his arm",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.86
+      },
+      "max_signal": 0.86,
+      "cleared": []
+    },
+    {
+      "id": "k027",
+      "label": "ambiguous",
+      "category": "borderline_symptom",
+      "text": "My speech is slurred",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.94
+      },
+      "max_signal": 0.94,
+      "cleared": []
+    },
+    {
+      "id": "k028",
+      "label": "ambiguous",
+      "category": "borderline_symptom",
+      "text": "Her face is drooping",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.91
+      },
+      "max_signal": 0.91,
+      "cleared": []
+    }
+  ]
+}

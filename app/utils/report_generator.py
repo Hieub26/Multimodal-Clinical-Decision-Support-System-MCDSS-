@@ -5,7 +5,7 @@ Produces structured JSON and formatted clinical reports.
 
 import json
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from app.config import settings
 from app.utils.logger import get_logger
@@ -31,7 +31,7 @@ class ReportGenerator:
         """Generate structured JSON output."""
         return {
             "report_id": str(uuid.uuid4()),
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "system": "Multimodal Clinical Decision Support System",
             "version": "1.0.0",
             "diagnosis": {
@@ -69,8 +69,8 @@ class ReportGenerator:
         confidence = safety_result.get("combined_confidence", 0)
         status = safety_result.get("safety_status", "unknown")
         explanation = safety_result.get("explanation", "")
-        severity = safety_result.get("severity", "unknown")
-        urgency = safety_result.get("urgency", "routine")
+        severity = str(safety_result.get("severity") or "unknown")
+        urgency = str(safety_result.get("urgency") or "routine")
 
         status_icon = "✅" if status == "approved" else "⚠️"
 

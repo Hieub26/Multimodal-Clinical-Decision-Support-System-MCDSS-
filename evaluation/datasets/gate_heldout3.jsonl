@@ -1,0 +1,28 @@
+{"id": "k001", "symptoms": "Dad had a stroke in 2022 and now his left leg won't move and he is mumbling", "label": "escalate", "category": "history_plus_current"}
+{"id": "k002", "symptoms": "I had a stroke two years ago and now my right hand is weak and I can't find my words", "label": "escalate", "category": "history_plus_current"}
+{"id": "k003", "symptoms": "My wife had a stroke before. Now her face looks crooked and she can't hold a cup with her left hand", "label": "escalate", "category": "history_plus_current"}
+{"id": "k004", "symptoms": "Grandpa had a stroke years ago and now he can't see out of his left eye and his arm hangs limp", "label": "escalate", "category": "history_plus_current"}
+{"id": "k005", "symptoms": "She had a mini-stroke last month and now her speech is garbled and her right side is weak", "label": "escalate", "category": "history_plus_current"}
+{"id": "k006", "symptoms": "My father, who had a stroke last year, can't lift his arm now and is drooling from one side", "label": "escalate", "category": "history_plus_current"}
+{"id": "k007", "symptoms": "My right arm and leg have gone numb and heavy and I'm slurring my words", "label": "escalate", "category": "paraphrase"}
+{"id": "k008", "symptoms": "Her mouth is drooping on one side and she doesn't understand what we say", "label": "escalate", "category": "paraphrase"}
+{"id": "k009", "symptoms": "I can't move my left arm and half of my face feels frozen", "label": "escalate", "category": "paraphrase"}
+{"id": "k010", "symptoms": "He woke up unable to speak and his right side is paralysed", "label": "escalate", "category": "paraphrase"}
+{"id": "k011", "symptoms": "After his stroke in 2019 my father walks with a limp and his left hand is weak, this has been the same for years. He has a cold now", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "k012", "symptoms": "My speech has been slightly slurred ever since my stroke five years ago, no change. I'm here about a sore throat", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "k013", "symptoms": "She has had a weak left arm since childhood polio, nothing new. She needs advice about dry eyes", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "k014", "symptoms": "My right eye has been blind since an accident twenty years ago. I have itchy skin", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "k015", "symptoms": "He has a long-standing facial droop from Bell's palsy ten years ago, unchanged. He has heartburn", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "k016", "symptoms": "Since my stroke last year my left leg is weak, stable with physiotherapy. I have a mild cough", "label": "no_escalate", "category": "chronic_stable"}
+{"id": "k017", "symptoms": "My foot fell asleep after sitting cross-legged, it was fine after I walked around", "label": "no_escalate", "category": "benign"}
+{"id": "k018", "symptoms": "My fingers tingle a little when I type for hours, it goes away with rest", "label": "no_escalate", "category": "benign"}
+{"id": "k019", "symptoms": "I slurred my words a bit after two glasses of wine last night, fine this morning", "label": "no_escalate", "category": "benign"}
+{"id": "k020", "symptoms": "My eyelid twitches now and then when I'm tired", "label": "no_escalate", "category": "benign"}
+{"id": "k021", "symptoms": "My hand felt weak after carrying heavy bags, it's fine today", "label": "no_escalate", "category": "benign"}
+{"id": "k022", "symptoms": "No numbness, no weakness and my speech is normal. I just want to ask about vitamins", "label": "no_escalate", "category": "negated_keyword"}
+{"id": "k023", "symptoms": "My grandfather had a stroke in 2005. I have a mild rash", "label": "no_escalate", "category": "family_history"}
+{"id": "k024", "symptoms": "I had a stroke in 2015 and made a full recovery. Today I have hay fever", "label": "no_escalate", "category": "personal_history"}
+{"id": "k025", "symptoms": "My mother had a stroke last year and since then she can't move her right arm", "label": "ambiguous", "category": "borderline_symptom"}
+{"id": "k026", "symptoms": "Dad can't move his arm", "label": "ambiguous", "category": "borderline_symptom"}
+{"id": "k027", "symptoms": "My speech is slurred", "label": "ambiguous", "category": "borderline_symptom"}
+{"id": "k028", "symptoms": "Her face is drooping", "label": "ambiguous", "category": "borderline_symptom"}

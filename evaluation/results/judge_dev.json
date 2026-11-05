@@ -1,0 +1,518 @@
+{
+  "split": "dev",
+  "threshold": 0.4,
+  "n_items": 26,
+  "n_clear": 26,
+  "metrics": {
+    "tokens": {
+      "n": 26,
+      "accuracy": 0.8846,
+      "sensitivity": 0.8,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 0.8889,
+      "tp": 12,
+      "tn": 11,
+      "fp": 0,
+      "fn": 3
+    },
+    "gemini": {
+      "n": 23,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 15,
+      "tn": 8,
+      "fp": 0,
+      "fn": 0
+    },
+    "openai_original": {
+      "n": 26,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 15,
+      "tn": 11,
+      "fp": 0,
+      "fn": 0
+    },
+    "openai": {
+      "n": 26,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 15,
+      "tn": 11,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "n_graded_by_every_system": 23,
+  "metrics_graded_by_every_system": {
+    "tokens": {
+      "n": 23,
+      "accuracy": 0.8696,
+      "sensitivity": 0.8,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 0.8889,
+      "tp": 12,
+      "tn": 8,
+      "fp": 0,
+      "fn": 3
+    },
+    "gemini": {
+      "n": 23,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 15,
+      "tn": 8,
+      "fp": 0,
+      "fn": 0
+    },
+    "openai_original": {
+      "n": 23,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 15,
+      "tn": 8,
+      "fp": 0,
+      "fn": 0
+    },
+    "openai": {
+      "n": 23,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 15,
+      "tn": 8,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "correct_per_category": {
+    "tokens": {
+      "exact": "4/4",
+      "synonym": "2/5",
+      "qualified": "4/4",
+      "cv_label": "2/2",
+      "not_in_kb": "4/4",
+      "lexical_trap": "3/3",
+      "non_diagnosis": "2/2",
+      "contradicted": "2/2"
+    },
+    "gemini": {
+      "exact": "4/4",
+      "synonym": "5/5",
+      "qualified": "4/4",
+      "cv_label": "2/2",
+      "not_in_kb": "4/4",
+      "lexical_trap": "3/3",
+      "non_diagnosis": "1/1"
+    },
+    "openai_original": {
+      "exact": "4/4",
+      "synonym": "5/5",
+      "qualified": "4/4",
+      "cv_label": "2/2",
+      "not_in_kb": "4/4",
+      "lexical_trap": "3/3",
+      "non_diagnosis": "2/2",
+      "contradicted": "2/2"
+    },
+    "openai": {
+      "exact": "4/4",
+      "synonym": "5/5",
+      "qualified": "4/4",
+      "cv_label": "2/2",
+      "not_in_kb": "4/4",
+      "lexical_trap": "3/3",
+      "non_diagnosis": "2/2",
+      "contradicted": "2/2"
+    }
+  },
+  "errors": {
+    "tokens": [
+      {
+        "id": "jd05",
+        "diagnosis": "Myocardial infarction",
+        "label": "supported",
+        "score": 0.0
+      },
+      {
+        "id": "jd08",
+        "diagnosis": "Collapsed lung",
+        "label": "supported",
+        "score": 0.0
+      },
+      {
+        "id": "jd09",
+        "diagnosis": "Kidney infection",
+        "label": "supported",
+        "score": 0.0
+      }
+    ],
+    "gemini": [],
+    "openai_original": [],
+    "openai": []
+  },
+  "usage": {
+    "gemini": {
+      "model": "gemini-2.5-flash",
+      "requests": 23,
+      "live_calls_this_run": 0,
+      "input_tokens": 18772,
+      "output_tokens": 17010,
+      "latency_median_s": 4.198,
+      "latency_p95_s": 6.038
+    },
+    "openai_original": {
+      "model": "gpt-6-luna",
+      "requests": 26,
+      "live_calls_this_run": 0,
+      "input_tokens": 23741,
+      "output_tokens": 2454,
+      "latency_median_s": 2.072,
+      "latency_p95_s": 3.731,
+      "cost_usd": 0.0036
+    },
+    "openai": {
+      "model": "gpt-6-luna",
+      "requests": 26,
+      "live_calls_this_run": 0,
+      "input_tokens": 27893,
+      "output_tokens": 2824,
+      "latency_median_s": 2.733,
+      "latency_p95_s": 5.516,
+      "cost_usd": 0.0042
+    }
+  },
+  "items": [
+    {
+      "id": "jd01",
+      "diagnosis": "Pneumonia",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.98,
+        "openai": 0.98
+      }
+    },
+    {
+      "id": "jd02",
+      "diagnosis": "Heart Failure",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.95,
+        "openai_original": 1.0,
+        "openai": 1.0
+      }
+    },
+    {
+      "id": "jd03",
+      "diagnosis": "Stroke (CVA)",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.98,
+        "openai": 0.98
+      }
+    },
+    {
+      "id": "jd04",
+      "diagnosis": "Pneumothorax",
+      "category": "exact",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.95,
+        "openai": 1.0
+      }
+    },
+    {
+      "id": "jd05",
+      "diagnosis": "Myocardial infarction",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.9,
+        "openai_original": 0.9,
+        "openai": 0.75
+      }
+    },
+    {
+      "id": "jd06",
+      "diagnosis": "High blood pressure",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.95,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jd07",
+      "diagnosis": "TB",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.9,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jd08",
+      "diagnosis": "Collapsed lung",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.9,
+        "openai_original": 0.75,
+        "openai": 0.9
+      }
+    },
+    {
+      "id": "jd09",
+      "diagnosis": "Kidney infection",
+      "category": "synonym",
+      "label": "supported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.9,
+        "openai_original": 0.8,
+        "openai": 0.9
+      }
+    },
+    {
+      "id": "jd10",
+      "diagnosis": "Community-acquired pneumonia",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.9,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jd11",
+      "diagnosis": "Suspected pulmonary tuberculosis",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.75,
+        "openai": 0.98
+      }
+    },
+    {
+      "id": "jd12",
+      "diagnosis": "Acute exacerbation of COPD",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.75,
+        "openai_original": 0.5,
+        "openai": 0.7
+      }
+    },
+    {
+      "id": "jd13",
+      "diagnosis": "Acute ischemic stroke",
+      "category": "qualified",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.95,
+        "openai": 0.95
+      }
+    },
+    {
+      "id": "jd14",
+      "diagnosis": "Effusion",
+      "category": "cv_label",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.65,
+        "openai": 0.68
+      }
+    },
+    {
+      "id": "jd15",
+      "diagnosis": "Pleural_Thickening",
+      "category": "cv_label",
+      "label": "supported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": 0.9,
+        "openai_original": 0.95,
+        "openai": 1.0
+      }
+    },
+    {
+      "id": "jd16",
+      "diagnosis": "Migraine",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.25,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jd17",
+      "diagnosis": "Acute Appendicitis",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.2,
+        "openai_original": 0.2,
+        "openai": 0.0
+      }
+    },
+    {
+      "id": "jd18",
+      "diagnosis": "Hypothyroidism",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.2,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jd19",
+      "diagnosis": "Influenza",
+      "category": "not_in_kb",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.2,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jd20",
+      "diagnosis": "Diabetes insipidus",
+      "category": "lexical_trap",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.25,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jd21",
+      "diagnosis": "Pulmonary embolism",
+      "category": "lexical_trap",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.2,
+        "openai_original": 0.3,
+        "openai": 0.2
+      }
+    },
+    {
+      "id": "jd22",
+      "diagnosis": "Kidney stones",
+      "category": "lexical_trap",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.3,
+        "openai_original": 0.3,
+        "openai": 0.3
+      }
+    },
+    {
+      "id": "jd23",
+      "diagnosis": "Analysis completed",
+      "category": "non_diagnosis",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": null,
+        "openai_original": 0.3,
+        "openai": 0.0
+      }
+    },
+    {
+      "id": "jd24",
+      "diagnosis": "Unable to provide diagnosis",
+      "category": "non_diagnosis",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 0.0,
+        "gemini": 0.2,
+        "openai_original": 0.3,
+        "openai": 0.0
+      }
+    },
+    {
+      "id": "jd25",
+      "diagnosis": "Hypertension (blood pressure 110/70 mmHg)",
+      "category": "contradicted",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": null,
+        "openai_original": 0.1,
+        "openai": 0.1
+      }
+    },
+    {
+      "id": "jd26",
+      "diagnosis": "Type 2 diabetes mellitus (HbA1c 5.1%)",
+      "category": "contradicted",
+      "label": "unsupported",
+      "scores": {
+        "tokens": 1.0,
+        "gemini": null,
+        "openai_original": 0.2,
+        "openai": 0.1
+      }
+    }
+  ]
+}

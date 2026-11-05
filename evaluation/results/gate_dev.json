@@ -1,0 +1,1646 @@
+{
+  "split": "dev",
+  "metrics": {
+    "rules": {
+      "n": 81,
+      "accuracy": 0.8395,
+      "sensitivity": 0.8039,
+      "specificity": 0.9,
+      "precision": 0.9318,
+      "f1": 0.8631,
+      "tp": 41,
+      "tn": 27,
+      "fp": 3,
+      "fn": 10
+    },
+    "jev signs only": {
+      "n": 81,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 51,
+      "tn": 30,
+      "fp": 0,
+      "fn": 0
+    },
+    "rules + jev signs": {
+      "n": 81,
+      "accuracy": 0.963,
+      "sensitivity": 1.0,
+      "specificity": 0.9,
+      "precision": 0.9444,
+      "f1": 0.9714,
+      "tp": 51,
+      "tn": 27,
+      "fp": 3,
+      "fn": 0
+    },
+    "rules + jev signs + clearing": {
+      "n": 81,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 51,
+      "tn": 30,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "by_category": {
+    "benign": {
+      "label": "no_escalate",
+      "n": 5,
+      "rules": 0.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.0,
+      "rules + jev signs + clearing": 0.0
+    },
+    "family_history": {
+      "label": "no_escalate",
+      "n": 18,
+      "rules": 0.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.0,
+      "rules + jev signs + clearing": 0.0
+    },
+    "history_plus_current": {
+      "label": "escalate",
+      "n": 26,
+      "rules": 1.0,
+      "jev signs only": 1.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 1.0
+    },
+    "keyword_current": {
+      "label": "escalate",
+      "n": 13,
+      "rules": 1.0,
+      "jev signs only": 1.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 1.0
+    },
+    "negated_keyword": {
+      "label": "no_escalate",
+      "n": 2,
+      "rules": 0.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.0,
+      "rules + jev signs + clearing": 0.0
+    },
+    "negation_plus_current": {
+      "label": "escalate",
+      "n": 2,
+      "rules": 1.0,
+      "jev signs only": 1.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 1.0
+    },
+    "paraphrase": {
+      "label": "escalate",
+      "n": 10,
+      "rules": 0.0,
+      "jev signs only": 1.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 1.0
+    },
+    "personal_history": {
+      "label": "no_escalate",
+      "n": 2,
+      "rules": 1.0,
+      "jev signs only": 0.0,
+      "rules + jev signs": 1.0,
+      "rules + jev signs + clearing": 0.0
+    },
+    "tricky_wording": {
+      "label": "no_escalate",
+      "n": 3,
+      "rules": 0.3333,
+      "jev signs only": 0.0,
+      "rules + jev signs": 0.3333,
+      "rules + jev signs + clearing": 0.0
+    }
+  },
+  "items": [
+    {
+      "id": "d001",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my mother had a stroke an hour ago",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.83
+      },
+      "max_signal": 0.83,
+      "cleared": []
+    },
+    {
+      "id": "d002",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my mother had a stroke and is not responding",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.79,
+        "unresponsive": 0.97
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "d003",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my mother is having a stroke",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.91
+      },
+      "max_signal": 0.91,
+      "cleared": []
+    },
+    {
+      "id": "d004",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my mother's stroke symptoms started today",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.91
+      },
+      "max_signal": 0.91,
+      "cleared": []
+    },
+    {
+      "id": "d005",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my mother's seizure will not stop",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "d006",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my mothers stroke happened 10 minutes ago",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.91
+      },
+      "max_signal": 0.91,
+      "cleared": []
+    },
+    {
+      "id": "d007",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my mother suffered a stroke just now",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.89
+      },
+      "max_signal": 0.89,
+      "cleared": []
+    },
+    {
+      "id": "d008",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my father had a heart attack last night",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "heart attack"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.79
+      },
+      "max_signal": 0.79,
+      "cleared": []
+    },
+    {
+      "id": "d009",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my mother has been bleeding since last month",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "bleeding"
+      ],
+      "jev_signs": {
+        "serious_bleeding": 0.87
+      },
+      "max_signal": 0.87,
+      "cleared": []
+    },
+    {
+      "id": "d010",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my mother had a stroke this morning",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.86,
+        "other_emergency": 0.3
+      },
+      "max_signal": 0.86,
+      "cleared": []
+    },
+    {
+      "id": "d011",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "my father is having a heart attack",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "heart attack"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.96
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "d012",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "severe chest pain",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "severe"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.79
+      },
+      "max_signal": 0.79,
+      "cleared": []
+    },
+    {
+      "id": "d013",
+      "label": "escalate",
+      "category": "keyword_current",
+      "text": "I had two seizures today",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "d014",
+      "label": "escalate",
+      "category": "negation_plus_current",
+      "text": "no fever, bleeding from the nose since morning",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "bleeding"
+      ],
+      "jev_signs": {
+        "serious_bleeding": 0.38
+      },
+      "max_signal": 0.38,
+      "cleared": []
+    },
+    {
+      "id": "d015",
+      "label": "escalate",
+      "category": "negation_plus_current",
+      "text": "no fever, has severe chest pain radiating to left arm with sweating",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "severe"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.96
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "d016",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my father had a heart attack last year and now he has a seizure",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.86,
+        "other_emergency": 0.74
+      },
+      "max_signal": 0.86,
+      "cleared": []
+    },
+    {
+      "id": "d017",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my father had a heart attack last year, now he is unconscious",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.34,
+        "unresponsive": 0.97,
+        "other_emergency": 0.4
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "d018",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "last year my mother had a stroke and today she had a seizure",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.98,
+        "other_emergency": 0.56
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "d019",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my mother had a stroke last year. she is having another stroke",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.85,
+        "other_emergency": 0.52
+      },
+      "max_signal": 0.85,
+      "cleared": []
+    },
+    {
+      "id": "d020",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my mother had a stroke last year, i think i am having a stroke",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.74,
+        "other_emergency": 0.49
+      },
+      "max_signal": 0.74,
+      "cleared": []
+    },
+    {
+      "id": "d021",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my mother had a stroke last year and now a seizure",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.78,
+        "other_emergency": 0.52
+      },
+      "max_signal": 0.78,
+      "cleared": []
+    },
+    {
+      "id": "d022",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my mother had a stroke last year and a seizure today",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.97,
+        "other_emergency": 0.64
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "d023",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my mother had a stroke last year and is bleeding",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "bleeding"
+      ],
+      "jev_signs": {
+        "serious_bleeding": 0.52,
+        "other_emergency": 0.49
+      },
+      "max_signal": 0.52,
+      "cleared": []
+    },
+    {
+      "id": "d024",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my dad had a stroke 2 years ago and another stroke today",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.78,
+        "other_emergency": 0.46
+      },
+      "max_signal": 0.78,
+      "cleared": []
+    },
+    {
+      "id": "d025",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my father died of a heart attack and i am having a seizure",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.96,
+        "other_emergency": 0.48
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "d026",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my father died of a heart attack last year and my mother is unconscious",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {
+        "unresponsive": 0.93,
+        "other_emergency": 0.48
+      },
+      "max_signal": 0.93,
+      "cleared": []
+    },
+    {
+      "id": "d027",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my grandfather had a stroke in 2015 and my father is unconscious",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {
+        "unresponsive": 0.95,
+        "other_emergency": 0.45
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "d028",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my brother who had a stroke last year is bleeding heavily",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "bleeding"
+      ],
+      "jev_signs": {
+        "serious_bleeding": 0.97,
+        "other_emergency": 0.35
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "d029",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my sister has a history of seizures and she is having a seizure",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.98
+      },
+      "max_signal": 0.98,
+      "cleared": []
+    },
+    {
+      "id": "d030",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my mother has a history of stroke and is unconscious",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {
+        "unresponsive": 0.96
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "d031",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "years ago my mother had sepsis and now my baby is unconscious",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {
+        "unresponsive": 0.96,
+        "other_emergency": 0.41
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "d032",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "family history of stroke. i think i am having a stroke",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.71,
+        "other_emergency": 0.46
+      },
+      "max_signal": 0.71,
+      "cleared": []
+    },
+    {
+      "id": "d033",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "family history of stroke, sudden severe headache",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "severe"
+      ],
+      "jev_signs": {
+        "head_emergency": 0.84,
+        "other_emergency": 0.44
+      },
+      "max_signal": 0.84,
+      "cleared": []
+    },
+    {
+      "id": "d034",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "family history of stroke, now unconscious",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.33,
+        "unresponsive": 0.95,
+        "other_emergency": 0.33
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "d035",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "family history of stroke and he is unconscious",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {
+        "unresponsive": 0.94,
+        "other_emergency": 0.33
+      },
+      "max_signal": 0.94,
+      "cleared": []
+    },
+    {
+      "id": "d036",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "family history of stroke and now has slurred speech and a seizure",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.93,
+        "seizure": 0.89,
+        "other_emergency": 0.49
+      },
+      "max_signal": 0.93,
+      "cleared": []
+    },
+    {
+      "id": "d037",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "family history significant for stroke. patient is having a seizure",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.97,
+        "other_emergency": 0.37
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "d038",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "fhx of stroke. severe headache and bleeding",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "bleeding",
+        "severe"
+      ],
+      "jev_signs": {
+        "serious_bleeding": 0.5,
+        "head_emergency": 0.8,
+        "other_emergency": 0.53
+      },
+      "max_signal": 0.8,
+      "cleared": []
+    },
+    {
+      "id": "d039",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "my mother had a stroke last year and she is having a seizure",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.96,
+        "other_emergency": 0.42
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "d040",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "family history of stroke, my father is unconscious",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.41,
+        "unresponsive": 0.95,
+        "other_emergency": 0.4
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "d041",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "my mother had a stroke last year",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "d042",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "my mother had a stroke 5 years ago, i have a cough",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.07,
+      "cleared": []
+    },
+    {
+      "id": "d043",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "my mother's stroke was 3 years ago",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d044",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "my grandmother had a stroke at the age of 80",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d045",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "my mother has a history of stroke",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d046",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "my mother, who had a stroke last year, is fine. i have a cough",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.06,
+      "cleared": []
+    },
+    {
+      "id": "d047",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "both my parents had heart attacks years ago",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d048",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "my father died of a heart attack",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "d049",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "my father passed away from a heart attack in 2010",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d050",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "my grandfather passed away from sepsis",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d051",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "family history of heart attack and stroke",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d052",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "family history significant for stroke and myocardial infarction",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d053",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "fhx: stroke, heart attack",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "d054",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "stroke runs in my family",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d055",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "mild headache, my mother had a stroke last year",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.09,
+      "cleared": []
+    },
+    {
+      "id": "d056",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "mild headache, my mother's stroke was last year",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.08,
+      "cleared": []
+    },
+    {
+      "id": "d057",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "runny nose. family history of heart attack and stroke",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d058",
+      "label": "no_escalate",
+      "category": "family_history",
+      "text": "runny nose, my father died of a heart attack",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "d059",
+      "label": "no_escalate",
+      "category": "negated_keyword",
+      "text": "runny nose, no bleeding, nothing severe",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d060",
+      "label": "no_escalate",
+      "category": "tricky_wording",
+      "text": "sore throat after 2000 keystrokes of typing",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d061",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "runny nose",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d062",
+      "label": "no_escalate",
+      "category": "negated_keyword",
+      "text": "I don't have chest pain, just a runny nose and nothing severe",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d063",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "my mother had a stroke",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.35
+      },
+      "max_signal": 0.35,
+      "cleared": []
+    },
+    {
+      "id": "d064",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "my dad had a seizure again",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {
+        "seizure": 0.69
+      },
+      "max_signal": 0.69,
+      "cleared": []
+    },
+    {
+      "id": "d065",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "mother had sepsis 3 days ago",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "sepsis"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.09,
+      "cleared": []
+    },
+    {
+      "id": "d066",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "mother: stroke",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {
+        "stroke_signs": 0.69
+      },
+      "max_signal": 0.69,
+      "cleared": []
+    },
+    {
+      "id": "d067",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "my husband had a heart attack last year",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "heart attack"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": [
+        "heart attack"
+      ]
+    },
+    {
+      "id": "d068",
+      "label": "ambiguous",
+      "category": "personal_history",
+      "text": "i had a stroke last year",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.06,
+      "cleared": [
+        "stroke"
+      ]
+    },
+    {
+      "id": "d069",
+      "label": "ambiguous",
+      "category": "undated_relative",
+      "text": "my son had a seizure last year",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": [
+        "seizure"
+      ]
+    },
+    {
+      "id": "d070",
+      "label": "ambiguous",
+      "category": "informational_question",
+      "text": "what are the risk factors for stroke?",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "stroke"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d071",
+      "label": "ambiguous",
+      "category": "borderline_symptom",
+      "text": "cough, fever, sputum, shortness of breath, chills for 3 days",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.08,
+      "cleared": []
+    },
+    {
+      "id": "d072",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "one side of my face feels numb and my smile is uneven since this morning",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "stroke_signs": 0.92
+      },
+      "max_signal": 0.92,
+      "cleared": []
+    },
+    {
+      "id": "d073",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "there is a heavy squeezing feeling in my chest and I feel sick and clammy",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "cardiac_signs": 0.95
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "d074",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "my wife can't catch her breath and is making a whistling sound, she can barely talk",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "breathing_emergency": 0.93
+      },
+      "max_signal": 0.93,
+      "cleared": []
+    },
+    {
+      "id": "d075",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "after the wasp sting my eyes and lips puffed up and I feel dizzy",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "severe_allergic_reaction": 0.96
+      },
+      "max_signal": 0.96,
+      "cleared": []
+    },
+    {
+      "id": "d076",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "he threw up something that looks like coffee grounds",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "serious_bleeding": 0.85
+      },
+      "max_signal": 0.85,
+      "cleared": []
+    },
+    {
+      "id": "d077",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "my baby is floppy and very hard to wake",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "unresponsive": 0.95,
+        "other_emergency": 0.3
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "d078",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "she is shaking all over and foaming at the mouth",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "seizure": 0.91
+      },
+      "max_signal": 0.91,
+      "cleared": []
+    },
+    {
+      "id": "d079",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "I swallowed a lot of sleeping pills",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "self_harm_or_poisoning": 0.97
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "d080",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "my head hurts worse than anything I have ever felt and it started in one second",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "head_emergency": 0.95
+      },
+      "max_signal": 0.95,
+      "cleared": []
+    },
+    {
+      "id": "d081",
+      "label": "escalate",
+      "category": "paraphrase",
+      "text": "fever, a very stiff neck, and he is confused and sleepy",
+      "rules": false,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [],
+      "jev_signs": {
+        "serious_infection": 0.97,
+        "other_emergency": 0.39
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "d082",
+      "label": "escalate",
+      "category": "history_plus_current",
+      "text": "I had a heart attack ten years ago and today I have the same crushing chest pain",
+      "rules": true,
+      "jev signs only": true,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": true,
+      "rule_keywords": [
+        "heart attack"
+      ],
+      "jev_signs": {
+        "cardiac_signs": 0.97
+      },
+      "max_signal": 0.97,
+      "cleared": []
+    },
+    {
+      "id": "d083",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "my arm felt a bit numb after sleeping on it, it was fine after a minute",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.12,
+      "cleared": []
+    },
+    {
+      "id": "d084",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "I get a little out of breath after running up five flights of stairs",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "d085",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "my nose bled for a minute after I blew it and then it stopped",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    },
+    {
+      "id": "d086",
+      "label": "no_escalate",
+      "category": "benign",
+      "text": "I felt light-headed for a second when I stood up quickly",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.04,
+      "cleared": []
+    },
+    {
+      "id": "d087",
+      "label": "no_escalate",
+      "category": "personal_history",
+      "text": "I had a heart attack ten years ago and have been fine since. Today I have a blocked nose",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "heart attack"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": [
+        "heart attack"
+      ]
+    },
+    {
+      "id": "d088",
+      "label": "no_escalate",
+      "category": "personal_history",
+      "text": "Years ago I had a seizure after a head injury, nothing since. I have a mild cough",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "seizure"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.06,
+      "cleared": [
+        "seizure"
+      ]
+    },
+    {
+      "id": "d089",
+      "label": "no_escalate",
+      "category": "tricky_wording",
+      "text": "My friend was unconscious after a car crash last year. I have a sore knee",
+      "rules": true,
+      "jev signs only": false,
+      "rules + jev signs": true,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [
+        "unconscious"
+      ],
+      "jev_signs": {},
+      "max_signal": 0.17,
+      "cleared": [
+        "unconscious"
+      ]
+    },
+    {
+      "id": "d090",
+      "label": "no_escalate",
+      "category": "tricky_wording",
+      "text": "The pharmacist told me the rash is not an emergency",
+      "rules": false,
+      "jev signs only": false,
+      "rules + jev signs": false,
+      "rules + jev signs + clearing": false,
+      "rule_keywords": [],
+      "jev_signs": {},
+      "max_signal": 0.05,
+      "cleared": []
+    }
+  ]
+}

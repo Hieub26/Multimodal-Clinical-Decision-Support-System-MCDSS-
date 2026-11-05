@@ -5,8 +5,10 @@ import time
 import signal
 import os
 
-FASTAPI_PORT = 8008
-STREAMLIT_PORT = 8501
+from app.config import settings
+
+FASTAPI_PORT = settings.fastapi_port
+STREAMLIT_PORT = settings.streamlit_port
 
 
 
@@ -23,7 +25,7 @@ def main():
     fastapi_cmd = [
         sys.executable, "-m", "uvicorn",
         "app.main:app",
-        "--host", "0.0.0.0",
+        "--host", settings.fastapi_host,
         "--port", str(FASTAPI_PORT),
         "--reload",
     ]
@@ -39,13 +41,23 @@ def main():
     streamlit_cmd = [
         sys.executable, "-m", "streamlit", "run",
         "streamlit_app/app.py",
+        # Streamlit listens on every interface unless told otherwise
+        "--server.address", settings.streamlit_host,
         "--server.port", str(STREAMLIT_PORT),
         "--server.headless", "true",
         "--theme.base", "dark",
     ]
+    # Point the frontend at the port the backend was actually started on, and
+    # hand it the API key from .env (the frontend does not read .env itself)
+    streamlit_env = {
+        "API_BASE_URL": f"http://localhost:{FASTAPI_PORT}{settings.api_prefix}",
+        "API_KEY": settings.api_key.get_secret_value(),
+        **os.environ,
+    }
     streamlit_proc = subprocess.Popen(
         streamlit_cmd,
         cwd=os.path.dirname(os.path.abspath(__file__)),
+        env=streamlit_env,
     )
     processes.append(streamlit_proc)
 

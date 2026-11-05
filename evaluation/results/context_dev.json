@@ -1,0 +1,1049 @@
+{
+  "split": "dev",
+  "metrics": {
+    "rules": {
+      "n": 100,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 43,
+      "tn": 57,
+      "fp": 0,
+      "fn": 0
+    },
+    "jev": {
+      "n": 100,
+      "accuracy": 1.0,
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "precision": 1.0,
+      "f1": 1.0,
+      "tp": 43,
+      "tn": 57,
+      "fp": 0,
+      "fn": 0
+    }
+  },
+  "accuracy_by_kind": {
+    "family": {
+      "rules": 1.0,
+      "jev": 1.0
+    },
+    "negated": {
+      "rules": 1.0,
+      "jev": 1.0
+    },
+    "past": {
+      "rules": 1.0,
+      "jev": 1.0
+    },
+    "present": {
+      "rules": 1.0,
+      "jev": 1.0
+    }
+  },
+  "items": [
+    {
+      "id": "x001",
+      "text": "I don't have chest pain",
+      "mention": "chest pain",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x002",
+      "text": "Patient doesnt have fever",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x003",
+      "text": "no fever but has no chest pain",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x003",
+      "text": "no fever but has no chest pain",
+      "mention": "chest pain",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x004",
+      "text": "no fever but has cough",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x004",
+      "text": "no fever but has cough",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x005",
+      "text": "no fever above 38.5 or cough",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x005",
+      "text": "no fever above 38.5 or cough",
+      "mention": "cough",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x006",
+      "text": "no fever, chest pain radiating to left arm",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x006",
+      "text": "no fever, chest pain radiating to left arm",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x007",
+      "text": "no fever, has severe chest pain radiating to left arm",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x007",
+      "text": "no fever, has severe chest pain radiating to left arm",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x008",
+      "text": "cough without fever, chest pain",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x008",
+      "text": "cough without fever, chest pain",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x008",
+      "text": "cough without fever, chest pain",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x009",
+      "text": "no fever, cough, or chest pain",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x009",
+      "text": "no fever, cough, or chest pain",
+      "mention": "cough",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x009",
+      "text": "no fever, cough, or chest pain",
+      "mention": "chest pain",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x010",
+      "text": "no fever, cough or chest pain",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x010",
+      "text": "no fever, cough or chest pain",
+      "mention": "cough",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x010",
+      "text": "no fever, cough or chest pain",
+      "mention": "chest pain",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x011",
+      "text": "no fever or chills, chest pain since morning",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x011",
+      "text": "no fever or chills, chest pain since morning",
+      "mention": "chills",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x011",
+      "text": "no fever or chills, chest pain since morning",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x012",
+      "text": "denies fever, cough, chest pain",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x012",
+      "text": "denies fever, cough, chest pain",
+      "mention": "cough",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x012",
+      "text": "denies fever, cough, chest pain",
+      "mention": "chest pain",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x013",
+      "text": "denies fever, chills, nausea, and vomiting",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x013",
+      "text": "denies fever, chills, nausea, and vomiting",
+      "mention": "chills",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x013",
+      "text": "denies fever, chills, nausea, and vomiting",
+      "mention": "nausea",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x013",
+      "text": "denies fever, chills, nausea, and vomiting",
+      "mention": "vomiting",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x014",
+      "text": "denies fever, shortness of breath or wheezing",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x014",
+      "text": "denies fever, shortness of breath or wheezing",
+      "mention": "shortness of breath",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x014",
+      "text": "denies fever, shortness of breath or wheezing",
+      "mention": "wheezing",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x015",
+      "text": "denies fever, has cough",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x015",
+      "text": "denies fever, has cough",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x016",
+      "text": "denies fever, cough. has chest pain",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x016",
+      "text": "denies fever, cough. has chest pain",
+      "mention": "cough",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x016",
+      "text": "denies fever, cough. has chest pain",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x017",
+      "text": "mother had a stroke last year, I have a mild headache",
+      "mention": "stroke",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x017",
+      "text": "mother had a stroke last year, I have a mild headache",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x018",
+      "text": "father died of a heart attack and now I have chest pain",
+      "mention": "heart attack",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x018",
+      "text": "father died of a heart attack and now I have chest pain",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x019",
+      "text": "my mother had diabetes and my father had hypertension",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x019",
+      "text": "my mother had diabetes and my father had hypertension",
+      "mention": "hypertension",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x020",
+      "text": "family history of diabetes, hypertension and stroke. now has chest pain",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x020",
+      "text": "family history of diabetes, hypertension and stroke. now has chest pain",
+      "mention": "hypertension",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x020",
+      "text": "family history of diabetes, hypertension and stroke. now has chest pain",
+      "mention": "stroke",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x020",
+      "text": "family history of diabetes, hypertension and stroke. now has chest pain",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x021",
+      "text": "family history of heart failure, I have a cough",
+      "mention": "heart failure",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x021",
+      "text": "family history of heart failure, I have a cough",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x022",
+      "text": "diabetes runs in my family, I have a headache",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x022",
+      "text": "diabetes runs in my family, I have a headache",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x023",
+      "text": "brother and sister both had asthma, I have wheezing",
+      "mention": "asthma",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x023",
+      "text": "brother and sister both had asthma, I have wheezing",
+      "mention": "wheezing",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x024",
+      "text": "last year my mother had a stroke, I have a headache",
+      "mention": "stroke",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x024",
+      "text": "last year my mother had a stroke, I have a headache",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x025",
+      "text": "my mother has a history of stroke, I have a headache",
+      "mention": "stroke",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x025",
+      "text": "my mother has a history of stroke, I have a headache",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x026",
+      "text": "my mother's stroke was last year, I have a headache",
+      "mention": "stroke",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x026",
+      "text": "my mother's stroke was last year, I have a headache",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x027",
+      "text": "my mother has diabetes, I have a headache",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x027",
+      "text": "my mother has diabetes, I have a headache",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x028",
+      "text": "my mother's diabetes is well controlled, I have blurred vision",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x028",
+      "text": "my mother's diabetes is well controlled, I have blurred vision",
+      "mention": "blurred vision",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x029",
+      "text": "My mom has high blood pressure and my dad has diabetes. I have had headaches for a week",
+      "mention": "hypertension",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x029",
+      "text": "My mom has high blood pressure and my dad has diabetes. I have had headaches for a week",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x029",
+      "text": "My mom has high blood pressure and my dad has diabetes. I have had headaches for a week",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x030",
+      "text": "my mother's stroke was last year and she has diabetes. I have a cough",
+      "mention": "stroke",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x030",
+      "text": "my mother's stroke was last year and she has diabetes. I have a cough",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x030",
+      "text": "my mother's stroke was last year and she has diabetes. I have a cough",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x031",
+      "text": "mother: diabetes, father: hypertension. I have chest pain",
+      "mention": "diabetes",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x031",
+      "text": "mother: diabetes, father: hypertension. I have chest pain",
+      "mention": "hypertension",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x031",
+      "text": "mother: diabetes, father: hypertension. I have chest pain",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x032",
+      "text": "FHx: MI in father at 55. Pt reports chest pain",
+      "mention": "myocardial infarction",
+      "kind": "family",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "other_person"
+    },
+    {
+      "id": "x032",
+      "text": "FHx: MI in father at 55. Pt reports chest pain",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x033",
+      "text": "my mother had a stroke last year and has chest pain",
+      "mention": "stroke",
+      "kind": "past",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "x033",
+      "text": "my mother had a stroke last year and has chest pain",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x034",
+      "text": "my mother had a stroke last year and she is having a seizure",
+      "mention": "stroke",
+      "kind": "past",
+      "rules": false,
+      "rules_context": "other_person",
+      "jev": false,
+      "jev_context": "past"
+    },
+    {
+      "id": "x034",
+      "text": "my mother had a stroke last year and she is having a seizure",
+      "mention": "seizure",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x035",
+      "text": "my wife says my chest pain is getting worse",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x036",
+      "text": "my father is having chest pain and sweating",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x036",
+      "text": "my father is having chest pain and sweating",
+      "mention": "sweating",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x037",
+      "text": "my mother has chest pain",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x038",
+      "text": "my mother has diabetes and chest pain",
+      "mention": "diabetes",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x038",
+      "text": "my mother has diabetes and chest pain",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x039",
+      "text": "my father has diabetes and he is confused and sweating",
+      "mention": "diabetes",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x039",
+      "text": "my father has diabetes and he is confused and sweating",
+      "mention": "sweating",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x040",
+      "text": "my mother's chest pain is getting worse",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x041",
+      "text": "my father has chest pain since last month",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x042",
+      "text": "my mother had a stroke this morning",
+      "mention": "stroke",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x043",
+      "text": "my father just had a heart attack",
+      "mention": "heart attack",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x044",
+      "text": "my mother had a seizure 2 hours ago",
+      "mention": "seizure",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x045",
+      "text": "my mother has tuberculosis, I have a cough",
+      "mention": "cough",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x046",
+      "text": "no family history of stroke, has headache",
+      "mention": "stroke",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x046",
+      "text": "no family history of stroke, has headache",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x047",
+      "text": "I have had headaches and two seizures, no fevers",
+      "mention": "headache",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x047",
+      "text": "I have had headaches and two seizures, no fevers",
+      "mention": "seizure",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    },
+    {
+      "id": "x047",
+      "text": "I have had headaches and two seizures, no fevers",
+      "mention": "fever",
+      "kind": "negated",
+      "rules": false,
+      "rules_context": "denied",
+      "jev": false,
+      "jev_context": "denied"
+    },
+    {
+      "id": "x048",
+      "text": "chest pain for 3 hr, hr 110",
+      "mention": "chest pain",
+      "kind": "present",
+      "rules": true,
+      "rules_context": "present",
+      "jev": true,
+      "jev_context": "present"
+    }
+  ]
+}
