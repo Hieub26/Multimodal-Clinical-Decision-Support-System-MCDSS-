@@ -101,11 +101,16 @@ class MedicalCVModel:
                 measured = {
                     m.get("label"): m for m in metadata.get("threshold_metrics") or []
                 }
+                # Which split the precision and recall come from: "test" for
+                # a model evaluated on a held-out test set (training/), older
+                # metadata measured them on the validation split.
+                measured_on = metadata.get("threshold_metrics_split", "validation")
                 self.validation_metrics = [
                     {
                         "threshold": float(threshold),
                         "precision": measured.get(label, {}).get("precision"),
                         "recall": measured.get(label, {}).get("recall"),
+                        "measured_on": measured_on,
                     }
                     for label, threshold in zip(self.class_names, thresholds)
                 ]
@@ -135,8 +140,7 @@ class MedicalCVModel:
     def grad_cam_visualizer(self) -> GradCAMVisualizer:
         """Lazy-load Grad-CAM and its visualizer."""
         if self._grad_cam_visualizer is None:
-            target_layer = self.model.features.denseblock4
-            self._grad_cam = GradCAM(self.model, target_layer)
+            self._grad_cam = GradCAM(self.model)
             self._grad_cam_visualizer = GradCAMVisualizer(
                 self._grad_cam, self.class_names
             )

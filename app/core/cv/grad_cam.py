@@ -10,6 +10,7 @@ from PIL import Image
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -20,46 +21,38 @@ from app.utils.logger import cv_logger
 
 
 class GradCAM:
-    """Gradient-weighted Class Activation Mapping for model explainability."""
+    """Gradient-weighted Class Activation Mapping for a torchvision DenseNet.
 
-    def __init__(self, model: nn.Module, target_layer: nn.Module):
+    The map is taken on the feature map the classifier actually pools: the
+    output of `features` (after norm5) passed through the final ReLU. The
+    forward pass is recomposed here instead of hooking a layer, because
+    DenseNet applies that ReLU in place, which a backward hook does not
+    allow; hooking denseblock4 instead, before norm5 and the ReLU, gave a
+    map that on some images agreed poorly with what the classifier used.
+    """
+
+    def __init__(self, model: nn.Module):
         self.model = model
-        self.target_layer = target_layer
-        self.gradients = None
-        self.activations = None
-
-        # Register hooks
-        target_layer.register_forward_hook(self._forward_hook)
-        target_layer.register_full_backward_hook(self._backward_hook)
-
-    def _forward_hook(self, module, input, output):
-        self.activations = output.detach().clone()
-
-    def _backward_hook(self, module, grad_input, grad_output):
-        self.gradients = grad_output[0].detach()
 
     def generate(self, input_tensor: torch.Tensor, class_idx: int = None) -> np.ndarray:
-        """Generate Grad-CAM heatmap."""
+        """Generate a Grad-CAM heatmap normalised to [0, 1]."""
         self.model.eval()
-        output = self.model(input_tensor)
+        features = self.model.features(input_tensor)
+        features.retain_grad()
+        activations = F.relu(features)
+        pooled = torch.flatten(F.adaptive_avg_pool2d(activations, 1), 1)
+        output = self.model.classifier(pooled)
 
         if class_idx is None:
             class_idx = output.argmax(dim=1).item()
 
         self.model.zero_grad()
-        target = output[0, class_idx]
-        target.backward()
+        output[0, class_idx].backward()
 
-        # Pool gradients across spatial dimensions
-        pooled_gradients = torch.mean(self.gradients, dim=[0, 2, 3])
-
-        # Weight activations by gradients
-        activations = self.activations[0]
-        weighted_activations = activations * pooled_gradients[:, None, None]
-
-        # Generate heatmap
-        heatmap = torch.mean(weighted_activations, dim=0).cpu().numpy()
-        heatmap = np.maximum(heatmap, 0)
+        # Channel weights: gradients averaged over the spatial grid
+        weights = features.grad[0].mean(dim=(1, 2))
+        heatmap = torch.relu((weights[:, None, None] * activations[0]).sum(dim=0))
+        heatmap = heatmap.detach().cpu().numpy()
         if heatmap.max() > 0:
             heatmap /= heatmap.max()
 
@@ -114,8 +107,10 @@ class GradCAMVisualizer:
             # Create overlay
             fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
-            # Original image
-            axes[0].imshow(original_image)
+            # Original image (a grayscale upload is shown in gray, not in
+            # matplotlib's default colour map)
+            original_rgb = original_image.convert("RGB")
+            axes[0].imshow(original_rgb)
             axes[0].set_title("Original Image", fontsize=12, fontweight="bold")
             axes[0].axis("off")
 
@@ -125,7 +120,7 @@ class GradCAMVisualizer:
             axes[1].axis("off")
 
             # Overlay
-            original_array = np.array(original_image.convert("RGB")) / 255.0
+            original_array = np.array(original_rgb) / 255.0
             colored_heatmap = cm.jet(heatmap_resized)[:, :, :3]
             overlay = 0.6 * original_array + 0.4 * colored_heatmap
             overlay = np.clip(overlay, 0, 1)
