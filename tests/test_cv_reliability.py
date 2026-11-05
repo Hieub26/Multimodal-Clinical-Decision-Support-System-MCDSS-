@@ -63,7 +63,7 @@ def test_flag_only_above_the_relaxed_threshold_says_so_and_is_capped():
     assert result["finding_detected"] is True
     assert result["reliability"]["above_validated_threshold"] is False
     assert (result["severity"], result["urgency"]) == ("high", "urgent")
-    assert "below the threshold the model was validated at (0.82)" in result["explanation"]
+    assert "below the threshold the model was measured at (0.82)" in result["explanation"]
 
 
 def test_cap_never_raises_a_milder_finding():

@@ -35,13 +35,13 @@ FINDING_RISK_MAP: dict[str, tuple[str, str]] = {
 _SEVERITY_RANK: dict[str, int] = {"low": 0, "moderate": 1, "high": 2, "critical": 3}
 _URGENCY_RANK: dict[str, int] = {"routine": 0, "urgent": 1, "emergency": 2}
 
-# The model's score is not the chance that a flag is right: it was trained
-# with heavy positive-class weights, and on its validation set a pulmonary
-# edema flag at a score above 0.92 was a true finding 17% of the time. A flag
-# is therefore reported as critical or an emergency only when the validation
-# figures back it: the score reaches the threshold those figures were measured
-# at, and at least this share of flags there were true findings. Any other
-# flag is capped at high / urgent, which still asks for prompt review.
+# The model's score is not the chance that a flag is right: on the official
+# patient-disjoint test split of ChestX-ray14, 23% of the pulmonary edema
+# flags raised at the chosen threshold were true findings. A flag is
+# therefore reported as critical or an emergency only when the measured
+# figures back it: the score reaches the threshold they were measured at, and
+# at least this share of flags there were true findings. Any other flag is
+# capped at high / urgent, which still asks for prompt review.
 MIN_PRECISION_FOR_CRITICAL = 0.25
 _UNCONFIRMED_FLAG_CAP = ("high", "urgent")
 
@@ -86,6 +86,7 @@ class CVPostprocessor:
                     "above_validated_threshold": bool(probs[i] >= validated["threshold"]),
                     "validated_precision": validated["precision"],
                     "validated_recall": validated["recall"],
+                    "measured_on": validated.get("measured_on", "validation"),
                 })
             return prediction
 
@@ -244,29 +245,32 @@ class CVPostprocessor:
 
     @classmethod
     def _reliability(cls, prediction: dict) -> dict | None:
-        """How far the reported flag can be trusted, from the validation set."""
+        """How far the reported flag can be trusted, from the measured figures."""
         precision = prediction.get("validated_precision")
         if "validated_threshold" not in prediction or precision is None:
             return None
 
         name = prediction["class"].replace("_", " ")
+        measured_on = prediction.get("measured_on", "validation")
         if prediction["above_validated_threshold"]:
             note = (
                 f"The model's score is not the chance that it is right: on its "
-                f"validation set, {precision:.0%} of the {name} flags raised "
-                f"at the validated threshold were true findings. Treat it as "
+                f"{measured_on} set, {precision:.0%} of the {name} flags raised "
+                f"at this threshold were true findings. Treat it as "
                 f"a prompt for review, not as a confirmed finding."
             )
         else:
             note = (
                 f"The model's score is not the chance that it is right, and "
                 f"for {name} it is below the threshold the model was "
-                f"validated at ({prediction['validated_threshold']:.2f}). At "
-                f"that threshold {precision:.0%} of flags were true findings; "
-                f"below it the share is lower and was not measured."
+                f"measured at ({prediction['validated_threshold']:.2f}). At "
+                f"that threshold {precision:.0%} of flags were true findings on "
+                f"its {measured_on} set; below it the share is lower and was "
+                f"not measured."
             )
         return {
             "class": prediction["class"],
+            "measured_on": measured_on,
             "validated_precision": precision,
             "validated_recall": prediction.get("validated_recall"),
             "above_validated_threshold": prediction["above_validated_threshold"],
@@ -282,8 +286,12 @@ class CVPostprocessor:
         ]
         if not recalls:
             return ""
+        measured_on = next(
+            (m.get("measured_on") for m in validation_metrics or [] if m.get("measured_on")),
+            "validation",
+        )
         return (
-            f" At its validated thresholds the model finds between "
+            f" At its thresholds, on its {measured_on} set, the model finds between "
             f"{min(recalls):.0%} and {max(recalls):.0%} of the cases of each "
             f"condition, so a negative result does not rule any of them out."
         )

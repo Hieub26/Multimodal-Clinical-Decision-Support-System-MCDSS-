@@ -53,7 +53,7 @@ Every external model is optional. Each step has a fallback that runs when its ke
 - **What leaves the machine.** The patient's text goes to Gemini (diagnosis, image safety review) and to TypeSafe (context judgments). The OpenAI judge receives only the diagnosis label and guideline passages. Images go to Gemini only for the safety review.
 - **Gemini free tier.** In October 2026 the free tier allowed 20 requests per day for `gemini-2.5-flash`. Once it is used up the generator falls back to the rule-based engine until the allowance resets. Judging on OpenAI leaves that allowance to diagnosis.
 - **What the rule-based engine's answer is worth.** Its confidence follows how clearly the symptoms single out one disease, fitted on a public benchmark. A diagnosis is shown as approved only from a confidence of 0.70, where 15 of 16 were right on the benchmark's test split; a picture that fits several diseases ("cough, fever, phlegm") is named but held back for review.
-- **What an image flag is worth.** The classifier's score is not the chance that a flag is right: on the model's validation set a pulmonary edema flag was a true finding 17% of the time. Every flag is reported with that measured precision, a flag below the validated threshold says so, and a flag the validation figures do not back is never rated critical or an emergency by itself.
+- **What an image flag is worth.** The classifier's score is not the chance that a flag is right: on the official patient-disjoint test split of ChestX-ray14, 23% of the pulmonary edema flags were true findings. Every flag is reported with the precision measured on that test split, a flag below the measured threshold says so, and a flag the test figures do not back (precision under 25%) is never rated critical or an emergency by itself.
 
 How much each of these helps is measured in [evaluation/](evaluation/README.md).
 
@@ -219,7 +219,7 @@ docker compose logs -f backend
 
 `ingest-guidelines` accepts inline `text`, or a `file_path` to a `.txt` file inside `data/guidelines` (relative to that directory). When `ADMIN_API_KEY` is set, the request must carry it in the `X-API-Key` header.
 
-When `API_KEY` is set, the diagnosis, history and download endpoints require it in the `X-API-Key` header; the health check stays open. The `validation` object of a diagnosis response says how guideline support was judged (`method`, `judge_model`), and `cv_details.reliability` what an image flag was worth on the model's validation set.
+When `API_KEY` is set, the diagnosis, history and download endpoints require it in the `X-API-Key` header; the health check stays open. The `validation` object of a diagnosis response says how guideline support was judged (`method`, `judge_model`), and `cv_details.reliability` what an image flag was worth on the model's held-out test split.
 
 ## 🧪 Tests
 
@@ -252,6 +252,41 @@ The rule-based diagnosis engine, which runs when Gemini is unavailable, is measu
 | Conditions outside its list shown with a diagnosis | none | 1 of 96 |
 
 The sets other than the two public ones are small and were labeled by one person; [evaluation/README.md](evaluation/README.md) lists what each number does and does not show.
+
+### Chest X-ray classifier
+
+DenseNet-121 (ImageNet initialisation) fine-tuned on NIH ChestX-ray14 with [training/train_densenet121_chestxray14.py](training/train_densenet121_chestxray14.py). The test set is the official `test_list.txt` (25,596 images, 2,797 patients), used once, after the checkpoint and the thresholds were fixed. Validation is 10% of the remaining patients (8,536 images), split by `Patient ID`; no patient is in two splits. Validation picked the epoch (6 of 10, early stopping) and the per-class thresholds (best F1).
+
+**Mean AUROC on the test set: 0.801 (95% CI 0.795–0.807, patient-level bootstrap).**
+
+| Finding | Test AUROC (95% CI) | Precision / recall at the threshold |
+|---|---|---|
+| Emphysema | 0.903 (0.889–0.915) | 35% / 62% |
+| Hernia | 0.882 (0.824–0.932) | 75% / 24% |
+| Cardiomegaly | 0.873 (0.854–0.889) | 45% / 29% |
+| Pneumothorax | 0.852 (0.836–0.865) | 41% / 51% |
+| Edema | 0.839 (0.822–0.855) | 23% / 17% |
+| Effusion | 0.818 (0.807–0.828) | 48% / 55% |
+| Mass | 0.814 (0.794–0.831) | 34% / 42% |
+| Fibrosis | 0.809 (0.783–0.834) | 15% / 14% |
+| Atelectasis | 0.770 (0.756–0.782) | 31% / 53% |
+| Pleural thickening | 0.767 (0.746–0.786) | 15% / 37% |
+| Nodule | 0.751 (0.730–0.771) | 28% / 29% |
+| Consolidation | 0.729 (0.714–0.745) | 18% / 25% |
+| Pneumonia | 0.719 (0.698–0.742) | 7% / 15% |
+| Infiltration | 0.696 (0.685–0.706) | 42% / 45%* |
+
+\* Infiltration is the most common and most noisily labelled finding (24% of test films), and its F1-optimal threshold flagged 60% of all films. Its threshold is instead the lowest that flags no more films than carry the finding ([training/recalibrate_thresholds.py](training/recalibrate_thresholds.py)). As the run kept no validation scores, it was chosen on half of the test patients and measured on the other half, which shares no patient with the first; the row shows that second half.
+
+Per-class figures, the training history and the split are in [training/results/](training/results/) and `models/best_densenet121_chestxray14_meta.json`. An earlier version of the model was evaluated on a random per-image split, which lets one patient's films sit in both training and validation; its figures (mean AUROC 0.836) are not comparable and are no longer used.
+
+## ⚠️ Limitations
+
+- **No clinical validation.** Nothing here was tested on real patients or with clinicians; it is a research prototype.
+- **Small, self-labeled text sets.** The context, red-flag and judge sets were labeled by one person (the author). The red-flag held-out set has 106 texts, of which 55 are emergencies.
+- **Image labels are text-mined.** ChestX-ray14 labels were extracted from radiology reports and are noisy; the test figures inherit that noise. Low-prevalence findings (Pneumonia, Fibrosis) have low precision at any useful threshold.
+- **No out-of-distribution check.** The image model accepts any picture; it scores a CT or MRI slice like a chest film (low scores in practice, but nothing rejects it).
+- **Grad-CAM is coarse.** Maps come from a 7×7 feature grid, so they show the region the model used, not the outline of a lesion, and a bilateral finding can show up as one blob.
 
 ## 🌳 Git Branching Strategy
 

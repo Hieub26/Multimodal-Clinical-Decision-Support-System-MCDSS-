@@ -117,7 +117,8 @@ class Settings(BaseSettings):
     cv_image_size: PositiveInt = Field(default=224, gt=0)
     cv_logit_temperature: float = Field(default=1.0, gt=0.0)
     cv_top_k: PositiveInt = Field(default=5, gt=0)
-    cv_threshold_relaxation: float = Field(default=0.84, ge=0.0, le=1.0)
+    # 1.0 = flag at the thresholds the precision and recall were measured at
+    cv_threshold_relaxation: float = Field(default=1.0, ge=0.0, le=1.0)
     cv_negative_screen_ratio_threshold: float = Field(default=0.65, ge=0.0, le=1.0)
 
     # Immutable tuple for class names
