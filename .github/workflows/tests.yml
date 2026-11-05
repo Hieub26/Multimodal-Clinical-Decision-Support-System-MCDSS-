@@ -32,6 +32,13 @@ jobs:
           pip install --extra-index-url https://download.pytorch.org/whl/cpu \
             -r requirements-dev.txt
 
+      # transformers hides why a model class fails to import unless its
+      # logging is at debug level; this shows the cause before the tests run.
+      - name: Check the model stack imports
+        env:
+          TRANSFORMERS_VERBOSITY: debug
+        run: python -c "import torch, transformers; print(torch.__version__, transformers.__version__); from transformers import PreTrainedModel"
+
       # The suite needs no API key, database, model weights or model
       # download; these two variables turn an accidental download into a
       # failure instead of a slow pass.
