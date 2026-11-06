@@ -1,6 +1,5 @@
 import pytest
 from PIL import Image
-from pydantic import SecretStr
 
 import app.core.safety.safety_controller as safety_module
 from app.core.safety.safety_controller import SafetyController
@@ -141,19 +140,88 @@ def test_red_flag_condition_in_explanation(controller):
     assert "pulmonary embolism" in result["risk_factors"][0]
 
 
-class _FailingVLM:
-    class models:
-        @staticmethod
-        def generate_content(**kwargs):
+class _FakeVLM:
+    """Stands in for OpenAIVLMReviewer: a fixed verdict, or a failure."""
+    provider, model, available = "fake", "fake-vlm", True
+
+    def __init__(self, verdict: dict | None = None):
+        self.verdict = verdict
+        self.calls = []
+
+    def review(self, prompt, image_path):
+        self.calls.append((prompt, image_path))
+        if self.verdict is None:
             raise RuntimeError("429 quota exhausted")
+        return dict(self.verdict)
 
 
-def test_vlm_outage_does_not_clear_risks(controller, tmp_path, monkeypatch):
+MULTIMODAL_CONFLICT = {
+    "primary_diagnosis": "Pneumonia",
+    "combined_confidence": 0.8,
+    "modality": "multimodal",
+    "severity": "moderate",
+    "urgency": "routine",
+    "is_guideline_consistent": False,
+    "fusion_strategy": "complementary",
+    "agreement": "complementary",
+    "explanation": "x",
+    "nlp_diagnosis": {"primary_diagnosis": "Pneumonia"},
+    "cv_diagnosis": {"detected_predictions": [{"class": "Infiltration"}]},
+}
+
+
+@pytest.fixture
+def xray(tmp_path):
+    path = tmp_path / "xray.png"
+    Image.new("RGB", (32, 32)).save(path)
+    return str(path)
+
+
+def test_vlm_approval_does_not_clear_a_risk(xray):
+    """An approve from the (unevaluated) reviewer leaves the case flagged."""
+    vlm = _FakeVLM({"decision": "approve", "reasoning": "looks coherent"})
+    result = SafetyController(vlm_reviewer=vlm).evaluate(
+        dict(MULTIMODAL_CONFLICT), image_path=xray, symptoms_text="cough"
+    )
+
+    assert vlm.calls, "the reviewer was not asked"
+    assert result["is_approved"] is False
+    assert "Diagnosis not fully consistent with clinical guidelines" in result["risk_factors"]
+
+
+@pytest.mark.parametrize("decision", ["escalate", "block"])
+def test_vlm_can_escalate_a_case_the_rules_approve(decision, xray):
+    vlm = _FakeVLM({"decision": decision, "reasoning": "possible pneumothorax"})
+    case = {**MULTIMODAL_CONFLICT, "is_guideline_consistent": True,
+            "fusion_strategy": "concordant", "agreement": "concordant"}
+    result = SafetyController(vlm_reviewer=vlm).evaluate(case, image_path=xray, symptoms_text="cough")
+
+    assert result["is_approved"] is False
+    assert any(r.startswith("VLM safety verifier recommends") for r in result["risk_factors"])
+
+
+def test_vlm_caution_adds_a_note_only(controller):
+    risks, notes, is_safe = controller._apply_vlm_review(
+        {"decision": "caution", "reasoning": "low-quality image"}, {}, [], [], True
+    )
+    assert (risks, is_safe) == ([], True)
+    assert notes == ["VLM safety verifier advises caution: low-quality image"]
+
+
+def test_vlm_is_skipped_without_a_reviewer_key(xray):
+    vlm = _FakeVLM({"decision": "block"})
+    vlm.available = False
+    result = SafetyController(vlm_reviewer=vlm).evaluate(
+        dict(MULTIMODAL_CONFLICT), image_path=xray, symptoms_text="cough"
+    )
+    assert vlm.calls == []
+    assert result["vlm_safety_review"] is None
+
+
+def test_vlm_outage_does_not_clear_risks(xray):
     """A failed VLM call must not turn a flagged case into an approved one."""
-    monkeypatch.setattr(safety_module.settings, "gemini_api_key", SecretStr("dummy"))
-    controller._client = _FailingVLM()
-    image_path = tmp_path / "xray.png"
-    Image.new("RGB", (32, 32)).save(image_path)
+    controller = SafetyController(vlm_reviewer=_FakeVLM())
+    image_path = xray
 
     result = controller.evaluate(
         {
