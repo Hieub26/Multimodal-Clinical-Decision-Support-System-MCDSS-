@@ -46,11 +46,12 @@ Every external model is optional. Each step has a fallback that runs when its ke
 | What the text says about each symptom (present, denied, past, someone else's, asked about) | TypeSafe Jev (`JEV_MODEL`) | Rule-based NegEx-style logic |
 | Red-flag gate on the patient's text | Keyword rules plus Jev emergency signs | Keyword rules only |
 | Guideline validation (LLM-as-a-Judge) | OpenAI (`JUDGE_MODEL_NAME`) | Token matching. With no OpenAI key at all, Gemini judges its own output |
-| Safety review of image cases | Gemini VLM (`VLM_SAFETY_MODEL`) | Skipped |
+| Safety review of image cases (can only add caution or escalate) | OpenAI vision model (`VLM_SAFETY_MODEL`) | Skipped |
 | Chest X-ray classification | DenseNet-121, local weights | Image diagnosis returns `503` |
 
 - **The judge is not the generator.** Gemini writes the diagnosis and an OpenAI model grades whether the guideline library supports it, so the two do not share blind spots. If the OpenAI call fails, validation falls back to token matching, never quietly to Gemini.
-- **What leaves the machine.** The patient's text goes to Gemini (diagnosis, image safety review) and to TypeSafe (context judgments). The OpenAI judge receives only the diagnosis label and guideline passages. Images go to Gemini only for the safety review.
+- **The image safety review only escalates.** For cases with an image, an OpenAI vision model looks at the film and the pipeline's output and may add a caution or escalate the case for review. It cannot clear any risk, not even a soft one such as a text/image disagreement or a guideline judge's "not supported": it has not been evaluated, so it is never allowed to make a case look safer than the rules, the judge and the red-flag gate left it. It runs on a different provider from the Gemini generator, so in a text + image case the generator does not review its own answer.
+- **What leaves the machine.** The patient's text goes to Gemini (diagnosis), to TypeSafe (context judgments) and, for image cases, to OpenAI with the image (safety review). The OpenAI guideline judge receives only the diagnosis label and guideline passages.
 - **Gemini free tier.** In October 2026 the free tier allowed 20 requests per day for `gemini-2.5-flash`. Once it is used up the generator falls back to the rule-based engine until the allowance resets. Judging on OpenAI leaves that allowance to diagnosis.
 - **What the rule-based engine's answer is worth.** Its confidence follows how clearly the symptoms single out one disease, fitted on a public benchmark. A diagnosis is shown as approved only from a confidence of 0.70, where 15 of 16 were right on the benchmark's test split; a picture that fits several diseases ("cough, fever, phlegm") is named but held back for review.
 - **What an image flag is worth.** The classifier's score is not the chance that a flag is right: on the official patient-disjoint test split of ChestX-ray14, 23% of the pulmonary edema flags were true findings. Every flag is reported with the precision measured on that test split, a flag below the measured threshold says so, and a flag the test figures do not back (precision under 25%) is never rated critical or an emergency by itself.
@@ -286,6 +287,7 @@ Per-class figures, the training history and the split are in [training/results/]
 - **Small, self-labeled text sets.** The context, red-flag and judge sets were labeled by one person (the author). The red-flag held-out set has 106 texts, of which 55 are emergencies.
 - **Image labels are text-mined.** ChestX-ray14 labels were extracted from radiology reports and are noisy; the test figures inherit that noise. Low-prevalence findings (Pneumonia, Fibrosis) have low precision at any useful threshold.
 - **No out-of-distribution check.** The image model accepts any picture; it scores a CT or MRI slice like a chest film (low scores in practice, but nothing rejects it).
+- **The image safety review is not evaluated.** No labeled set measures how often the vision model's escalations are right, which is why it can only add caution.
 - **Grad-CAM is coarse.** Maps come from a 7×7 feature grid, so they show the region the model used, not the outline of a lesion, and a bilateral finding can show up as one blob.
 
 ## 🌳 Git Branching Strategy

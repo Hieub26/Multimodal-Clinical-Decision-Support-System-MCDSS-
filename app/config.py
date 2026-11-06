@@ -143,8 +143,12 @@ class Settings(BaseSettings):
     confidence_threshold_cv: float = Field(default=0.30, ge=0.0, le=1.0)
     confidence_threshold_nlp: float = Field(default=0.70, ge=0.0, le=1.0)
     safety_threshold: float = Field(default=0.15, ge=0.0, le=1.0)
+    # Image safety review: an OpenAI vision model (needs OPENAI_API_KEY), not
+    # the Gemini generator. It can add caution or escalate, never clear a risk.
     vlm_safety_enabled: bool = True
-    vlm_safety_model: str = "gemini-2.5-flash"
+    vlm_safety_model: str = "gpt-6-luna"
+    vlm_reasoning_effort: str = "low"
+    vlm_timeout_seconds: float = Field(default=30.0, gt=0.0)
 
     # --- Database ---
     # Holds the database password, so it is left out of the settings repr

@@ -8,19 +8,10 @@ import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from PIL import Image
-
-try:
-    from google import genai
-    from google.genai import types
-    HAS_GENAI = True
-except ImportError:
-    HAS_GENAI = False
-    genai = None
-    types = None
 
 from app.config import settings
 from app.core.nlp.jev_judge import DENIED, OTHER_PERSON, PAST, JevJudge
+from app.core.safety.vlm_reviewer import OpenAIVLMReviewer
 from app.core.nlp.text_preprocessor import (
     STATED_FAMILY_HISTORY_CONTEXTS, family_context, is_negated,
     normalize_contractions,
@@ -88,6 +79,7 @@ class SafetyController:
         self,
         context_judge: JevJudge | None = None,
         clear_history_flags: bool | None = None,
+        vlm_reviewer: OpenAIVLMReviewer | None = None,
     ):
         """
         Args:
@@ -95,6 +87,8 @@ class SafetyController:
                 key) the red-flag gate is purely rule-based.
             clear_history_flags: Whether Jev may drop a keyword red flag it
                 reads as history. Defaults to the configured setting.
+            vlm_reviewer: Image safety reviewer. Defaults to the OpenAI
+                reviewer, which is skipped without an OpenAI key.
         """
         self.confidence_threshold_cv = settings.confidence_threshold_cv
         self.confidence_threshold_nlp = settings.confidence_threshold_nlp
@@ -104,18 +98,14 @@ class SafetyController:
             settings.jev_clear_history_red_flags
             if clear_history_flags is None else clear_history_flags
         )
-        self._client = None
+        self._vlm = vlm_reviewer or OpenAIVLMReviewer()
         safety_logger.info(
             f"SafetyController initialized "
             f"(cv_threshold={self.confidence_threshold_cv}, "
-            f"nlp_threshold={self.confidence_threshold_nlp})"
+            f"nlp_threshold={self.confidence_threshold_nlp}, "
+            f"vlm={self._vlm.provider}:{self._vlm.model}, "
+            f"vlm_available={self._vlm.available})"
         )
-
-    def _ensure_vlm(self):
-        """Configure Gemini VLM on first use."""
-        if self._client is None and settings.gemini_api_key_str and HAS_GENAI:
-            self._client = genai.Client(api_key=settings.gemini_api_key_str)
-            safety_logger.info("VLM safety verifier configured")
 
     def evaluate(
         self,
@@ -365,7 +355,7 @@ class SafetyController:
         """Run VLM verification only when image context can change the decision."""
         if not settings.vlm_safety_enabled or not image_path:
             return False
-        if not settings.gemini_api_key_str or not HAS_GENAI:
+        if not self._vlm.available:
             return False
         if not Path(image_path).exists():
             return False
@@ -390,9 +380,8 @@ class SafetyController:
         risk_factors: list[str] = None,
         warning_notes: list[str] = None,
     ) -> dict | None:
-        """Use Gemini multimodal reasoning as cross-modal safety verifier."""
-        self._ensure_vlm()
-        if not self._client:
+        """Ask the image safety reviewer (OpenAI vision model) about the case."""
+        if not self._vlm.available:
             return None
 
         prompt = self._build_vlm_prompt(
@@ -404,15 +393,7 @@ class SafetyController:
         )
 
         try:
-            image = Image.open(image_path).convert("RGB")
-            response = self._client.models.generate_content(
-                model=settings.vlm_safety_model,
-                contents=[prompt, image],
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                ),
-            )
-            review = json.loads(response.text)
+            review = self._vlm.review(prompt, image_path)
             safety_logger.info(
                 "VLM safety review: decision=%s risk=%s",
                 review.get("decision"),
@@ -652,7 +633,7 @@ class SafetyController:
         warning_notes: list[str],
         is_safe: bool,
     ) -> tuple[list[str], list[str], bool]:
-        """Let VLM soften soft risks or escalate unsafe cases."""
+        """Add the VLM review's escalation or caution; it never clears a risk."""
         if not vlm_review:
             return risk_factors, warning_notes, is_safe
 
@@ -669,48 +650,21 @@ class SafetyController:
             warning_notes = list(dict.fromkeys(warning_notes + [note]))
             return risk_factors, warning_notes, is_safe
 
-        hard_risks = [
-            r for r in risk_factors
-            if r.startswith(("Low confidence", "Red-flag", "Emergency warning signs"))
-        ]
-
-        if decision == "block":
-            reason = f"VLM safety verifier recommends {decision}"
+        # One-way: the review can add a risk or a warning, never remove one.
+        # It has not been evaluated, so an "approve" leaves the case exactly
+        # as the rules, the guideline judge and the red-flag gate left it.
+        if decision in ("block", "escalate"):
+            verb = "recommends escalation" if decision == "escalate" else "recommends block"
+            reason = f"VLM safety verifier {verb}"
             if reasoning:
                 reason += f": {reasoning}"
             risk_factors = list(dict.fromkeys(risk_factors + [reason]))
             return risk_factors, warning_notes, False
 
-        if decision == "escalate":
-            can_warn_instead = (
-                validated_output.get("fusion_strategy") == "concordant"
-                and validated_output.get("agreement") == "concordant"
-                and validated_output.get("is_guideline_consistent", False)
-                and not hard_risks
-                and not validated_output.get("conflict_flag")
-            )
-            note = "VLM safety verifier recommends escalation"
+        if decision == "caution":
+            note = "VLM safety verifier advises caution"
             if reasoning:
                 note += f": {reasoning}"
-
-            if can_warn_instead:
-                warning_notes = list(dict.fromkeys(warning_notes + [note]))
-                risk_factors = hard_risks
-                return risk_factors, warning_notes, True
-
-            risk_factors = list(dict.fromkeys(risk_factors + [note]))
-            return risk_factors, warning_notes, False
-
-        if decision in ("approve", "caution"):
-            if decision == "caution":
-                note = "VLM safety verifier advises caution"
-                if reasoning:
-                    note += f": {reasoning}"
-                warning_notes = list(dict.fromkeys(warning_notes + [note]))
-
-            # VLM may resolve soft risks such as guideline retrieval gaps or
-            # NLP/CV conflict, but never clears hard low-confidence/red-flag risks.
-            risk_factors = hard_risks
-            return risk_factors, warning_notes, len(risk_factors) == 0
+            warning_notes = list(dict.fromkeys(warning_notes + [note]))
 
         return risk_factors, warning_notes, is_safe
