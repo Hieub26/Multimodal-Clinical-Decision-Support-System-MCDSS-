@@ -113,12 +113,17 @@ class SafetyController:
         image_path: str = None,
         symptoms_text: str = None,
         clinical_question: str = None,
+        patient_flags: PatientTextFlags | None = None,
     ) -> dict:
         """
         Evaluate the safety of a validated diagnosis output.
 
         Args:
             validated_output: Output from GuidelineValidator
+            patient_flags: Result of patient_text_flags() for the same text,
+                when the caller already has it. It depends on the patient's
+                text alone, so a pipeline can compute it while the diagnosis
+                is still being generated. Computed here when not given.
 
         Returns:
             SafetyResult with approval status and risk factors
@@ -165,7 +170,8 @@ class SafetyController:
         # (e.g. "Inquiry about disease etiology" instead of "heart attack").
         # Each source is scanned on its own so a negation in one cannot
         # reach into the next.
-        patient_flags = self.patient_text_flags(symptoms_text, clinical_question)
+        if patient_flags is None:
+            patient_flags = self.patient_text_flags(symptoms_text, clinical_question)
         red_flags_found = list(dict.fromkeys(
             self._find_red_flags(primary, RED_FLAG_KEYWORDS)
             + patient_flags.keywords

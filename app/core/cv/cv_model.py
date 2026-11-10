@@ -17,7 +17,7 @@ from app.config import settings
 from app.core.cv.image_preprocessor import ImagePreprocessor
 from app.core.cv.cv_postprocessor import CVPostprocessor
 from app.core.cv.uncertainty_analyzer import UncertaintyAnalyzer
-from app.core.cv.grad_cam import GradCAM, GradCAMVisualizer
+from app.core.cv.grad_cam import GradCAM, GradCAMVisualizer, classify_features
 from app.utils.logger import cv_logger
 
 
@@ -65,9 +65,13 @@ class MedicalCVModel:
         self._model = None
         self._grad_cam = None
         self._grad_cam_visualizer = None
-        # Requests run in worker threads. Grad-CAM keeps per-call state on the
-        # model hooks and matplotlib is not thread-safe, so run one at a time.
-        self._predict_lock = threading.Lock()
+        # Requests run in worker threads; load the weights only once.
+        self._load_lock = threading.Lock()
+        # One forward pass at a time: torch already spreads a single pass
+        # over every core, so concurrent passes only compete for them. The
+        # lock is held for the model alone; decoding the upload and drawing
+        # the Grad-CAM image run outside it.
+        self._inference_lock = threading.Lock()
         cv_logger.info(f"MedicalCVModel initialized (device={self.device})")
 
     def _load_model_metadata(self):
@@ -131,10 +135,21 @@ class MedicalCVModel:
     def model(self) -> nn.Module:
         """Lazy-load the CV model."""
         if self._model is None:
-            self._model = self._build_model()
-            self._model.to(self.device)
-            self._model.eval()
+            with self._load_lock:
+                if self._model is None:
+                    model = self._build_model()
+                    model.to(self.device)
+                    model.eval()
+                    self._model = model
         return self._model
+
+    def ensure_loaded(self) -> None:
+        """Load the weights now if they are not loaded yet.
+
+        Raises:
+            ModelWeightsNotFoundError: if the fine-tuned weights are missing.
+        """
+        self.model
 
     @property
     def grad_cam_visualizer(self) -> GradCAMVisualizer:
@@ -186,10 +201,6 @@ class MedicalCVModel:
         Returns:
             CVDiagnosis dictionary
         """
-        with self._predict_lock:
-            return self._predict(image_input)
-
-    def _predict(self, image_input) -> dict:
         cv_logger.info("Starting CV prediction")
 
         # Step 1: Preprocess image (delegated to ImagePreprocessor)
@@ -200,9 +211,12 @@ class MedicalCVModel:
         else:
             tensor = torch.from_numpy(raw_tensor).to(self.device)
 
-        # Step 2: Inference
-        with torch.no_grad():
-            output = self.model(tensor)
+        # Step 2: Inference. The feature map is kept: Grad-CAM is computed
+        # from it, so a positive finding does not cost a second forward pass.
+        model = self.model
+        with self._inference_lock, torch.no_grad():
+            features = model.features(tensor)
+            output = classify_features(model, features)
             temperature = max(float(settings.cv_logit_temperature), 1e-6)
             scaled_logits = output[0] / temperature
             probabilities = torch.sigmoid(scaled_logits)
@@ -223,6 +237,7 @@ class MedicalCVModel:
                 preprocessed["original_image"],
                 result["primary_class_index"],
                 content_box=preprocessed["content_box"],
+                features=features,
             )
         else:
             gradcam_path = ""

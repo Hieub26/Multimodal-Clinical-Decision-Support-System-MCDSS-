@@ -76,6 +76,8 @@ class Settings(BaseSettings):
         description="API key for Gemini LLM/VLM services"
     )
     llm_model_name: str = "gemini-2.5-flash"
+    # A call that takes longer falls back to the rule-based engine.
+    llm_timeout_seconds: float = Field(default=60.0, gt=0.0)
 
     # --- Guideline judge (LLM-as-a-Judge) ---
     # A model from a different provider than the one that writes the

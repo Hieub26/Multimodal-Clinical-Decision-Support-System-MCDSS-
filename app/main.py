@@ -48,6 +48,20 @@ async def lifespan(app: FastAPI):
         api_logger.warning(f"Non-critical startup warning (Guideline initialization skipped): {e}")
 
     try:
+        # When the guideline index is already current nothing above embeds
+        # anything, and the embedding model would be loaded by the first
+        # diagnosis request, which then waits for it.
+        from app.api.dependencies import get_vector_store
+        embedding_engine = get_vector_store().embedding_engine
+        await run_in_threadpool(lambda: embedding_engine.model)
+        api_logger.info("Embedding model preloaded into memory successfully")
+    except Exception as e:
+        api_logger.warning(
+            f"Non-critical startup warning (Embedding model not preloaded — "
+            f"the first text diagnosis will load it): {e}"
+        )
+
+    try:
         from app.api.dependencies import get_cv_model
         cv = get_cv_model()
         # trigger lazy-load now, not on first request

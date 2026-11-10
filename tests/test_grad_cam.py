@@ -49,24 +49,73 @@ def test_repeated_calls_give_the_same_map(densenet):
     np.testing.assert_allclose(cam.generate(x.clone(), 0), cam.generate(x.clone(), 0), atol=1e-6)
 
 
+def test_map_from_a_kept_feature_map_is_the_same_map(densenet):
+    """The prediction's own feature map gives the map a fresh forward pass
+    would: no second pass through the model is needed."""
+    x = _input()
+    cam = GradCAM(densenet)
+    with torch.no_grad():
+        features = densenet.features(x)
+
+    np.testing.assert_allclose(
+        cam.generate_from_features(features, 1), cam.generate(x, 1), atol=1e-6
+    )
+
+
+def test_map_leaves_no_gradient_on_the_model(densenet):
+    """Nothing is stored on the shared model, so requests cannot interfere."""
+    GradCAM(densenet).generate(_input(), 0)
+    assert all(parameter.grad is None for parameter in densenet.parameters())
+
+
+def _panels(path) -> list[np.ndarray]:
+    """The three panels of a saved figure, as RGB arrays."""
+    from app.core.cv.grad_cam import _MARGIN, _TITLE_HEIGHT
+
+    figure = np.asarray(Image.open(path).convert("RGB"))
+    width = (figure.shape[1] - 4 * _MARGIN) // 3
+    return [
+        figure[_TITLE_HEIGHT:figure.shape[0] - _MARGIN, left:left + width]
+        for left in (_MARGIN + i * (width + _MARGIN) for i in range(3))
+    ]
+
+
 def test_grayscale_upload_is_drawn_in_gray(densenet, tmp_path, monkeypatch):
     from app.config import settings
 
     monkeypatch.setattr(settings, "image_storage_dir", tmp_path)
-    shown = []
-    import app.core.cv.grad_cam as module
-    original_imshow = module.plt.Axes.imshow
-
-    def record(self, data, *args, **kwargs):
-        shown.append(np.asarray(data))
-        return original_imshow(self, data, *args, **kwargs)
-
-    monkeypatch.setattr(module.plt.Axes, "imshow", record)
     gray = Image.fromarray(np.tile(np.arange(64, dtype=np.uint8), (64, 1)), mode="L")
 
     path = GradCAMVisualizer(GradCAM(densenet), ["a", "b", "c"]).generate_and_save(_input(), gray, 2)
 
     assert path
-    original = shown[0]
-    assert original.ndim == 3 and original.shape[2] == 3  # RGB, not a colour-mapped 2-D array
+    original, heatmap, overlay = _panels(path)
+    # Gray, not colour-mapped
     assert (original[..., 0] == original[..., 1]).all() and (original[..., 1] == original[..., 2]).all()
+    # The heatmap and the overlay are in colour
+    assert (heatmap[..., 0] != heatmap[..., 2]).any()
+    assert (overlay[..., 0] != overlay[..., 2]).any()
+
+
+def test_figure_size_does_not_grow_with_the_upload(densenet, tmp_path, monkeypatch):
+    """A full-size chest film is drawn at the same size as a small one."""
+    from app.config import settings
+    from app.core.cv.grad_cam import PANEL_MAX_SIDE
+
+    monkeypatch.setattr(settings, "image_storage_dir", tmp_path)
+    film = Image.new("L", (3000, 2400), 128)
+
+    path = GradCAMVisualizer(GradCAM(densenet), ["a", "b", "c"]).generate_and_save(_input(), film, 0)
+
+    width, height = Image.open(path).size
+    assert width < 3 * PANEL_MAX_SIDE + 100
+    assert height < PANEL_MAX_SIDE
+
+
+def test_heatmap_colours_run_from_blue_to_red():
+    from app.core.cv.grad_cam import _JET
+
+    assert _JET.shape == (256, 3)
+    assert _JET[0].argmax() == 2      # coldest: blue
+    assert _JET[255].argmax() == 0    # hottest: red
+    assert tuple(_JET[128]) == pytest.approx((127, 255, 127), abs=8)  # middle: green

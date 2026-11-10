@@ -5,10 +5,18 @@ synonym mapping, 2-tier entity extraction with longest non-overlapping interval 
 and duration/severity metadata extraction using Enums.
 """
 
+import importlib.util
 import re
+import threading
 from enum import Enum
 from typing import Any
 from app.utils.logger import nlp_logger
+
+# Tier-2 entity extraction: the scispaCy model trained on BC5CDR, and the
+# entity labels it produces.
+TIER2_MODEL = "en_ner_bc5cdr_md"
+TIER2_ENTITY_LABELS = ("DISEASE", "CHEMICAL")
+_TIER2_UNAVAILABLE = object()
 
 # Mention contexts, shared with the Jev judge (app/core/nlp/jev_judge.py)
 PRESENT = "present"
@@ -691,7 +699,9 @@ class TextPreprocessor:
         self.disease_keywords = set(DISEASE_KEYWORDS)
         # Combined vocabulary for extraction pipeline
         self.all_clinical_keywords = self.symptom_keywords | self.disease_keywords
+        # The Tier-2 model, _TIER2_UNAVAILABLE once it is known to be missing
         self._spacy_nlp = None
+        self._spacy_lock = threading.Lock()
         nlp_logger.info("TextPreprocessor initialized")
 
     def preprocess(self, text: str) -> dict[str, Any]:
@@ -953,18 +963,45 @@ class TextPreprocessor:
         return False
 
     def _extract_tier2_spacy(self, text: str) -> list[str]:
-        """Tier 2: scispaCy / spaCy Clinical NER entity extraction fallback."""
+        """Tier 2: scispaCy clinical NER, when its model is installed."""
+        nlp = self._tier2_model()
+        if nlp is None:
+            return []
         try:
-            import spacy
-            if self._spacy_nlp is None:
-                try:
-                    self._spacy_nlp = spacy.load("en_ner_bc5cdr_md")
-                except Exception:
-                    self._spacy_nlp = spacy.load("en_core_web_sm")
-            doc = self._spacy_nlp(text)
-            return [ent.text.lower() for ent in doc.ents if ent.label_ in ("DISEASE", "CHEMICAL", "PROBLEM")]
+            doc = nlp(text)
         except Exception:
             return []
+        return [ent.text.lower() for ent in doc.ents if ent.label_ in TIER2_ENTITY_LABELS]
+
+    def _tier2_model(self):
+        """The scispaCy model, loaded on first use; None when it is not installed.
+
+        Looked up once: without the model, a text with no recognised symptom
+        would otherwise pay for a failed load on every request. A general
+        English model is not a substitute: its entity labels (PERSON, ORG,
+        DATE, ...) include none of TIER2_ENTITY_LABELS, so loading one costs
+        seconds and can never return anything.
+        """
+        if self._spacy_nlp is None:
+            with self._spacy_lock:
+                if self._spacy_nlp is None:
+                    self._spacy_nlp = self._load_tier2_model() or _TIER2_UNAVAILABLE
+        return None if self._spacy_nlp is _TIER2_UNAVAILABLE else self._spacy_nlp
+
+    @staticmethod
+    def _load_tier2_model():
+        try:
+            # Checked before importing spaCy, which itself takes seconds
+            if importlib.util.find_spec(TIER2_MODEL) is None:
+                return None
+            import spacy
+            return spacy.load(TIER2_MODEL)
+        except Exception as e:
+            nlp_logger.warning(
+                f"Tier-2 entity extraction disabled: {TIER2_MODEL} "
+                f"could not be loaded ({type(e).__name__})"
+            )
+            return None
 
     def _build_search_query(self, text: str, active_symptoms: list[str]) -> str:
         """Build an optimized RAG vector store search query."""

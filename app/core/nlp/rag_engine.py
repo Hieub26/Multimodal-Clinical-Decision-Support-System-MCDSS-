@@ -3,8 +3,13 @@ RAG Engine: Combines ChromaDB retrieval with LLM reasoning
 for clinical diagnosis generation.
 """
 
+import copy
+import hashlib
 import json
 import math
+import threading
+import time
+from collections import OrderedDict
 try:
     from google import genai
     from google.genai import types
@@ -57,6 +62,14 @@ IMPORTANT:
 """
 
 
+_CACHE_SIZE = 128
+
+# After a failed call the LLM is skipped for this long and the fallback
+# engine answers. Without it every request during an outage, or once the
+# daily quota is used up, would first wait for a call that cannot succeed.
+_FAILURE_COOLDOWN_SECONDS = 60.0
+
+
 class RAGEngine:
     """RAG pipeline combining ChromaDB retrieval with LLM generation."""
 
@@ -73,13 +86,30 @@ class RAGEngine:
         self.question_understanding = question_understanding or QuestionUnderstanding()
         self._fallback = fallback_engine or ClinicalFallbackEngine()
         self._client = None
+        self._client_lock = threading.Lock()
+        # The same prompt (same input, same retrieved passages, same model)
+        # is answered once: a repeated request gets the same diagnosis and
+        # does not spend another call of the provider's quota. Keys are
+        # hashes, so the cache does not hold the patient's text a second time.
+        self._cache: OrderedDict[str, dict] = OrderedDict()
+        self._cache_lock = threading.Lock()
+        self._skip_until = 0.0  # time.monotonic() until which the LLM is skipped
         nlp_logger.info("RAGEngine initialized")
 
     def _ensure_llm(self):
         """Configure the LLM client on first use."""
         if self._client is None and settings.gemini_api_key_str and HAS_GENAI:
-            self._client = genai.Client(api_key=settings.gemini_api_key_str)
-            nlp_logger.info(f"LLM configured: {settings.llm_model_name}")
+            with self._client_lock:
+                if self._client is None:
+                    self._client = genai.Client(
+                        api_key=settings.gemini_api_key_str,
+                        # Milliseconds. Without it a stalled connection
+                        # holds the request, and its worker thread, for good.
+                        http_options=types.HttpOptions(
+                            timeout=int(settings.llm_timeout_seconds * 1000)
+                        ),
+                    )
+                    nlp_logger.info(f"LLM configured: {settings.llm_model_name}")
 
     def diagnose_from_text(self, symptoms_text: str = None,
                            clinical_question: str = None) -> dict:
@@ -153,26 +183,67 @@ class RAGEngine:
         self._ensure_llm()
         fallback_input = raw_input or user_input
 
+        if not (self._client and HAS_GENAI):
+            nlp_logger.warning("No API key — using clinical fallback engine")
+            return self._fallback.diagnose(fallback_input, retrieved_docs or [])
+
         prompt = RAG_PROMPT_TEMPLATE.format(context=context, user_input=user_input)
+        key = hashlib.sha256(
+            f"{settings.llm_model_name}\n{prompt}".encode("utf-8")
+        ).hexdigest()
+        with self._cache_lock:
+            if key in self._cache:
+                self._cache.move_to_end(key)
+                nlp_logger.info("LLM diagnosis served from cache")
+                # A copy: the caller adds fields to the diagnosis
+                return copy.deepcopy(self._cache[key])
+
+        if time.monotonic() < self._skip_until:
+            return self._fallback.diagnose(fallback_input, retrieved_docs or [])
 
         try:
-            if self._client and HAS_GENAI:
-                response = self._client.models.generate_content(
-                    model=settings.llm_model_name,
-                    contents=prompt,
-                    config=types.GenerateContentConfig(
-                        response_mime_type="application/json",
-                    ),
-                )
-                result = self._parse_llm_response(response.text)
-                result = self._sanitize_llm_result(result)
-                return self._normalize_urgency(result)
-            else:
-                nlp_logger.warning("No API key — using clinical fallback engine")
-                return self._fallback.diagnose(fallback_input, retrieved_docs or [])
+            response = self._client.models.generate_content(
+                model=settings.llm_model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                ),
+            )
         except Exception as e:
-            nlp_logger.error(f"LLM generation failed: {describe_error(e)}")
+            # The call itself failed (network, timeout, quota, key): the next
+            # one would most likely fail the same way.
+            self._skip_until = time.monotonic() + _FAILURE_COOLDOWN_SECONDS
+            nlp_logger.error(
+                f"LLM generation failed: {describe_error(e)}; using the "
+                f"fallback engine for the next {_FAILURE_COOLDOWN_SECONDS:.0f}s"
+            )
             return self._fallback.diagnose(fallback_input, retrieved_docs or [])
+
+        try:
+            result = self._parse_llm_response(response.text)
+            result = self._sanitize_llm_result(result)
+            result = self._normalize_urgency(result)
+        except Exception as e:
+            # An unusable answer to this prompt says nothing about the next
+            # one: no cooldown, and nothing is cached.
+            nlp_logger.error(f"LLM response unusable: {describe_error(e)}")
+            return self._fallback.diagnose(fallback_input, retrieved_docs or [])
+
+        # An answer that had to be pieced together from malformed JSON is
+        # returned but not kept: the next identical request asks again.
+        if self._is_json_object(response.text):
+            with self._cache_lock:
+                self._cache[key] = copy.deepcopy(result)
+                while len(self._cache) > _CACHE_SIZE:
+                    self._cache.popitem(last=False)
+        return result
+
+    @staticmethod
+    def _is_json_object(text) -> bool:
+        try:
+            return isinstance(json.loads(text), dict)
+        except (TypeError, ValueError):
+            return False
 
     def _parse_llm_response(self, response_text: str) -> dict:
         """Parse the JSON response from the LLM."""

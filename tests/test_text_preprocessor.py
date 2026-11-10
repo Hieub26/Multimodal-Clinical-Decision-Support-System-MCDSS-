@@ -198,3 +198,46 @@ def test_hr_after_number_is_a_duration(preprocessor):
     assert "3 hours" in result["expanded_text"]
     assert "heart rate 110" in result["expanded_text"]
     assert result["durations"] == ["for 3 hours"]
+
+
+def test_missing_tier2_model_is_looked_up_once_and_loads_nothing(monkeypatch):
+    """Without the scispaCy model the fallback is a no-op: no general English
+    model is loaded in its place, and the lookup is not repeated per request."""
+    import app.core.nlp.text_preprocessor as module
+
+    lookups = []
+
+    def find_spec(name):
+        lookups.append(name)
+        return None
+
+    monkeypatch.setattr(module.importlib.util, "find_spec", find_spec)
+    preprocessor = TextPreprocessor()
+
+    for _ in range(3):
+        result = preprocessor.preprocess("I just feel off lately")
+        assert result["extracted_symptoms"] == []
+
+    assert lookups == [module.TIER2_MODEL]
+
+
+def test_tier2_keeps_only_clinical_entities_and_respects_tier1(monkeypatch):
+    class Entity:
+        def __init__(self, text, label):
+            self.text, self.label_ = text, label
+
+    class Doc:
+        ents = [
+            Entity("Sarcoidosis", "DISEASE"),
+            Entity("Monday", "DATE"),
+            Entity("fever", "DISEASE"),
+        ]
+
+    preprocessor = TextPreprocessor()
+    monkeypatch.setattr(preprocessor, "_tier2_model", lambda: lambda text: Doc())
+
+    # "fever" is denied in the text: Tier 2 must not bring it back
+    result = preprocessor.preprocess("no fever, they mentioned sarcoidosis on Monday")
+
+    assert result["negated_symptoms"] == ["fever"]
+    assert result["extracted_symptoms"] == ["sarcoidosis"]
