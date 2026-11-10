@@ -1,0 +1,126 @@
+{
+  "frontal_films": 2255,
+  "half_A": 1117,
+  "half_B": 1138,
+  "specificity": 0.995,
+  "normal_films_flagged_B": {
+    "densenet": 0.07627118644067797,
+    "ensemble": 0.062146892655367235
+  },
+  "classes": {
+    "Cardiomegaly": {
+      "positives_A": 157,
+      "positives_B": 174,
+      "A_densenet": 0.888,
+      "A_combined": 0.957,
+      "B_densenet": 0.8795,
+      "B_combined": 0.9461,
+      "combined": true,
+      "densenet_at_its_threshold_B": {
+        "recall": 0.28735632183908044,
+        "specificity": 0.9731638418079096,
+        "precision": 0.704225352112676
+      },
+      "threshold": 0.8342735950705993,
+      "combined_at_threshold_B": {
+        "recall": 0.39655172413793105,
+        "specificity": 0.9830508474576272,
+        "precision": 0.7582417582417582
+      }
+    },
+    "Effusion": {
+      "positives_A": 71,
+      "positives_B": 73,
+      "A_densenet": 0.9777,
+      "A_combined": 0.9856,
+      "B_densenet": 0.9704,
+      "B_combined": 0.9798,
+      "combined": true,
+      "densenet_at_its_threshold_B": {
+        "recall": 0.7123287671232876,
+        "specificity": 0.9957627118644068,
+        "precision": 0.7027027027027027
+      },
+      "threshold": 0.6422194699510884,
+      "combined_at_threshold_B": {
+        "recall": 0.7945205479452054,
+        "specificity": 0.9929378531073446,
+        "precision": 0.5043478260869565
+      }
+    },
+    "Atelectasis": {
+      "positives_A": 168,
+      "positives_B": 140,
+      "A_densenet": 0.919,
+      "A_combined": 0.9437,
+      "B_densenet": 0.9124,
+      "B_combined": 0.9467,
+      "combined": true,
+      "densenet_at_its_threshold_B": {
+        "recall": 0.39285714285714285,
+        "specificity": 0.9844632768361582,
+        "precision": 0.5445544554455446
+      },
+      "threshold": 0.8612613889974039,
+      "combined_at_threshold_B": {
+        "recall": 0.4714285714285714,
+        "specificity": 0.9915254237288136,
+        "precision": 0.5
+      }
+    },
+    "Nodule": {
+      "positives_A": 50,
+      "positives_B": 56,
+      "A_densenet": 0.7859,
+      "A_combined": 0.8016,
+      "B_densenet": 0.8006,
+      "B_combined": 0.7939,
+      "combined": false,
+      "densenet_at_its_threshold_B": {
+        "recall": 0.17857142857142858,
+        "specificity": 0.9774011299435028,
+        "precision": 0.30303030303030304
+      }
+    },
+    "Edema": {
+      "positives_A": 22,
+      "positives_B": 23,
+      "A_densenet": 0.9907,
+      "A_combined": 0.9974,
+      "B_densenet": 0.9363,
+      "B_combined": 0.9461,
+      "combined": true,
+      "densenet_at_its_threshold_B": {
+        "recall": 0.0,
+        "specificity": 1.0,
+        "precision": null
+      },
+      "threshold": 0.38973968685708005,
+      "combined_at_threshold_B": {
+        "recall": 0.6956521739130435,
+        "specificity": 0.9943502824858758,
+        "precision": 0.17204301075268819
+      }
+    },
+    "Pneumonia": {
+      "positives_A": 21,
+      "positives_B": 18,
+      "A_densenet": 0.9631,
+      "A_combined": 0.9892,
+      "B_densenet": 0.912,
+      "B_combined": 0.9475,
+      "combined": true,
+      "densenet_at_its_threshold_B": {
+        "recall": 0.1111111111111111,
+        "specificity": 1.0,
+        "precision": 0.25
+      },
+      "threshold": 0.3038803073956003,
+      "combined_at_threshold_B": {
+        "recall": 0.7222222222222222,
+        "specificity": 0.9901129943502824,
+        "precision": 0.1368421052631579
+      }
+    }
+  }
+}

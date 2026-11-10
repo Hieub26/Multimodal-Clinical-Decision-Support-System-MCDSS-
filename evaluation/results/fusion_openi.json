@@ -1,0 +1,7650 @@
+{
+  "dataset": "Open-I / IU chest X-ray",
+  "limit": 600,
+  "targets": {
+    "cardiomegaly": "cardiomegaly",
+    "pleural effusion": "effusion",
+    "pulmonary atelectasis": "atelectasis",
+    "nodule": "nodule",
+    "pulmonary edema": "edema",
+    "pneumonia": "pneumonia",
+    "pneumothorax": "pneumothorax",
+    "pulmonary emphysema": "emphysema",
+    "pulmonary fibrosis": "fibrosis",
+    "hernia, hiatal": "hernia"
+  },
+  "n_cases": 333,
+  "n_with_finding": 130,
+  "n_normal": 203,
+  "n_with_indication": 321,
+  "systems": {
+    "cv": {
+      "cases_with_output": 130,
+      "diagnosis_is_a_present_finding": 0.2308,
+      "false_alarm_rate_on_normal": 0.1133,
+      "confidence_auroc": 0.6027
+    },
+    "nlp": {
+      "cases_with_output": 125,
+      "diagnosis_is_a_present_finding": 0.1,
+      "false_alarm_rate_on_normal": 0.1034,
+      "confidence_auroc": 0.6154
+    },
+    "fused": {
+      "cases_with_output": 130,
+      "diagnosis_is_a_present_finding": 0.2385,
+      "false_alarm_rate_on_normal": 0.1133,
+      "confidence_auroc": 0.5859
+    }
+  },
+  "fusion_strategies_when_text_present": {
+    "cv_primary": 138,
+    "complementary": 177,
+    "concordant": 6
+  },
+  "fusion_changed_diagnosis_vs_image": 74,
+  "cases_with_text_and_finding": 125,
+  "target_prevalence": {
+    "atelectasis": 43,
+    "cardiomegaly": 53,
+    "edema": 8,
+    "effusion": 27,
+    "emphysema": 6,
+    "fibrosis": 2,
+    "hernia": 6,
+    "nodule": 16,
+    "pneumonia": 6,
+    "pneumothorax": 2
+  },
+  "items": [
+    {
+      "report": "4",
+      "indication": "-year-old with .",
+      "group": "finding",
+      "truth": [
+        "fibrosis"
+      ],
+      "cv": {
+        "name": "Fibrosis, Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.25493860244750977
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Fibrosis, Pleural_Thickening",
+        "confidence": 0.25493860244750977,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "6",
+      "indication": "Evaluate for infection",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.13501869142055511
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.13501869142055511,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "17",
+      "indication": "-year-old female, chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4789988949370412
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3584,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "29",
+      "indication": ", hypoxia.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.5278792381286621
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.5278792381286621,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "38",
+      "indication": ", and shortness of breath for 3 days",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.9096923415697444
+      },
+      "nlp": {
+        "name": "Pneumonia (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6268,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "44",
+      "indication": "-year-old with for 5 days. Previously seen for vomiting and ear pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6617341198547975
+      },
+      "nlp": {
+        "name": "Acute Appendicitis",
+        "confidence": 0.25
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5059,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "48",
+      "indication": "-year-old female with .",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "Pneumothorax",
+        "detected": true,
+        "confidence": 0.3652760684490204
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Pneumothorax",
+        "confidence": 0.3652760684490204,
+        "strategy": "cv_primary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "50",
+      "indication": "pt with sob,",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8729993782843762
+      },
+      "nlp": {
+        "name": "Pulmonary Edema",
+        "confidence": 0.15
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5971,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "54",
+      "indication": "-year-old woman, prior to Enbrel therapy..",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.2657126784324646
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.2657126784324646,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "66",
+      "indication": "Hematemesis; BACK PAIN 724.5",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.39631605441596907
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.39631605441596907,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "72",
+      "indication": "-year-old female with chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6954463711221315
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4918,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "79",
+      "indication": "Flank pain and dyspnea",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8733556234831834
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.15
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.617,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "96",
+      "indication": ",786.2",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.08225958794355392
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.08225958794355392,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "110",
+      "indication": "Preoperative bariatric surgery.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5658321051918176
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5658321051918176,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "133",
+      "indication": "BMT W/U;",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5002428199440672
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5002428199440672,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "177",
+      "indication": "-year-old female with dyspnea.",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "cardiomegaly",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Effusion, Atelectasis, Consolidation, Pneumothorax",
+        "detected": true,
+        "confidence": 0.8526142239570618
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.11
+      },
+      "fused": {
+        "name": "Effusion, Atelectasis, Consolidation, Pneumothorax",
+        "confidence": 0.5039,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "207",
+      "indication": ", right sided rib pain after falling on the .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7581753752557066
+      },
+      "nlp": {
+        "name": "Pneumothorax",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5553,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "227",
+      "indication": "-year-old male with dyspnea, chest pain",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "edema",
+        "effusion"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.17446193099021912
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1708,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "233",
+      "indication": "-year-old female, post closure",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.3297896683216095
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.3297896683216095,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "236",
+      "indication": "-year-old female diffuse chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8594242239478734
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6219,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "241",
+      "indication": "chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6858898633661631
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5049,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "246",
+      "indication": "Chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Mass",
+        "detected": true,
+        "confidence": 0.22216448187828064
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Mass",
+        "confidence": 0.174,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "252",
+      "indication": "year old chest pain, sent from Lab.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6415688583863826
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.448,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "268",
+      "indication": "",
+      "group": "finding",
+      "truth": [
+        "pneumonia"
+      ],
+      "cv": {
+        "name": "Infiltration",
+        "detected": true,
+        "confidence": 0.3764711022377014
+      },
+      "nlp": null,
+      "fused": {
+        "name": "Infiltration",
+        "confidence": 0.3764711022377014,
+        "strategy": "single",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "269",
+      "indication": "Difficulty breathing and",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6706391525312442
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4545,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "296",
+      "indication": "and right-sided chest pain",
+      "group": "finding",
+      "truth": [
+        "hernia"
+      ],
+      "cv": {
+        "name": "Atelectasis, Consolidation",
+        "detected": true,
+        "confidence": 0.3526407480239868
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Atelectasis, Consolidation",
+        "confidence": 0.2431,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "299",
+      "indication": "Preop bariatric surgery.",
+      "group": "finding",
+      "truth": [
+        "hernia"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7984377769722213
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7984377769722213,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "305",
+      "indication": "-year-old with chest pain on and since having stent placed last .",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5345580275865669
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3926,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "310",
+      "indication": ", pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8913684601763638
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6429,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "325",
+      "indication": "chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.434071284469453
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3175,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "330",
+      "indication": "-year-old woman with hepatic encephalopathy and of abdomen.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6176260619213226
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6176260619213226,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "339",
+      "indication": "CLL UP;",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1304740160703659
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1304740160703659,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "340",
+      "indication": "-year-old female, left arm pain and nausea",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5996482975755293
+      },
+      "nlp": {
+        "name": "Acute Appendicitis (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4093,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "342",
+      "indication": "Preoperative renal transplant.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.17335252463817596
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.17335252463817596,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "344",
+      "indication": "-year-old male with chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.786546976951811
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.23
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5824,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "363",
+      "indication": "distress",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5917995237362388
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5917995237362388,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "367",
+      "indication": "-year-old with dyspnea",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6406577506067266
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4498,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "416",
+      "indication": "-year-old female,",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8047043767179812
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8047043767179812,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "418",
+      "indication": "-year-old male, chest pain",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.12514153122901917
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.23
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1263,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "436",
+      "indication": "Dyspnea",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "hernia"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5774252182755121
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4033,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "459",
+      "indication": "-year-old male, rule out foreign body.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.929573050990903
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.929573050990903,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "461",
+      "indication": ", throat pain, right ear pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6984546730764718
+      },
+      "nlp": {
+        "name": "COVID-19",
+        "confidence": 0.6
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6087,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "470",
+      "indication": "-year-old male with .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4538978511136702
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4538978511136702,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "474",
+      "indication": "Chest pain and bilateral hand numbness.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.3776860616435239
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.2952,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "502",
+      "indication": "The patient is a -year-old male with abdominal pain, question of small bowel obstruction. onset and wheezing in bilateral lung .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5282100437000002
+      },
+      "nlp": {
+        "name": "Asthma",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3911,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "504",
+      "indication": "-year-old with dyspnea.",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.13219183683395386
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1118,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "534",
+      "indication": "and hypoxia",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.15501835942268372
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.15501835942268372,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "544",
+      "indication": "-year-old female with .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.23461797833442688
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.23461797833442688,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "550",
+      "indication": "ELEVATED WBC",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7198212221895994
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7198212221895994,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "551",
+      "indication": "with COPD/emphysema and dyspnea on exertion.",
+      "group": "finding",
+      "truth": [
+        "emphysema"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1991807371377945
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.12
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1544,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "557",
+      "indication": "Chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.9063055507526189
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6499,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "559",
+      "indication": "Chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.13767366111278534
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1233,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "576",
+      "indication": "-year-old female with and leukocytosis",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "cardiomegaly",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.41193708777427673
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.41193708777427673,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "582",
+      "indication": "Five weeks pregnant, shortness of breath x1 month",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Fibrosis",
+        "detected": true,
+        "confidence": 0.20645223557949066
+      },
+      "nlp": {
+        "name": "Pneumonia (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Fibrosis",
+        "confidence": 0.1538,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "612",
+      "indication": "-year-old woman with chest pain..",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1664292812347412
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1546,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "631",
+      "indication": "",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Effusion, Atelectasis",
+        "detected": true,
+        "confidence": 0.48319098353385925
+      },
+      "nlp": null,
+      "fused": {
+        "name": "Effusion, Atelectasis",
+        "confidence": 0.48319098353385925,
+        "strategy": "single",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "635",
+      "indication": "Has a history of followup pleural effusion.",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Effusion, Infiltration",
+        "detected": true,
+        "confidence": 0.8154726624488831
+      },
+      "nlp": {
+        "name": "Heart Failure (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Effusion, Infiltration",
+        "confidence": 0.8154726624488831,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "639",
+      "indication": "Bone marrow transplant evaluation",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Pneumothorax",
+        "detected": true,
+        "confidence": 0.2723441421985626
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Pneumothorax",
+        "confidence": 0.2723441421985626,
+        "strategy": "cv_primary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "650",
+      "indication": "The patient is a -year-old female admitted for fractures (multiple), examination for ECF placement.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "effusion",
+        "hernia",
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.17120900750160217
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.17120900750160217,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "657",
+      "indication": "Preoperative for kidney pancreas transplant",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.61774992355503
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.61774992355503,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "670",
+      "indication": "Chronic",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5242733141230308
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5242733141230308,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "717",
+      "indication": "Chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7591999015251626
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5355,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "721",
+      "indication": "Testicular cancer are all",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7029182296108346
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7029182296108346,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "723",
+      "indication": "-year-old with dyspnea.",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.5959364771842957
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.3796,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "748",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6973408497031743
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5124,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "764",
+      "indication": "-year-old male. Abnormal feeling. Cocaine use.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7866729442778984
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7866729442778984,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "792",
+      "indication": "left sided chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8420655312683951
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.591,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "793",
+      "indication": "Dyspnea, shortness of breath, lightheadedness.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.491788510917727
+      },
+      "nlp": {
+        "name": "Pulmonary Edema (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3518,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "795",
+      "indication": "tuberculosis positive PPD",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8368856877648367
+      },
+      "nlp": {
+        "name": "Tuberculosis",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6071,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "797",
+      "indication": "-year-old female with chest pain.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Cardiomegaly",
+        "detected": true,
+        "confidence": 0.5595683455467224
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "Cardiomegaly",
+        "confidence": 0.3853,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "799",
+      "indication": "-year-old female with history of endometrial cancer; routine followup.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6592920685298146
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6592920685298146,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "813",
+      "indication": "Chest pain.",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7343342476960388
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5196,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "815",
+      "indication": "tuberculosis +PPD",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5409477149383359
+      },
+      "nlp": {
+        "name": "Tuberculosis",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4123,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "817",
+      "indication": "-year-old male with positive PPD.",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.15342985093593597
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.15342985093593597,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "820",
+      "indication": "and congestion for months.",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7960446259608601
+      },
+      "nlp": {
+        "name": "COVID-19",
+        "confidence": 0.6
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6709,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "856",
+      "indication": "-year-old female shortness of breath.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.40697527469736217
+      },
+      "nlp": {
+        "name": "Pneumonia (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.2865,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "879",
+      "indication": "Chronic",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Mass",
+        "detected": true,
+        "confidence": 0.437235951423645
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Mass",
+        "confidence": 0.437235951423645,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "910",
+      "indication": "-year-old with osteoarthritis of the left hip. Preop evaluation for hip replacement.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5927642497205456
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5927642497205456,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "934",
+      "indication": "Asthma",
+      "group": "finding",
+      "truth": [
+        "edema"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.42942827930827776
+      },
+      "nlp": {
+        "name": "Asthma",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3173,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "941",
+      "indication": "-year-old with chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7245106313070475
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.18
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5275,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "962",
+      "indication": "",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.14424972236156464
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.14424972236156464,
+        "strategy": "single",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "967",
+      "indication": "-year-old female with .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.09650889784097672
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.09650889784097672,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "975",
+      "indication": "Preop, neck infection.",
+      "group": "finding",
+      "truth": [
+        "emphysema"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6566559362940605
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6566559362940605,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "977",
+      "indication": "year old left anterior chest pain today.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7331127697703002
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5325,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "980",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.07919173687696457
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.0989,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1009",
+      "indication": "786.50 anterior left sided chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.47143084992501827
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3779,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1022",
+      "indication": "please evaluate for evidence of active TB (for supportive housing placement)",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1847323477268219
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1847323477268219,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1028",
+      "indication": "Preop chest x- .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.766524165802366
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.766524165802366,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1031",
+      "indication": "-year-old female, diaphoresis, short of breath",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7306994466297221
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome (requires further evaluation)",
+        "confidence": 0.12
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4982,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1034",
+      "indication": "10 hx of , SOB, wheezing in",
+      "group": "finding",
+      "truth": [
+        "hernia"
+      ],
+      "cv": {
+        "name": "Atelectasis, Nodule",
+        "detected": true,
+        "confidence": 0.5745720863342285
+      },
+      "nlp": {
+        "name": "Asthma",
+        "confidence": 0.17
+      },
+      "fused": {
+        "name": "Atelectasis, Nodule",
+        "confidence": 0.3626,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1055",
+      "indication": "year old with chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.42361305000814764
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.18
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3085,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1057",
+      "indication": "Testicular carcinoma",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6538796260063615
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6538796260063615,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1078",
+      "indication": "Pain with in the chest for one",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8273845304945777
+      },
+      "nlp": {
+        "name": "Heart Failure (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5543,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1099",
+      "indication": "-year-old male with right lower lobe crackles.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.599543887537945
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.599543887537945,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1122",
+      "indication": "-year-old with suspected pneumothorax.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.9034087093713464
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6508,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1128",
+      "indication": "Pneumonia one ago with left-sided crackles",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.1095239445567131
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Pneumonia",
+        "confidence": 0.1093,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1142",
+      "indication": "",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7273529481832168
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7273529481832168,
+        "strategy": "single",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1144",
+      "indication": "Chest pain, palpitations.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8802046298500414
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.21
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6384,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1183",
+      "indication": "This is a -year-old male patient with complaints of chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8830352785147159
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.23
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6459,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1207",
+      "indication": "chronic",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7905469664146203
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7905469664146203,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1211",
+      "indication": "-year-old female, or a persistent pain, nausea, vomiting.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.536071150943821
+      },
+      "nlp": {
+        "name": "Acute Appendicitis",
+        "confidence": 0.17
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4007,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1220",
+      "indication": "-year-old with chest tightness.",
+      "group": "finding",
+      "truth": [
+        "emphysema"
+      ],
+      "cv": {
+        "name": "Fibrosis",
+        "detected": true,
+        "confidence": 0.12145154923200607
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.1038,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1230",
+      "indication": "followup consolidation mass. Brain metastasis versus abscess.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Mass",
+        "detected": true,
+        "confidence": 0.3325909376144409
+      },
+      "nlp": {
+        "name": "Tuberculosis",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Mass",
+        "confidence": 0.3325909376144409,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1236",
+      "indication": ".",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4666646869520361
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4666646869520361,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1267",
+      "indication": "-year-old female, dyspnea.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6452258862376146
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.11
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4556,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1270",
+      "indication": "and .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8168974151792064
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8168974151792064,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1300",
+      "indication": "-year-old with neck pain. Sore throat and headache. Runny nose and . .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.20284253358840942
+      },
+      "nlp": {
+        "name": "COVID-19 (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1462,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1316",
+      "indication": "anemia.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7723133636006155
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7723133636006155,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1335",
+      "indication": "upper back pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.16890904307365417
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.16890904307365417,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1347",
+      "indication": "-year-old female. Left numbness after .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8658600287473723
+      },
+      "nlp": {
+        "name": "Stroke (CVA) (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5979,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1355",
+      "indication": "year old female, chest pain",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7538909158688651
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5321,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1359",
+      "indication": "-year-old male with chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.11462926119565964
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.23
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1252,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1374",
+      "indication": "Left arm tingling.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6239029464104038
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6239029464104038,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1378",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.38721647173662
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.2985,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1393",
+      "indication": "Endstage renal disease. History of testicular carcinoma.",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4290586025864972
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4290586025864972,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1395",
+      "indication": "Pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7636810095395103
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5589,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1397",
+      "indication": "-year-old male, pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.3959199518354589
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3959199518354589,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1401",
+      "indication": "of breath sputum production",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "Fibrosis",
+        "detected": true,
+        "confidence": 0.09300818294286728
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.44
+      },
+      "fused": {
+        "name": "Pneumonia",
+        "confidence": 0.1723,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1410",
+      "indication": "-year-old female with history of .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1027856171131134
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1027856171131134,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1415",
+      "indication": "chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7835886968847445
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5692,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1419",
+      "indication": "Dyspnea and congestion",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7280675609158391
+      },
+      "nlp": {
+        "name": "Asthma",
+        "confidence": 0.14
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.502,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1420",
+      "indication": "-year-old male, dyspnea,",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "Consolidation, Pneumonia",
+        "detected": true,
+        "confidence": 0.22863014042377472
+      },
+      "nlp": {
+        "name": "COPD",
+        "confidence": 0.15
+      },
+      "fused": {
+        "name": "Consolidation, Pneumonia",
+        "confidence": 0.164,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1448",
+      "indication": "-year-old male with pulmonary stenosis.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Fibrosis",
+        "detected": true,
+        "confidence": 0.11618480831384659
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Fibrosis",
+        "confidence": 0.11618480831384659,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1458",
+      "indication": "-year-old female, SOB , dyspnea/drug-induced , nonsmoker.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.11759399622678757
+      },
+      "nlp": {
+        "name": "Pulmonary Edema (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Pleural_Thickening",
+        "confidence": 0.0908,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1485",
+      "indication": "Irregular heartbeat, right hip replacement.",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.2791208326816559
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.2791208326816559,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1489",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8675094942483702
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6244,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1520",
+      "indication": "",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6614032760126121
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6614032760126121,
+        "strategy": "single",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1527",
+      "indication": "Dyspnea and weakness",
+      "group": "finding",
+      "truth": [
+        "emphysema"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.27031269669532776
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.11
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1822,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1551",
+      "indication": "-year-old female chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7885804392380078
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5866,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1560",
+      "indication": "-year-old female with blood-tinged sputum.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4612934660892446
+      },
+      "nlp": {
+        "name": "Tuberculosis",
+        "confidence": 0.21
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3396,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1588",
+      "indication": "",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.13587144017219543
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.13587144017219543,
+        "strategy": "single",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1591",
+      "indication": "The patient is a -year-old with and hyperglycemia.",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Nodule",
+        "detected": true,
+        "confidence": 0.2472662329673767
+      },
+      "nlp": {
+        "name": "Diabetes Mellitus",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Nodule",
+        "confidence": 0.2472662329673767,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1602",
+      "indication": ", symptoms",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4141435230738284
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4141435230738284,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1615",
+      "indication": "",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8243712035493007
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8243712035493007,
+        "strategy": "single",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1678",
+      "indication": "TRANSPLEURAL BILOMA , , RIGHT CHEST PAIN RADIATING TO SHOULDER, LOCULATED RIGHT EFFUSION /10 US;",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.9248983146197995
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6247,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1681",
+      "indication": "pt with ? h/o COPD/ smoking, r/o infiltrate/mass",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5647211500098427
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3998,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1691",
+      "indication": "vehicle collision, rib fracture, pneumothorax",
+      "group": "finding",
+      "truth": [
+        "pneumothorax"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.18981881439685822
+      },
+      "nlp": {
+        "name": "Pneumothorax",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Pneumothorax",
+        "confidence": 0.1582,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1713",
+      "indication": "Chest congestion, for one .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6991412907962907
+      },
+      "nlp": {
+        "name": "COVID-19",
+        "confidence": 0.6
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6092,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1719",
+      "indication": "-year-old male, for mass/infiltrate",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.45312588159167144
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.45312588159167144,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1745",
+      "indication": ". MVA today.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8741439969384671
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8741439969384671,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1751",
+      "indication": "chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Cardiomegaly",
+        "detected": true,
+        "confidence": 0.26694950461387634
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Cardiomegaly",
+        "confidence": 0.1983,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1755",
+      "indication": "-year-old male, dyspnea",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "Nodule",
+        "detected": true,
+        "confidence": 0.37078166007995605
+      },
+      "nlp": {
+        "name": "COPD",
+        "confidence": 0.15
+      },
+      "fused": {
+        "name": "Nodule",
+        "confidence": 0.2631,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1757",
+      "indication": "-year-old male with chest pain and shortness of breath.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7812884876880111
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.23
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5605,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1769",
+      "indication": "Patient with dyspnea and",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Infiltration",
+        "detected": true,
+        "confidence": 0.3575466573238373
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "Infiltration",
+        "confidence": 0.2314,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1788",
+      "indication": "The patient is a -year-old male with .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6791688838672256
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6791688838672256,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1796",
+      "indication": "-year-old female with history of right cervical lymphadenopathy..",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4460986449156841
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4460986449156841,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1802",
+      "indication": "-year-old male with chronic kidney disease; preoperative evaluation.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1244707703590393
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1244707703590393,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1811",
+      "indication": "-year-old with shortness of breath",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Atelectasis, Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.2664991319179535
+      },
+      "nlp": {
+        "name": "Pneumonia (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Atelectasis, Pleural_Thickening",
+        "confidence": 0.178,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1813",
+      "indication": "Wheezing, chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.849252501260385
+      },
+      "nlp": {
+        "name": "Asthma",
+        "confidence": 0.17
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.568,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1827",
+      "indication": "-year-old with dyspnea.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6204451743817873
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4449,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1829",
+      "indication": "Status post chest tube removal",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.604594435391721
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.604594435391721,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1832",
+      "indication": "-year-old male, chest pain.",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1615820974111557
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.23
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1493,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1848",
+      "indication": "h/o sarcoma.",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5194045848454283
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5194045848454283,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1856",
+      "indication": "Dyspnea",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.755316515657547
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5337,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1857",
+      "indication": "Syncope.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8389321658764572
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8389321658764572,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1861",
+      "indication": "Back pain, .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7185864733507865
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7185864733507865,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1863",
+      "indication": "Left-sided chest pain",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6657098629913129
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4944,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1880",
+      "indication": "-year-old with left arm tingling and heaviness. Possible blood clot in the left leg. And tingling and chest. Asthma. History of calf.",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.46066260729374764
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.46066260729374764,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1896",
+      "indication": "-year-old with hemoptysis.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.12301930785179138
+      },
+      "nlp": {
+        "name": "Tuberculosis",
+        "confidence": 0.37
+      },
+      "fused": {
+        "name": "Tuberculosis",
+        "confidence": 0.1735,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1898",
+      "indication": "Shortness of breath",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "edema"
+      ],
+      "cv": {
+        "name": "Effusion, Cardiomegaly, Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.6144421100616455
+      },
+      "nlp": {
+        "name": "Pulmonary Edema (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Effusion, Cardiomegaly, Pleural_Thickening",
+        "confidence": 0.3681,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1906",
+      "indication": "-year-old female, chest pain",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.883646547794342
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.5997,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1912",
+      "indication": "Asthma",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.915534776800746
+      },
+      "nlp": {
+        "name": "Asthma",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6588,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1928",
+      "indication": ".",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6451878187200952
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6451878187200952,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1953",
+      "indication": "-year-old male with chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.754046496791186
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.23
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5431,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1960",
+      "indication": ".",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6794747258294804
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6794747258294804,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1966",
+      "indication": "Chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.14314211905002594
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1336,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "1970",
+      "indication": "-year-old male. . Headache. Hypertension.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Fibrosis, Pneumonia",
+        "detected": true,
+        "confidence": 0.10087577253580093
+      },
+      "nlp": {
+        "name": "Hypertension",
+        "confidence": 0.55
+      },
+      "fused": {
+        "name": "Hypertension",
+        "confidence": 0.1885,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "1994",
+      "indication": "and nonproductive x1 .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.41520578613841985
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.41520578613841985,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2001",
+      "indication": "",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7542634755788613
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7542634755788613,
+        "strategy": "single",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2003",
+      "indication": "Liver failure.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Emphysema",
+        "detected": true,
+        "confidence": 0.19937382638454437
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Emphysema",
+        "confidence": 0.19937382638454437,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2020",
+      "indication": "-year-old with chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.09641862660646439
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.18
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1106,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2024",
+      "indication": "Pain in chest with apparent",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4493093786031438
+      },
+      "nlp": {
+        "name": "Heart Failure (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3032,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2031",
+      "indication": "-year-old with pulmonary nodule",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5441959476838057
+      },
+      "nlp": {
+        "name": "Tuberculosis",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5441959476838057,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2046",
+      "indication": "786.59, 54yof with chest pain;:attn: sternum,direct to sternum 3 days ago",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Effusion, Atelectasis",
+        "detected": true,
+        "confidence": 0.7286167740821838
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Effusion, Atelectasis",
+        "confidence": 0.4599,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2053",
+      "indication": "year old and migraine.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.41566840518887893
+      },
+      "nlp": {
+        "name": "Hypertension",
+        "confidence": 0.25
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3221,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2075",
+      "indication": "-year-old male. Pain. .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Consolidation",
+        "detected": true,
+        "confidence": 0.20042642951011658
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Consolidation",
+        "confidence": 0.20042642951011658,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2082",
+      "indication": "Dyspnea, generalized weakness.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "edema"
+      ],
+      "cv": {
+        "name": "Infiltration, Nodule",
+        "detected": true,
+        "confidence": 0.3289565145969391
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.11
+      },
+      "fused": {
+        "name": "Infiltration, Nodule",
+        "confidence": 0.2106,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2087",
+      "indication": "-year-old male, syncope",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8415872572258821
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8415872572258821,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2089",
+      "indication": "Caucasian female, 14 weeks pregnant with , tachycardia, shortness of",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.18887600302696228
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.18887600302696228,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2097",
+      "indication": "repeat after stab wound",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Emphysema, Pneumothorax",
+        "detected": true,
+        "confidence": 0.3885241150856018
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Emphysema, Pneumothorax",
+        "confidence": 0.3885241150856018,
+        "strategy": "cv_primary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2099",
+      "indication": "-year-old woman with pleurisy and positive PPD..",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6015292816557567
+      },
+      "nlp": {
+        "name": "Heart Failure (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6015292816557567,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2120",
+      "indication": "loss",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6736748165451139
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6736748165451139,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2146",
+      "indication": "Chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Consolidation",
+        "detected": true,
+        "confidence": 0.25482624769210815
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Consolidation",
+        "confidence": 0.1883,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2181",
+      "indication": "-year-old with dyspnea.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.21894989907741547
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1692,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2213",
+      "indication": "COPD, ;",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.3524876152086148
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.2518,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2215",
+      "indication": "-year-old female. onset chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.39132295728078126
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.2912,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2232",
+      "indication": "-year-old , chest pain and hypertensive urgency.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6609379216738644
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4729,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2242",
+      "indication": "Mid chest pain,",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Atelectasis, Nodule",
+        "detected": true,
+        "confidence": 0.3456288278102875
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Atelectasis, Nodule",
+        "confidence": 0.2413,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2275",
+      "indication": ", dyspnea, history of asthma",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "Nodule",
+        "detected": true,
+        "confidence": 0.2899487614631653
+      },
+      "nlp": {
+        "name": "Asthma",
+        "confidence": 0.17
+      },
+      "fused": {
+        "name": "Nodule",
+        "confidence": 0.2058,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2277",
+      "indication": "-year-old female with chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7299361537033553
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5305,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2280",
+      "indication": "chest pain",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6878813924227061
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5062,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2285",
+      "indication": "Dyspnea.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.12451663613319397
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.1009,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2287",
+      "indication": "rales",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Infiltration, Cardiomegaly",
+        "detected": true,
+        "confidence": 0.4016813039779663
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Infiltration, Cardiomegaly",
+        "confidence": 0.4016813039779663,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2289",
+      "indication": "dyspnea",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.2861078977584839
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.2034,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2294",
+      "indication": "PAIN;",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7001604287295549
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5006,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2296",
+      "indication": "-year-old male with chest pain.",
+      "group": "finding",
+      "truth": [
+        "hernia"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.10984526574611664
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.23
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1284,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2301",
+      "indication": "chest pain",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8144294254884108
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5895,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2303",
+      "indication": "chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6484769044331402
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4649,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2312",
+      "indication": "Chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6635102591526278
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4745,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2313",
+      "indication": "Sore throat and for one",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Consolidation",
+        "detected": true,
+        "confidence": 0.2547421157360077
+      },
+      "nlp": {
+        "name": "COVID-19",
+        "confidence": 0.6
+      },
+      "fused": {
+        "name": "COVID-19",
+        "confidence": 0.2867,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2314",
+      "indication": "chest pain",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.16719521582126617
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1441,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2326",
+      "indication": "-year-old female, syncope",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7785514284359504
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7785514284359504,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2348",
+      "indication": "Short of breath.",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "Effusion",
+        "detected": true,
+        "confidence": 0.9434706568717957
+      },
+      "nlp": {
+        "name": "Pulmonary Edema",
+        "confidence": 0.14
+      },
+      "fused": {
+        "name": "Effusion",
+        "confidence": 0.5619,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2363",
+      "indication": "-year-old with hypertension and for one .",
+      "group": "finding",
+      "truth": [
+        "pneumonia"
+      ],
+      "cv": {
+        "name": "Infiltration, Pneumonia",
+        "detected": true,
+        "confidence": 0.5711321234703064
+      },
+      "nlp": {
+        "name": "Hypertension",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Infiltration, Pneumonia",
+        "confidence": 0.3678,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2390",
+      "indication": "Followup lung cancer",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6360892557534259
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4325,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2396",
+      "indication": "-year-old female with dyspnea.",
+      "group": "finding",
+      "truth": [
+        "edema"
+      ],
+      "cv": {
+        "name": "Effusion",
+        "detected": true,
+        "confidence": 0.31028929352760315
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.11
+      },
+      "fused": {
+        "name": "Effusion",
+        "confidence": 0.2002,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2428",
+      "indication": "-year-old male, pain",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7315345071444548
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7315345071444548,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2436",
+      "indication": "dyspnea",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6411643487731302
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4293,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2437",
+      "indication": "chest radiograph prior to initiation of medication",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5713567064190171
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5713567064190171,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2457",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7423638998072577
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5421,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2485",
+      "indication": "Hypoxic with low-grade .",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "effusion"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1395951807498932
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1395951807498932,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2499",
+      "indication": "-year-old male with dyspnea",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "effusion"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5862300090330941
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.11
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4168,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2504",
+      "indication": "-year-old female, stab wounds, .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.95
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.95,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2526",
+      "indication": "Transplant evaluation; No chest complaints; Nonsmoker; No previous surgery; Shielded.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5367345279118187
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5367345279118187,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2545",
+      "indication": ".",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5698538635328423
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5698538635328423,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2548",
+      "indication": "PLEURAL EFFUSION SEEN ON ;",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Effusion, Atelectasis",
+        "detected": true,
+        "confidence": 0.7705127596855164
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.18
+      },
+      "fused": {
+        "name": "Effusion, Atelectasis",
+        "confidence": 0.7705127596855164,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2549",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6880075441505753
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.474,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2559",
+      "indication": "Preop evaluation",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6557439184842921
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6557439184842921,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2564",
+      "indication": "Chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1010054349899292
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1124,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2570",
+      "indication": ", hypertension.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "edema"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.549315010755119
+      },
+      "nlp": {
+        "name": "Hypertension",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4045,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2604",
+      "indication": "chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.3822942315050146
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.2954,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2608",
+      "indication": "F with dyspnea and CHF exacerbation",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.2794705629348755
+      },
+      "nlp": {
+        "name": "Heart Failure (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1918,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2612",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6635011588515036
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4902,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2626",
+      "indication": "weakness loss",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6299765924583356
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4409,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2628",
+      "indication": "to inside of cheek, shortness of breath.",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Nodule",
+        "detected": true,
+        "confidence": 0.4024103581905365
+      },
+      "nlp": {
+        "name": "Pneumonia (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Nodule",
+        "confidence": 0.2687,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2651",
+      "indication": "-year-old female with .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7781567627450915
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7781567627450915,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2655",
+      "indication": "Elevated blood pressure and thoracic pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7640578338505337
+      },
+      "nlp": {
+        "name": "Hypertension",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5563,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2667",
+      "indication": "-year-old male with , , and .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5939691346523661
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5939691346523661,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2672",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.16711564362049103
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1479,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2674",
+      "indication": "PRE-OP pre op bladder . non . no chest complaints.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6018835707474173
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6018835707474173,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2686",
+      "indication": "-year-old female with chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Fibrosis",
+        "detected": true,
+        "confidence": 0.13771983981132507
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1455,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2688",
+      "indication": "year old with diarrhea and lethargy.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.16641178727149963
+      },
+      "nlp": {
+        "name": "Anemia (requires further evaluation)",
+        "confidence": 0.12
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1342,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2691",
+      "indication": "-year-old female, hypoxia,",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.3623059421645959
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3623059421645959,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2698",
+      "indication": "Bronchiectasis",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.28037282824516296
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.28037282824516296,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2710",
+      "indication": "year old male with history of productive .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7223821405865231
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7223821405865231,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2714",
+      "indication": "dizzyness and migranes, pt states she always has a . nonsmoker, no heart or lung conditions.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8131230413397943
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8131230413397943,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2716",
+      "indication": "-year-old male, dyspnea.",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.15048937499523163
+      },
+      "nlp": {
+        "name": "COPD",
+        "confidence": 0.15
+      },
+      "fused": {
+        "name": "Pleural_Thickening",
+        "confidence": 0.125,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2731",
+      "indication": "for one month bloody sputum for 3 days.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6406576548140832
+      },
+      "nlp": {
+        "name": "Tuberculosis (requires further evaluation)",
+        "confidence": 0.14
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.461,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2752",
+      "indication": "PLEURAL EFFUSIONS;",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "cardiomegaly",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Effusion, Consolidation",
+        "detected": true,
+        "confidence": 0.6103388667106628
+      },
+      "nlp": {
+        "name": "Heart Failure (requires further evaluation)",
+        "confidence": 0.11
+      },
+      "fused": {
+        "name": "Effusion, Consolidation",
+        "confidence": 0.6103388667106628,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2764",
+      "indication": "and hemoptysis and on for 2 months",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Cardiomegaly",
+        "detected": true,
+        "confidence": 0.28700506687164307
+      },
+      "nlp": {
+        "name": "Tuberculosis",
+        "confidence": 0.22
+      },
+      "fused": {
+        "name": "Cardiomegaly",
+        "confidence": 0.2164,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2775",
+      "indication": "-year-old woman with .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.44880880156138414
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.44880880156138414,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2781",
+      "indication": "-year-old chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5977491861380626
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4463,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2787",
+      "indication": "The patient is a -year-old male with kidney transplant evaluation.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8056318889878213
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8056318889878213,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2799",
+      "indication": "Dyspnea",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.855423952923337
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5613,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2811",
+      "indication": "hypoxia",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8317607076417741
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8317607076417741,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2817",
+      "indication": "Chest pain",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "Pleural_Thickening, Pneumothorax",
+        "detected": true,
+        "confidence": 0.3683401942253113
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Pleural_Thickening, Pneumothorax",
+        "confidence": 0.2579,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2838",
+      "indication": "",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7133027962351575
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7133027962351575,
+        "strategy": "single",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2859",
+      "indication": "Pain and difficulty breathing.",
+      "group": "finding",
+      "truth": [
+        "pneumonia"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.511273041200841
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3413,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2862",
+      "indication": "-year-old with",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Consolidation, Fibrosis",
+        "detected": true,
+        "confidence": 0.28892162442207336
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Consolidation, Fibrosis",
+        "confidence": 0.28892162442207336,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2867",
+      "indication": "The patient is a -year-old woman with and vomiting.",
+      "group": "finding",
+      "truth": [
+        "emphysema"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1082042008638382
+      },
+      "nlp": {
+        "name": "Acute Appendicitis",
+        "confidence": 0.25
+      },
+      "fused": {
+        "name": "Acute Appendicitis",
+        "confidence": 0.1372,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2877",
+      "indication": "-year-old female. .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7782107179514934
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7782107179514934,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2880",
+      "indication": "Throat and lung pain with breathing",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8252620048538133
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.12
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5769,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2882",
+      "indication": "-year-old female, abdominal pain.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.2755125164985657
+      },
+      "nlp": {
+        "name": "Acute Appendicitis",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.2053,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2886",
+      "indication": "-year-old female, .",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1857229322195053
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1857229322195053,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2898",
+      "indication": "-year-old male, hypertension",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8809100947724517
+      },
+      "nlp": {
+        "name": "Hypertension",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.636,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2904",
+      "indication": "-year-old female, pain and weakness",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Nodule",
+        "detected": true,
+        "confidence": 0.6879075169563293
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Nodule",
+        "confidence": 0.4378,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2942",
+      "indication": "Followup on reported pneumonia",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Consolidation, Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.20761747658252716
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Pneumonia",
+        "confidence": 0.1875,
+        "strategy": "concordant",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2954",
+      "indication": "-year-old female with , pulmonary hypertension, dementia.",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "effusion",
+        "fibrosis"
+      ],
+      "cv": {
+        "name": "Effusion, Consolidation",
+        "detected": true,
+        "confidence": 0.7544233798980713
+      },
+      "nlp": {
+        "name": "Hypertension",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Effusion, Consolidation",
+        "confidence": 0.4705,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2955",
+      "indication": "-year-old male, syncope,",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.1957128793001175
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1957128793001175,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "2961",
+      "indication": "evaluate for pneumonia retroperitoneal mass",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "effusion",
+        "pneumonia"
+      ],
+      "cv": {
+        "name": "Atelectasis, Consolidation",
+        "detected": true,
+        "confidence": 0.3236325681209564
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Pneumonia",
+        "confidence": 0.2404,
+        "strategy": "concordant",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "2999",
+      "indication": "-year-old male with congestion presents for evaluation.",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Infiltration, Effusion, Pneumonia",
+        "detected": true,
+        "confidence": 0.45356619358062744
+      },
+      "nlp": {
+        "name": "COVID-19",
+        "confidence": 0.6
+      },
+      "fused": {
+        "name": "COVID-19",
+        "confidence": 0.398,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3002",
+      "indication": "-year-old female with onset of chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5248370299017092
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3862,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3006",
+      "indication": "Melanoma.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.49192094904872663
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.49192094904872663,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3025",
+      "indication": "-year-old , rib tenderness..",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7916504258222481
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7916504258222481,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3033",
+      "indication": "-year-old with chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7443913085747282
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.18
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5406,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3037",
+      "indication": "chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5092913172014614
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3763,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3073",
+      "indication": "-year-old male with and rib pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4058090706139894
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4058090706139894,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3098",
+      "indication": "-year-old with hypertension.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.16653656959533691
+      },
+      "nlp": {
+        "name": "Hypertension",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Hypertension",
+        "confidence": 0.1413,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3117",
+      "indication": "Kidney .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.35575989190758117
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.35575989190758117,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3122",
+      "indication": "Throat pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.546701484250196
+      },
+      "nlp": {
+        "name": "COVID-19",
+        "confidence": 0.6
+      },
+      "fused": {
+        "name": "COVID-19",
+        "confidence": 0.5289,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3138",
+      "indication": "positive ppd",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Cardiomegaly",
+        "detected": true,
+        "confidence": 0.24700768291950226
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Cardiomegaly",
+        "confidence": 0.24700768291950226,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3141",
+      "indication": "Back pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4986044818983204
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4986044818983204,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3143",
+      "indication": "dizziness",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.19929203391075134
+      },
+      "nlp": {
+        "name": "Stroke (CVA) (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1492,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3145",
+      "indication": "POSTERIORCHEST PX/BACK PX nonsmoker with posterior midline chest pain with radiating rt back tenderness around level of T8 x 1-2 wks no known or disease processes",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6359106024734619
+      },
+      "nlp": {
+        "name": "Pneumothorax (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4466,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3157",
+      "indication": ".",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7847532118075928
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7847532118075928,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3191",
+      "indication": "",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.10228222608566284
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.10228222608566284,
+        "strategy": "single",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3215",
+      "indication": "Preop right knee replacement",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8313395451669499
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8313395451669499,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3230",
+      "indication": "Altered mental status",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.793125728323442
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.793125728323442,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3232",
+      "indication": "Pre-transplant evaluation.",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6143024289049847
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6143024289049847,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3247",
+      "indication": "persistent . Cigarette use",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.21758651733398438
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.21758651733398438,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3248",
+      "indication": "Decreased breath sounds",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Effusion, Atelectasis",
+        "detected": true,
+        "confidence": 0.7739800810813904
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Effusion, Atelectasis",
+        "confidence": 0.7739800810813904,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3263",
+      "indication": "-year-old with edema and chronic knee pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Cardiomegaly",
+        "detected": true,
+        "confidence": 0.27800169587135315
+      },
+      "nlp": {
+        "name": "Heart Failure",
+        "confidence": 0.6
+      },
+      "fused": {
+        "name": "Heart Failure",
+        "confidence": 0.3467,
+        "strategy": "concordant",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3267",
+      "indication": ", transfer patient",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.751304121047416
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.751304121047416,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3279",
+      "indication": "chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6879385566826625
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5062,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3289",
+      "indication": "Syncope.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7965111121861175
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7965111121861175,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3305",
+      "indication": "-year-old female with history of osteomyelitis. .",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.3089272379875183
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.3089272379875183,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3320",
+      "indication": "preop knee replacement surgery and",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.2066289484500885
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.2066289484500885,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3329",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4561967538341136
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3425,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3382",
+      "indication": "The patient is a -year-old male with chronic shortness of breath.",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.32987815141677856
+      },
+      "nlp": {
+        "name": "Pulmonary Edema",
+        "confidence": 0.15
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.2226,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3385",
+      "indication": ", Rule out pneumonia",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8516272254302778
+      },
+      "nlp": {
+        "name": "Pneumonia",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6168,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3399",
+      "indication": "dyspnea",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "pneumonia"
+      ],
+      "cv": {
+        "name": "Mass",
+        "detected": true,
+        "confidence": 0.22176343202590942
+      },
+      "nlp": {
+        "name": "Asthma (requires further evaluation)",
+        "confidence": 0.13
+      },
+      "fused": {
+        "name": "Mass",
+        "confidence": 0.1554,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3411",
+      "indication": "Hypoxia",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Pleural_Thickening, Fibrosis",
+        "detected": true,
+        "confidence": 0.13091625273227692
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Pleural_Thickening, Fibrosis",
+        "confidence": 0.13091625273227692,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3416",
+      "indication": "Pt is pre-op R carotid artery repair;   / /SOB; no Hx smoking;  L carotid artery repair in ; pt has both operated on for rotator .",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8663027224748221
+      },
+      "nlp": {
+        "name": "Pneumonia (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5791,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3443",
+      "indication": "shoulder dislocation",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.15470778942108154
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.15470778942108154,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3455",
+      "indication": "-year-old female end-stage renal disease, peripheral edema and shortness of breath.",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "cardiomegaly",
+        "edema"
+      ],
+      "cv": {
+        "name": "Infiltration, Pneumonia",
+        "detected": true,
+        "confidence": 0.45404040813446045
+      },
+      "nlp": {
+        "name": "Heart Failure",
+        "confidence": 0.44
+      },
+      "fused": {
+        "name": "Infiltration, Pneumonia",
+        "confidence": 0.3599,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3459",
+      "indication": "-year-old male with and possible TB exposure.",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.10137854516506195
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.10137854516506195,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3472",
+      "indication": "and for 3 days",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5065839390344002
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5065839390344002,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3510",
+      "indication": "-year-old female, pain",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8286713197749055
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.8286713197749055,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3528",
+      "indication": "..",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.17954286932945251
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.17954286932945251,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3549",
+      "indication": "-year-old female with epigastric pain..",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.09846936166286469
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.09846936166286469,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3563",
+      "indication": "716.81 OTHER ARTHROPATHY SHOULDER V74.1 SCREENING FOR PULMONARY TB",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5516746354391094
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5516746354391094,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3566",
+      "indication": "-year-old male, ,  ladder 6 feet.",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7724446738329813
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7724446738329813,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3585",
+      "indication": "PAIN",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4714089549106203
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3432,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3610",
+      "indication": "tuberculosis +PPD",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7367825792757001
+      },
+      "nlp": {
+        "name": "Tuberculosis",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5412,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3625",
+      "indication": "INDICATION: EVALUATE FOR METASTATIC DISEASE; Pre op for nephrectomy",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7089271319730459
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7089271319730459,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3627",
+      "indication": "-year-old woman with chest pain",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Nodule",
+        "detected": true,
+        "confidence": 0.24416528642177582
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "Nodule",
+        "confidence": 0.1943,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3637",
+      "indication": "-year-old male,",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Pneumothorax",
+        "detected": true,
+        "confidence": 0.1933506280183792
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Pneumothorax",
+        "confidence": 0.1933506280183792,
+        "strategy": "cv_primary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3649",
+      "indication": "-year-old female with chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Emphysema",
+        "detected": true,
+        "confidence": 0.19916659593582153
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.1691,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3672",
+      "indication": "COPD",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly",
+        "edema"
+      ],
+      "cv": {
+        "name": "Cardiomegaly",
+        "detected": true,
+        "confidence": 0.24572375416755676
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Cardiomegaly",
+        "confidence": 0.1648,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3686",
+      "indication": "Hypoxia, aortic stenosis",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Effusion",
+        "detected": true,
+        "confidence": 0.31788256764411926
+      },
+      "nlp": {
+        "name": "Heart Failure",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Effusion",
+        "confidence": 0.31788256764411926,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3720",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Nodule",
+        "detected": true,
+        "confidence": 0.4616243541240692
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "Nodule",
+        "confidence": 0.3156,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3726",
+      "indication": "left chest pain pleurisy",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8621392628660297
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.17
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6152,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3737",
+      "indication": "-year-old female chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.392555603016156
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3052,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3744",
+      "indication": "CHEST  reads screening- bacterial dis, pt does not  , unable to obtain history",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6988570740232862
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6988570740232862,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3749",
+      "indication": "Chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7591924525344649
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.19
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5355,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3768",
+      "indication": "-year-old female shortness of breath and bilateral lower extremity edema.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Effusion, Atelectasis",
+        "detected": true,
+        "confidence": 0.44560933113098145
+      },
+      "nlp": {
+        "name": "Heart Failure",
+        "confidence": 0.38
+      },
+      "fused": {
+        "name": "Heart Failure",
+        "confidence": 0.3579,
+        "strategy": "concordant",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3771",
+      "indication": "preop total left knee",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "Mass, Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.3711921274662018
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Mass, Pleural_Thickening",
+        "confidence": 0.3711921274662018,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3781",
+      "indication": "-year-old woman with chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4564644330121461
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome",
+        "confidence": 0.24
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.3445,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3814",
+      "indication": "-year-old female, , pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7037183111948552
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7037183111948552,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3833",
+      "indication": "-year-old male with possible aspiration..",
+      "group": "finding",
+      "truth": [
+        "emphysema"
+      ],
+      "cv": {
+        "name": "Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.18266941606998444
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Pleural_Thickening",
+        "confidence": 0.18266941606998444,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3837",
+      "indication": "",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7863448542187148
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.7863448542187148,
+        "strategy": "single",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3860",
+      "indication": "-year-old female with dyspnea for one .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.15280529856681824
+      },
+      "nlp": {
+        "name": "COPD (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.1123,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3877",
+      "indication": "-year-old with positive PPD.",
+      "group": "finding",
+      "truth": [
+        "effusion"
+      ],
+      "cv": {
+        "name": "Infiltration, Fibrosis, Pneumonia",
+        "detected": true,
+        "confidence": 0.4053803086280823
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Infiltration, Fibrosis, Pneumonia",
+        "confidence": 0.4053803086280823,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3894",
+      "indication": "r/o tb",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6048596916934069
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6048596916934069,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3912",
+      "indication": "-year-old male, and dizziness.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8139585687237977
+      },
+      "nlp": {
+        "name": "Stroke (CVA) (requires further evaluation)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5638,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3913",
+      "indication": ",786.2",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.38655923712612283
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.38655923712612283,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3915",
+      "indication": "Seizure",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.22385022044181824
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.22385022044181824,
+        "strategy": "cv_primary",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3917",
+      "indication": "-year-old woman, long-term care placement..",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Cardiomegaly",
+        "detected": true,
+        "confidence": 0.26376664638519287
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Cardiomegaly",
+        "confidence": 0.26376664638519287,
+        "strategy": "cv_primary",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3931",
+      "indication": "-year-old female with symptoms.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6925729561946239
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6925729561946239,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3945",
+      "indication": "Reevaluate pneumothorax. Stab wound.",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "effusion",
+        "pneumothorax"
+      ],
+      "cv": {
+        "name": "Pneumothorax",
+        "detected": true,
+        "confidence": 0.12324640899896622
+      },
+      "nlp": {
+        "name": "Pneumothorax (requires further evaluation)",
+        "confidence": 0.11
+      },
+      "fused": {
+        "name": "Pneumothorax (requires further evaluation)",
+        "confidence": 0.1235,
+        "strategy": "concordant",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "3968",
+      "indication": "",
+      "group": "finding",
+      "truth": [
+        "pneumonia"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.10573318600654602
+      },
+      "nlp": null,
+      "fused": {
+        "name": "No confident CV finding",
+        "confidence": 0.10573318600654602,
+        "strategy": "single",
+        "severity": "unknown",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3970",
+      "indication": "-year-old female with altered mental status, unresponsive.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4113011371065737
+      },
+      "nlp": {
+        "name": "General clinical assessment needed",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4113011371065737,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "3993",
+      "indication": "Edema",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Cardiomegaly",
+        "detected": true,
+        "confidence": 0.3110477328300476
+      },
+      "nlp": {
+        "name": "Heart Failure",
+        "confidence": 0.51
+      },
+      "fused": {
+        "name": "Heart Failure",
+        "confidence": 0.3477,
+        "strategy": "concordant",
+        "severity": "high",
+        "reports_a_finding": true
+      }
+    }
+  ]
+}

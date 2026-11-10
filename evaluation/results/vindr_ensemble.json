@@ -1,0 +1,78 @@
+{
+  "films": 15000,
+  "normal": 10606,
+  "classes": {
+    "Cardiomegaly": {
+      "positives": 1817,
+      "combined": true,
+      "auroc_densenet": 0.8756248301136313,
+      "auroc_ensemble": 0.9229956727429227,
+      "densenet": {
+        "recall": 0.170610897083104,
+        "precision": 0.6695464362850972
+      },
+      "ensemble": {
+        "recall": 0.15905338470005503,
+        "precision": 0.9088050314465409
+      }
+    },
+    "Effusion": {
+      "positives": 634,
+      "combined": true,
+      "auroc_densenet": 0.947175815136598,
+      "auroc_ensemble": 0.9736247431391416,
+      "densenet": {
+        "recall": 0.5867507886435331,
+        "precision": 0.7484909456740443
+      },
+      "ensemble": {
+        "recall": 0.7602523659305994,
+        "precision": 0.6513513513513514
+      }
+    },
+    "Atelectasis": {
+      "positives": 62,
+      "combined": true,
+      "auroc_densenet": 0.79295604628162,
+      "auroc_ensemble": 0.8293732373379863,
+      "densenet": {
+        "recall": 0.14516129032258066,
+        "precision": 0.014018691588785047
+      },
+      "ensemble": {
+        "recall": 0.22580645161290322,
+        "precision": 0.014583333333333334
+      }
+    },
+    "Nodule": {
+      "positives": 405,
+      "combined": false,
+      "auroc_densenet": 0.8296511150867666,
+      "auroc_ensemble": 0.8296511150867666,
+      "densenet": {
+        "recall": 0.16296296296296298,
+        "precision": 0.4024390243902439
+      },
+      "ensemble": {
+        "recall": 0.16296296296296298,
+        "precision": 0.4024390243902439
+      }
+    }
+  },
+  "normal_flagged": {
+    "densenet": 0.05987177069583255,
+    "ensemble": 0.04572883273618707
+  },
+  "mean_auroc_difference": {
+    "classes": [
+      "Cardiomegaly",
+      "Effusion",
+      "Atelectasis"
+    ],
+    "point": 0.0367456538960671,
+    "ci95": [
+      0.02822663410118338,
+      0.04543196077048915
+    ]
+  }
+}

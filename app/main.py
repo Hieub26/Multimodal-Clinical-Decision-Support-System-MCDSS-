@@ -65,7 +65,7 @@ async def lifespan(app: FastAPI):
         from app.api.dependencies import get_cv_model
         cv = get_cv_model()
         # trigger lazy-load now, not on first request
-        await run_in_threadpool(lambda: cv.model)
+        await run_in_threadpool(cv.ensure_loaded)
         api_logger.info("CV model preloaded into memory successfully")
     except Exception as e:
         api_logger.warning(

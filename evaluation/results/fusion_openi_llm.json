@@ -1,0 +1,449 @@
+{
+  "dataset": "Open-I / IU chest X-ray",
+  "limit": 600,
+  "targets": {
+    "cardiomegaly": "cardiomegaly",
+    "pleural effusion": "effusion",
+    "pulmonary atelectasis": "atelectasis",
+    "nodule": "nodule",
+    "pulmonary edema": "edema",
+    "pneumonia": "pneumonia",
+    "pneumothorax": "pneumothorax",
+    "pulmonary emphysema": "emphysema",
+    "pulmonary fibrosis": "fibrosis",
+    "hernia, hiatal": "hernia"
+  },
+  "n_cases": 17,
+  "n_with_finding": 6,
+  "n_normal": 11,
+  "n_with_indication": 17,
+  "systems": {
+    "cv": {
+      "cases_with_output": 6,
+      "diagnosis_is_a_present_finding": 0.5,
+      "false_alarm_rate_on_normal": 0.0,
+      "confidence_auroc": 0.2222
+    },
+    "nlp": {
+      "cases_with_output": 6,
+      "diagnosis_is_a_present_finding": 0.0,
+      "false_alarm_rate_on_normal": 0.3636,
+      "confidence_auroc": null
+    },
+    "fused": {
+      "cases_with_output": 6,
+      "diagnosis_is_a_present_finding": 0.5,
+      "false_alarm_rate_on_normal": 0.0909,
+      "confidence_auroc": 0.2222
+    }
+  },
+  "fusion_strategies_when_text_present": {
+    "cv_primary": 3,
+    "complementary": 13,
+    "discordant": 1
+  },
+  "fusion_changed_diagnosis_vs_image": 1,
+  "cases_with_text_and_finding": 6,
+  "target_prevalence": {
+    "atelectasis": 2,
+    "cardiomegaly": 3,
+    "edema": 0,
+    "effusion": 1,
+    "emphysema": 0,
+    "fibrosis": 1,
+    "hernia": 0,
+    "nodule": 1,
+    "pneumonia": 0,
+    "pneumothorax": 0
+  },
+  "items": [
+    {
+      "report": "4",
+      "indication": "-year-old with .",
+      "group": "finding",
+      "truth": [
+        "fibrosis"
+      ],
+      "cv": {
+        "name": "Fibrosis, Pleural_Thickening",
+        "detected": true,
+        "confidence": 0.25493860244750977
+      },
+      "nlp": {
+        "name": "Cannot be determined without patient information",
+        "confidence": 0.0
+      },
+      "fused": {
+        "name": "Fibrosis, Pleural_Thickening",
+        "confidence": 0.25493860244750977,
+        "strategy": "cv_primary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "6",
+      "indication": "Evaluate for infection",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.13501869142055511
+      },
+      "nlp": {
+        "name": "Need for Diagnostic Evaluation for Infection",
+        "confidence": 0.9
+      },
+      "fused": {
+        "name": "Need for Diagnostic Evaluation for Infection",
+        "confidence": 0.3098,
+        "strategy": "complementary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "17",
+      "indication": "-year-old female, chest pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.4789988949370412
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome (ACS)",
+        "confidence": 0.4
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4007,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "29",
+      "indication": ", hypoxia.",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.5278792381286621
+      },
+      "nlp": {
+        "name": "Emphysema",
+        "confidence": 0.2
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.3436,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "38",
+      "indication": ", and shortness of breath for 3 days",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.9096923415697444
+      },
+      "nlp": {
+        "name": "Consolidation",
+        "confidence": 0.35
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6973,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "44",
+      "indication": "-year-old with for 5 days. Previously seen for vomiting and ear pain.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6617341198547975
+      },
+      "nlp": {
+        "name": "Undeterminable due to insufficient patient information",
+        "confidence": 0.0
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.4354,
+        "strategy": "complementary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "48",
+      "indication": "-year-old female with .",
+      "group": "finding",
+      "truth": [
+        "nodule"
+      ],
+      "cv": {
+        "name": "Pneumothorax",
+        "detected": true,
+        "confidence": 0.3652760684490204
+      },
+      "nlp": {
+        "name": "Insufficient patient information for diagnosis",
+        "confidence": 0.0
+      },
+      "fused": {
+        "name": "Pneumothorax",
+        "confidence": 0.3652760684490204,
+        "strategy": "cv_primary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "50",
+      "indication": "pt with sob,",
+      "group": "finding",
+      "truth": [
+        "cardiomegaly"
+      ],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8729993782843762
+      },
+      "nlp": {
+        "name": "Shortness of Breath (Undifferentiated Etiology)",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5834,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "54",
+      "indication": "-year-old woman, prior to Enbrel therapy..",
+      "group": "finding",
+      "truth": [
+        "atelectasis"
+      ],
+      "cv": {
+        "name": "Atelectasis",
+        "detected": true,
+        "confidence": 0.2657126784324646
+      },
+      "nlp": {
+        "name": "Unable to determine due to insufficient patient information",
+        "confidence": 0.0
+      },
+      "fused": {
+        "name": "Atelectasis",
+        "confidence": 0.1568,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "66",
+      "indication": "Hematemesis; BACK PAIN 724.5",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.39631605441596907
+      },
+      "nlp": {
+        "name": "Hiatal / Diaphragmatic Hernia (with possible complication of upper GI bleeding)",
+        "confidence": 0.5
+      },
+      "fused": {
+        "name": "Hiatal / Diaphragmatic Hernia (with possible complication of upper GI bleeding)",
+        "confidence": 0.4018,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "72",
+      "indication": "-year-old female with chest pain",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.6954463711221315
+      },
+      "nlp": {
+        "name": "Acute Coronary Syndrome (ACS)",
+        "confidence": 0.35
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5208,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "79",
+      "indication": "Flank pain and dyspnea",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.8733556234831834
+      },
+      "nlp": {
+        "name": "Pleural Effusion",
+        "confidence": 0.4
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.6875,
+        "strategy": "complementary",
+        "severity": "high",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "96",
+      "indication": ",786.2",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.08225958794355392
+      },
+      "nlp": {
+        "name": "Cough (symptom of unknown etiology)",
+        "confidence": 0.25
+      },
+      "fused": {
+        "name": "Cough (symptom of unknown etiology)",
+        "confidence": 0.1167,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "110",
+      "indication": "Preoperative bariatric surgery.",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5658321051918176
+      },
+      "nlp": {
+        "name": "Insufficient information for a specific disease diagnosis",
+        "confidence": 1.0
+      },
+      "fused": {
+        "name": "CONFLICTING: NLP='Insufficient information for a specific disease diagnosis' vs CV='No confident abnormal finding detected'",
+        "confidence": 0.7735,
+        "strategy": "discordant",
+        "severity": "moderate",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "133",
+      "indication": "BMT W/U;",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.5002428199440672
+      },
+      "nlp": {
+        "name": "Information Insufficient/Outside Scope of Provided Guidelines",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5002428199440672,
+        "strategy": "cv_primary",
+        "severity": "low",
+        "reports_a_finding": false
+      }
+    },
+    {
+      "report": "177",
+      "indication": "-year-old female with dyspnea.",
+      "group": "finding",
+      "truth": [
+        "atelectasis",
+        "cardiomegaly",
+        "effusion"
+      ],
+      "cv": {
+        "name": "Effusion, Atelectasis, Consolidation, Pneumothorax",
+        "detected": true,
+        "confidence": 0.8526142239570618
+      },
+      "nlp": {
+        "name": "Asthma",
+        "confidence": 0.1
+      },
+      "fused": {
+        "name": "Effusion, Atelectasis, Consolidation, Pneumothorax",
+        "confidence": 0.5015,
+        "strategy": "complementary",
+        "severity": "critical",
+        "reports_a_finding": true
+      }
+    },
+    {
+      "report": "207",
+      "indication": ", right sided rib pain after falling on the .",
+      "group": "normal",
+      "truth": [],
+      "cv": {
+        "name": "",
+        "detected": false,
+        "confidence": 0.7581753752557066
+      },
+      "nlp": {
+        "name": "Pneumothorax",
+        "confidence": 0.35
+      },
+      "fused": {
+        "name": "No confident abnormal finding detected",
+        "confidence": 0.5976,
+        "strategy": "complementary",
+        "severity": "moderate",
+        "reports_a_finding": false
+      }
+    }
+  ]
+}

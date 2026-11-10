@@ -18,6 +18,10 @@ python -m evaluation.run_eval gate --split heldout3
 python -m evaluation.run_eval negex --split test
 python -m evaluation.judge_eval --split heldout
 python -m evaluation.fallback_eval --split test
+python -m evaluation.fusion_eval --limit 600
+python -m evaluation.clear_calibration
+python -m evaluation.external_ensemble_eval vindr
+python -m evaluation.external_ensemble_eval nih
 ```
 
 - **Results** are written to `results/*.json`, with every item and each system's answer.
@@ -134,9 +138,90 @@ What the benchmark is and is not good for:
 - **It covers 9 of the engine's 22 diseases.** The confidence curve is fitted on those. Its cap at 0.75 and the rule that one symptom is never a confident diagnosis are there for the rest.
 - **Most correct diagnoses are still held back.** A picture shared by several diseases, such as cough, fever and sputum, leaves pneumonia ahead of tuberculosis by a margin of about 0.6 and is sent to review. On this benchmark that is the right call about half the time.
 
+### 6. Image model and fusion on Open-I
+
+[Open-I / Indiana University Chest X-ray](https://openi.nlm.nih.gov/) (NLM, CC BY-NC-ND 4.0): radiology reports with their images, indexed with MeSH terms by the collection's curators. It was not written for this project and the model was not trained on it. It is downloaded by hand into `.cache/openi` (`NLMCXR_reports.tgz`; images from `NLMCXR_png.tgz`) and is not redistributed. The server delivered about 80 KB/s, so the image archive was read as a stream and stopped after 600 images, which come in archive order, not in report order. 333 reports are scored: 130 with at least one of 10 findings the model can name (listed in `fusion_eval.py`, fixed before the model was run) and 203 whose only MeSH term is "normal". Reports with other abnormalities only are left out. The text is the report's "indication" field, analysed by the rule-based engine (no API). Not blind in the sense of section 1: the model, thresholds and fusion were not changed after seeing these data, but this is the first and only run.
+
+| | Names a finding that is present | False alarm on normal | AUROC of confidence |
+|---|---|---|---|
+| Image only | 23.1% | 11.3% | 0.603 |
+| Text only (indication) | 10.0% | 10.3% | 0.615 |
+| Fused | 23.8% | 11.3% | 0.586 |
+
+- **Fusion adds nothing measurable.** 23.8% against 23.1% is one case in 130. With a text present, 138 cases took the image-only branch, 177 were "complementary" and 6 "concordant".
+- **The indication carries almost no information.** "Positive TB test" or "chest pain" does not tell what the film shows: the text-only system is at chance. This says little about patients who describe their symptoms in detail.
+- **With Gemini on the text** only 17 cases could be run before the free tier of 20 requests per day was spent (6 with a finding, 11 normal): too few to conclude anything. The answers are cached; a later run continues where it stopped (`--llm`).
+- **The confidence does not separate right from wrong** (AUROC about 0.6 for all three).
+
+**Why the image model misses so much.** On 353 images (both views of the sampled reports; 212 normal), per class, against the normal cases:
+
+| Class | Positives | AUROC | Sensitivity at the model's threshold | Median p, positives | Threshold |
+|---|---|---|---|---|---|
+| Effusion | 28 | 0.91 | 29% | 0.16 | 0.30 |
+| Atelectasis | 47 | 0.81 | 26% | 0.07 | 0.26 |
+| Cardiomegaly | 55 | 0.76 | 11% | 0.012 | 0.22 |
+| Nodule | 16 | 0.64 | 13% | 0.04 | 0.20 |
+| Edema | 8 | 0.98 | 0% | 0.05 | 0.33 |
+
+The model ranks cases reasonably, but its probabilities on this collection sit far below its thresholds, so it almost never raises a false alarm and misses most findings. Cardiomegaly is weak also in its own domain: its recall at the threshold is 29% on the ChestX-ray14 test set. The first image of each report ranks better than the second (effusion AUROC 0.98 against 0.78); the application does not detect lateral views, and the model was trained on frontal films.
+
+**Recalibration, exploratory.** Reports were split in two by a hash of the report number (views of one case stay together), thresholds were fitted on half A and measured on half B. Mean over the classes with at least 10 positives in B (cardiomegaly, effusion, atelectasis):
+
+| Thresholds | Sensitivity, all images | False alarms | Sensitivity, first image | False alarms |
+|---|---|---|---|---|
+| As deployed | 25% | 0.3% | 29% | 0.9% |
+| One factor for all classes (x0.48, x0.41) | 40% | 1.5% | 45% | 1.9% |
+| Per class, 95% specificity on A | 46% | 2.7% | 41% | 7.4% |
+
+One factor was stable across both splits; per-class cuts were not (atelectasis had 13% false alarms on the 88-image first-image half). **The deployed thresholds were not changed.** Each half has 6 to 34 positives per class, the false alarms are counted against normal films only (other abnormal films would add some), the precision of a flag at a realistic prevalence was not measured, and no second collection confirmed it. The analysis scripts for this paragraph are not in the repository.
+
+### 7. DenseNet + CLEAR image ensemble (optional, `CV_CLEAR_ENABLED`)
+
+[CLEAR](https://github.com/peterhan91/CLEAR) is a vision-language model trained on chest X-rays paired with their reports (MIMIC-CXR, CheXpert-Plus, ReXGradient; not Open-I). It scores a class zero-shot, as how much closer the image is to "<finding>" than to "no <finding>". [`clear_calibration.py`](clear_calibration.py) combines it with the DenseNet on the full Open-I collection: 4,402 labelled images, of which 2,255 frontal films after the TorchXRayVision view classifier (laterals removed). Reports are split in halves by hash; everything is fitted and chosen on half A (1,117 films), half B (1,138) is only measured.
+
+- **Combination**: per class, the DenseNet logit and the CLEAR score are standardized on A, averaged, and mapped by a logistic fit.
+- **Operating point**, chosen on A: the lowest specificity on {95, 96, 97, 98, 99, 99.5}% at which the normal films of A flagged for anything (all 14 classes) are not more than with DenseNet alone. That is 99.5%. The first try, 95%, flagged a quarter of the normal films; this rule was written after seeing it.
+- A class is combined when the combination finds more of its cases on A than DenseNet at the same specificity. All six candidates passed; **nodule was then removed by hand** after half B showed the combination finding fewer nodules (12% against 18%), so half B no longer measures that choice blind.
+
+Half B, frontal films. Precision is over all labelled frontal films of B (normal films and films with any target finding):
+
+| Class | Positives B | AUROC DenseNet → ensemble | Recall DenseNet → ensemble | Precision DenseNet → ensemble |
+|---|---|---|---|---|
+| Cardiomegaly | 174 | 0.879 → 0.946 | 29% → 40% | 70% → 76% |
+| Effusion | 73 | 0.970 → 0.980 | 71% → 79% | 70% → 50% |
+| Atelectasis | 140 | 0.912 → 0.947 | 39% → 47% | 54% → 50% |
+| Edema | 23 | 0.936 → 0.946 | 0% → 70% | – → 17% |
+| Pneumonia | 18 | 0.912 → 0.948 | 11% → 72% | 25% → 14% |
+| Nodule (DenseNet only) | 56 | 0.801 | 18% | 30% |
+
+Normal films of B flagged for anything: 7.6% with DenseNet, 6.2% with the ensemble. Edema and pneumonia flags are right fewer than one time in five, so their precision (under 25%) keeps them from being rated critical or an emergency on their own.
+
+**On other collections**, with the thresholds set on Open-I unchanged ([`external_ensemble_eval.py`](external_ensemble_eval.py)). AUROC is films with the finding against all others; the confidence interval is a paired bootstrap of the mean AUROC difference over the combined classes.
+
+| | VinDr-CXR (Vietnam) | ChestX-ray14 test split (NIH) |
+|---|---|---|
+| Films | 15,000 (Kaggle VinBigData training set, 512 px PNGs) | 5,034, a random sample of 500 test patients |
+| Labels | three radiologists per film; present when two mark it | text-mined from reports |
+| Neither model trained on it | yes | CLEAR yes; it is the DenseNet's own test split |
+| Cardiomegaly AUROC | 0.876 → 0.923 | 0.868 → 0.883 |
+| Effusion AUROC | 0.947 → 0.974 | 0.832 → 0.851 |
+| Atelectasis AUROC | 0.793 → 0.829 (62 positives) | **0.762 → 0.732** |
+| Edema / pneumonia AUROC | no labels | 0.811 → 0.813 / 0.706 → 0.751 |
+| Mean difference, 95% CI | +0.037 [+0.028, +0.045] | +0.010 [+0.002, +0.019] |
+| Normal films flagged for anything | 6.0% → 4.6% | 46.4% → **53.7%** |
+| Recall / precision, effusion | 59% → 76% / 75% → 65% | 57% → 88% / 49% → 36% |
+| Recall / precision, cardiomegaly | 17% → 16% / 67% → 91% | 33% → 50% / 45% → 35% |
+
+- **The ranking carries over; the thresholds do not.** The combination ranks better on every collection, but on ChestX-ray14 it is worse for atelectasis and its gain elsewhere is small.
+- **Thresholds are site-specific.** At the Open-I thresholds it flags more of ChestX-ray14's "No Finding" films than DenseNet does, finding many more cases at a lower precision. On VinDr the same thresholds are strict (cardiomegaly: 91% precision, 16% recall). A site enabling it should recalibrate on its own films.
+- ChestX-ray14 "No Finding" labels are text-mined and noisy; even DenseNet, at thresholds set on that collection, flags 46% of them.
+
+Limits: Open-I labels come from report MeSH terms, and CLEAR learned from reports, which may favour it on that kind of label (VinDr's radiologist labels do not have this problem); the VinDr PNGs are a third-party conversion; VinDr has 62 atelectasis films; edema and pneumonia were measured on Open-I (about 20 positives per half) and ChestX-ray14 only; lateral films were not evaluated. A first comparison of nine models (TorchXRayVision, JF Healthcare, CLEAR, ensembles) on a 353-image sample chose CLEAR; that sample's half B is part of half B here.
+
 ## What these numbers do not show
 
 - How the full pipeline performs on real patient text. The texts were written for the evaluation, in English, and are short.
 - Agreement between annotators, since there was one.
 - How stable a model's answer is across repeated calls.
+- Fusion with a detailed patient description: the only text in the image-and-text evaluation was a one-line reason for the examination.
 - How the judge behaves when the generator, not the retrieval, is wrong about the patient: the judge sees the diagnosis label and the guidelines, not the patient's text.
