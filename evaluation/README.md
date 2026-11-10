@@ -196,6 +196,16 @@ Half B, frontal films. Precision is over all labelled frontal films of B (normal
 
 Normal films of B flagged for anything: 7.6% with DenseNet, 6.2% with the ensemble. Edema and pneumonia flags are right fewer than one time in five, so their precision (under 25%) keeps them from being rated critical or an emergency on their own.
 
+**What each collection tests.** Only VinDr-CXR is an external validation; ChestX-ray14 is the DenseNet's internal test.
+
+| Role | Collection | Seen by DenseNet | Seen by CLEAR | Ensemble thresholds set on |
+|---|---|---|---|---|
+| Internal test | ChestX-ray14, official test split | same collection, other patients (`patient_overlap: 0` in the model metadata) | no | Open-I |
+| Calibration and held-out test | Open-I, half B | no | no | Open-I, half A |
+| **External validation** | **VinDr-CXR** | **no** | **no** | **Open-I, unchanged** |
+
+One ChestX-ray14 test-split touch: the DenseNet's **Infiltration** threshold was chosen on half A of the test patients and measured on half B (`threshold_overrides` in the metadata). Infiltration is not among the compared classes; it enters only the share of normal films flagged for anything, the same way for both systems, since the ensemble keeps DenseNet's Infiltration threshold.
+
 **On other collections**, with the thresholds set on Open-I unchanged ([`external_ensemble_eval.py`](external_ensemble_eval.py)). AUROC is films with the finding against all others; the confidence interval is a paired bootstrap of the mean AUROC difference over the combined classes.
 
 | | VinDr-CXR (Vietnam) | ChestX-ray14 test split (NIH) |
