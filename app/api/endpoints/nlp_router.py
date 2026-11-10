@@ -3,6 +3,7 @@ NLP Router: Text-based diagnosis and guideline management endpoints.
 """
 
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from fastapi import APIRouter, Depends, HTTPException
@@ -38,21 +39,30 @@ def _run_text_pipeline(
     safety = get_safety_controller()
     report_gen = get_report_generator()
 
-    # NLP diagnosis
-    nlp_result = rag.diagnose_from_text(symptoms_text, clinical_question)
+    # The red flags in the patient's text depend on that text alone, so they
+    # are read (a Jev call, when Jev is configured) while the diagnosis is
+    # generated and validated, not after it.
+    with ThreadPoolExecutor(max_workers=1, thread_name_prefix="pipeline") as side:
+        patient_flags = side.submit(
+            safety.patient_text_flags, symptoms_text, clinical_question
+        )
 
-    # Fusion (single modality)
-    fused = fusion.fuse(nlp_diagnosis=nlp_result)
+        # NLP diagnosis
+        nlp_result = rag.diagnose_from_text(symptoms_text, clinical_question)
 
-    # Validate against guidelines
-    validated = validator.validate(fused)
+        # Fusion (single modality)
+        fused = fusion.fuse(nlp_diagnosis=nlp_result)
 
-    # Safety check
-    safe_result = safety.evaluate(
-        validated,
-        symptoms_text=symptoms_text,
-        clinical_question=clinical_question,
-    )
+        # Validate against guidelines
+        validated = validator.validate(fused)
+
+        # Safety check
+        safe_result = safety.evaluate(
+            validated,
+            symptoms_text=symptoms_text,
+            clinical_question=clinical_question,
+            patient_flags=patient_flags.result(),
+        )
 
     # Generate report
     report_path = report_gen.generate_clinical_report(

@@ -23,7 +23,6 @@ typesafe-sdk==0.7.2
 torch==2.6.0
 torchvision==0.21.0
 Pillow==12.2.0
-matplotlib==3.10.6
 
 # === Database ===
 asyncpg==0.31.0

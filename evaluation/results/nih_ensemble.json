@@ -1,0 +1,108 @@
+{
+  "films": 5034,
+  "normal": 1910,
+  "classes": {
+    "Cardiomegaly": {
+      "positives": 223,
+      "combined": true,
+      "auroc_densenet": 0.8681189314845557,
+      "auroc_ensemble": 0.8833735842655052,
+      "densenet": {
+        "recall": 0.3273542600896861,
+        "precision": 0.4506172839506173
+      },
+      "ensemble": {
+        "recall": 0.4977578475336323,
+        "precision": 0.3512658227848101
+      }
+    },
+    "Effusion": {
+      "positives": 917,
+      "combined": true,
+      "auroc_densenet": 0.8321977469804298,
+      "auroc_ensemble": 0.8508643974010996,
+      "densenet": {
+        "recall": 0.5747001090512541,
+        "precision": 0.4916044776119403
+      },
+      "ensemble": {
+        "recall": 0.8767720828789531,
+        "precision": 0.36134831460674155
+      }
+    },
+    "Atelectasis": {
+      "positives": 726,
+      "combined": true,
+      "auroc_densenet": 0.7616859273924353,
+      "auroc_ensemble": 0.731805104731795,
+      "densenet": {
+        "recall": 0.5165289256198347,
+        "precision": 0.3119800332778702
+      },
+      "ensemble": {
+        "recall": 0.8236914600550964,
+        "precision": 0.20982456140350877
+      }
+    },
+    "Edema": {
+      "positives": 153,
+      "combined": true,
+      "auroc_densenet": 0.8106449846209056,
+      "auroc_ensemble": 0.813486468137757,
+      "densenet": {
+        "recall": 0.0915032679738562,
+        "precision": 0.10852713178294573
+      },
+      "ensemble": {
+        "recall": 0.8627450980392157,
+        "precision": 0.06389157792836399
+      }
+    },
+    "Pneumonia": {
+      "positives": 120,
+      "combined": true,
+      "auroc_densenet": 0.7055385972052639,
+      "auroc_ensemble": 0.7505494505494505,
+      "densenet": {
+        "recall": 0.13333333333333333,
+        "precision": 0.0599250936329588
+      },
+      "ensemble": {
+        "recall": 0.6416666666666667,
+        "precision": 0.05314009661835749
+      }
+    },
+    "Nodule": {
+      "positives": 280,
+      "combined": false,
+      "auroc_densenet": 0.7332013642646794,
+      "auroc_ensemble": 0.7332013642646794,
+      "densenet": {
+        "recall": 0.21785714285714286,
+        "precision": 0.2364341085271318
+      },
+      "ensemble": {
+        "recall": 0.21785714285714286,
+        "precision": 0.2364341085271318
+      }
+    }
+  },
+  "normal_flagged": {
+    "densenet": 0.4643979057591623,
+    "ensemble": 0.5366492146596858
+  },
+  "mean_auroc_difference": {
+    "classes": [
+      "Cardiomegaly",
+      "Effusion",
+      "Atelectasis",
+      "Edema",
+      "Pneumonia"
+    ],
+    "point": 0.010378563480403424,
+    "ci95": [
+      0.002329771316806147,
+      0.019060132441360504
+    ]
+  }
+}

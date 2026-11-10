@@ -76,6 +76,8 @@ class Settings(BaseSettings):
         description="API key for Gemini LLM/VLM services"
     )
     llm_model_name: str = "gemini-2.5-flash"
+    # A call that takes longer falls back to the rule-based engine.
+    llm_timeout_seconds: float = Field(default=60.0, gt=0.0)
 
     # --- Guideline judge (LLM-as-a-Judge) ---
     # A model from a different provider than the one that writes the
@@ -120,6 +122,17 @@ class Settings(BaseSettings):
     # 1.0 = flag at the thresholds the precision and recall were measured at
     cv_threshold_relaxation: float = Field(default=1.0, ge=0.0, le=1.0)
     cv_negative_screen_ratio_threshold: float = Field(default=0.65, ge=0.0, le=1.0)
+    # Second image model, CLEAR (zero-shot vision-language, DINOv2 ViT-B/14).
+    # When enabled, the classes listed in the calibration file use the
+    # DenseNet + CLEAR combination, with thresholds measured on Open-I
+    # (evaluation/clear_calibration.py). Off by default: it needs the CLEAR
+    # package and weights (scripts/fetch_clear.py) and about 1 GB of memory.
+    cv_clear_enabled: bool = False
+    cv_clear_calibration_path: Path = BASE_DIR / "models" / "clear_ensemble_calibration.json"
+    # None = the checkpoint in the Hugging Face cache
+    cv_clear_checkpoint_path: Path | None = None
+    # False = never fetch weights or DINOv2 code at run time
+    cv_clear_allow_download: bool = False
 
     # Immutable tuple for class names
     cv_class_names: tuple[str, ...] = (

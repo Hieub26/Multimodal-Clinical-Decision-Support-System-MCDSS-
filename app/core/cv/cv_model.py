@@ -17,7 +17,9 @@ from app.config import settings
 from app.core.cv.image_preprocessor import ImagePreprocessor
 from app.core.cv.cv_postprocessor import CVPostprocessor
 from app.core.cv.uncertainty_analyzer import UncertaintyAnalyzer
-from app.core.cv.grad_cam import GradCAM, GradCAMVisualizer
+from app.core.cv.grad_cam import GradCAM, GradCAMVisualizer, classify_features
+from app.core.cv.image_ensemble import ImageEnsemble
+from app.core.cv.clear_scorer import ClearScorer
 from app.utils.logger import cv_logger
 
 
@@ -56,6 +58,14 @@ class MedicalCVModel:
         # precision and recall measured there. None without model metadata.
         self.validation_metrics: list[dict] | None = None
         self._load_model_metadata()
+        # DenseNet's own thresholds and figures, used whenever CLEAR is off
+        # or fails for a request
+        self.densenet_thresholds = list(self.class_thresholds)
+        self.densenet_validation_metrics = self.validation_metrics
+        self.ensemble: ImageEnsemble | None = None
+        self.clear_scorer: ClearScorer | None = None
+        if settings.cv_clear_enabled:
+            self._load_ensemble()
 
         # Dependency Injection
         self.image_preprocessor = image_preprocessor or ImagePreprocessor()
@@ -65,9 +75,13 @@ class MedicalCVModel:
         self._model = None
         self._grad_cam = None
         self._grad_cam_visualizer = None
-        # Requests run in worker threads. Grad-CAM keeps per-call state on the
-        # model hooks and matplotlib is not thread-safe, so run one at a time.
-        self._predict_lock = threading.Lock()
+        # Requests run in worker threads; load the weights only once.
+        self._load_lock = threading.Lock()
+        # One forward pass at a time: torch already spreads a single pass
+        # over every core, so concurrent passes only compete for them. The
+        # lock is held for the model alone; decoding the upload and drawing
+        # the Grad-CAM image run outside it.
+        self._inference_lock = threading.Lock()
         cv_logger.info(f"MedicalCVModel initialized (device={self.device})")
 
     def _load_model_metadata(self):
@@ -127,14 +141,69 @@ class MedicalCVModel:
         except Exception as e:
             cv_logger.error("Failed to load CV metadata from %s: %s", meta_path, e)
 
+    def _load_ensemble(self):
+        """Read the DenseNet + CLEAR calibration. Without it the model runs
+        DenseNet alone, as when CLEAR is disabled."""
+        path = settings.cv_clear_calibration_path
+        try:
+            ensemble = ImageEnsemble.from_file(path)
+            ensemble.check_classes(self.class_names)
+        except Exception as e:
+            cv_logger.error("CLEAR enabled but its calibration %s is unusable: %s", path, e)
+            return
+        self.ensemble = ensemble
+        self.clear_scorer = ClearScorer(
+            ensemble.prompts,
+            self.device,
+            checkpoint_path=settings.cv_clear_checkpoint_path,
+            allow_download=settings.cv_clear_allow_download,
+        )
+        cv_logger.info("DenseNet + CLEAR for: %s", ", ".join(ensemble.classes))
+
+    def _ensemble_figures(self) -> tuple[list[float], list[dict]]:
+        return (
+            self.ensemble.thresholds(self.class_names, self.densenet_thresholds),
+            self.ensemble.validation_metrics(
+                self.class_names, self.densenet_thresholds, self.densenet_validation_metrics
+            ),
+        )
+
     @property
     def model(self) -> nn.Module:
         """Lazy-load the CV model."""
         if self._model is None:
-            self._model = self._build_model()
-            self._model.to(self.device)
-            self._model.eval()
+            with self._load_lock:
+                if self._model is None:
+                    model = self._build_model()
+                    model.to(self.device)
+                    model.eval()
+                    self._model = model
         return self._model
+
+    def ensure_loaded(self) -> None:
+        """Load the weights now if they are not loaded yet.
+
+        Raises:
+            ModelWeightsNotFoundError: if the fine-tuned weights are missing.
+        """
+        self.model
+        if self.clear_scorer is not None:
+            try:
+                self.clear_scorer.ensure_loaded()
+            except Exception as e:
+                # DenseNet alone still gives a validated answer
+                cv_logger.error("CLEAR could not be loaded; using DenseNet alone: %s", e)
+
+    def densenet_probabilities(self, tensor: torch.Tensor) -> tuple[np.ndarray, torch.Tensor]:
+        """DenseNet probabilities for a preprocessed batch of one, and the
+        feature map Grad-CAM is computed from."""
+        model = self.model
+        with self._inference_lock, torch.no_grad():
+            features = model.features(tensor)
+            output = classify_features(model, features)
+            temperature = max(float(settings.cv_logit_temperature), 1e-6)
+            probabilities = torch.sigmoid(output[0] / temperature)
+        return probabilities.cpu().numpy(), features
 
     @property
     def grad_cam_visualizer(self) -> GradCAMVisualizer:
@@ -186,10 +255,6 @@ class MedicalCVModel:
         Returns:
             CVDiagnosis dictionary
         """
-        with self._predict_lock:
-            return self._predict(image_input)
-
-    def _predict(self, image_input) -> dict:
         cv_logger.info("Starting CV prediction")
 
         # Step 1: Preprocess image (delegated to ImagePreprocessor)
@@ -200,19 +265,26 @@ class MedicalCVModel:
         else:
             tensor = torch.from_numpy(raw_tensor).to(self.device)
 
-        # Step 2: Inference
-        with torch.no_grad():
-            output = self.model(tensor)
-            temperature = max(float(settings.cv_logit_temperature), 1e-6)
-            scaled_logits = output[0] / temperature
-            probabilities = torch.sigmoid(scaled_logits)
+        # Step 2: Inference. The feature map is kept: Grad-CAM is computed
+        # from it, so a positive finding does not cost a second forward pass.
+        probs, features = self.densenet_probabilities(tensor)
+        thresholds, metrics = self.class_thresholds, self.validation_metrics
+        image_models = ["DenseNet-121"]
 
-        probs = probabilities.cpu().numpy()
+        # Step 2b: CLEAR, for the classes the combination is calibrated for.
+        # A failure here falls back to DenseNet with its own thresholds.
+        if self.ensemble is not None and self.clear_scorer is not None:
+            try:
+                with self._inference_lock:
+                    clear_scores = self.clear_scorer.score(preprocessed["original_image"])
+                probs = self.ensemble.combine(probs, self.class_names, clear_scores)
+                thresholds, metrics = self._ensemble_figures()
+                image_models.append("CLEAR")
+            except Exception as e:
+                cv_logger.error("CLEAR failed for this image; using DenseNet alone: %s", e)
 
-        # Step 3: Postprocess predictions 
-        result = self.postprocessor.postprocess(
-            probs, self.class_names, self.class_thresholds, self.validation_metrics
-        )
+        # Step 3: Postprocess predictions
+        result = self.postprocessor.postprocess(probs, self.class_names, thresholds, metrics)
 
         # Step 4: Generate Grad-CAM only for positive findings 
         if result["finding_detected"]:
@@ -223,13 +295,14 @@ class MedicalCVModel:
                 preprocessed["original_image"],
                 result["primary_class_index"],
                 content_box=preprocessed["content_box"],
+                features=features,
             )
         else:
             gradcam_path = ""
 
         # Step 5: Compute uncertainty 
         uncertainty = self.uncertainty_analyzer.compute(
-            probs, self.class_names, self.class_thresholds
+            probs, self.class_names, thresholds
         )
 
         # Step 6: Assemble final result
@@ -237,6 +310,10 @@ class MedicalCVModel:
         result["gradcam_path"] = gradcam_path
         result["image_metadata"] = preprocessed["metadata"]
         result["input_type"] = "image"
+        result["image_models"] = image_models
+        result["combined_classes"] = (
+            list(self.ensemble.classes) if "CLEAR" in image_models else []
+        )
 
         cv_logger.info(
             f"CV prediction: {result['predicted_class']} "

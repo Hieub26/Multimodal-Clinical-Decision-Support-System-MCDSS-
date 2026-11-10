@@ -4,6 +4,7 @@ CV Router: Image-based diagnosis endpoints.
 
 import io
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException
@@ -69,34 +70,51 @@ def _run_image_pipeline(
 
     Runs in a worker thread so it does not stall the event loop.
     """
-    # CV diagnosis
     cv_model = get_cv_model()
-    cv_result = cv_model.predict(image_path)
-
-    # Optional NLP diagnosis for multimodal
-    nlp_result = None
-    modality = "image"
-    if symptoms_text or clinical_question:
-        rag = get_rag_engine()
-        nlp_result = rag.diagnose_from_text(symptoms_text, clinical_question)
-        modality = "multimodal"
-
-    # Fusion
-    fusion = get_fusion_engine()
-    fused = fusion.fuse(nlp_diagnosis=nlp_result, cv_diagnosis=cv_result)
-
-    # Validate
-    validator = get_guideline_validator()
-    validated = validator.validate(fused)
-
-    # Safety check
     safety = get_safety_controller()
-    safe_result = safety.evaluate(
-        validated,
-        image_path=image_path,
-        symptoms_text=symptoms_text,
-        clinical_question=clinical_question,
-    )
+    has_text = bool(symptoms_text or clinical_question)
+    modality = "multimodal" if has_text else "image"
+
+    # Loaded before anything else starts: without the weights the request
+    # fails here, and no LLM call is spent on a case that cannot be completed.
+    cv_model.ensure_loaded()
+
+    # The image and the text are analysed independently, and the red flags in
+    # the patient's text depend on that text alone: the three run side by
+    # side, so the request takes as long as the slowest instead of their sum.
+    with ThreadPoolExecutor(max_workers=2, thread_name_prefix="pipeline") as side:
+        patient_flags = side.submit(
+            safety.patient_text_flags, symptoms_text, clinical_question
+        )
+        nlp_diagnosis = (
+            side.submit(
+                get_rag_engine().diagnose_from_text, symptoms_text, clinical_question
+            )
+            if has_text else None
+        )
+
+        # CV diagnosis
+        cv_result = cv_model.predict(image_path)
+
+        # Optional NLP diagnosis for multimodal
+        nlp_result = nlp_diagnosis.result() if nlp_diagnosis else None
+
+        # Fusion
+        fusion = get_fusion_engine()
+        fused = fusion.fuse(nlp_diagnosis=nlp_result, cv_diagnosis=cv_result)
+
+        # Validate
+        validator = get_guideline_validator()
+        validated = validator.validate(fused)
+
+        # Safety check
+        safe_result = safety.evaluate(
+            validated,
+            image_path=image_path,
+            symptoms_text=symptoms_text,
+            clinical_question=clinical_question,
+            patient_flags=patient_flags.result(),
+        )
 
     # Generate report
     report_gen = get_report_generator()

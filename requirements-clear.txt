@@ -1,0 +1,4 @@
+# Optional second image model, CLEAR (CV_CLEAR_ENABLED=true). Pinned to the
+# commit the calibration in models/clear_ensemble_calibration.json was made
+# with. Then run: python scripts/fetch_clear.py
+clear-med @ git+https://github.com/peterhan91/CLEAR@57d2eae57ddabf8e56c8013ec675336d71b3d8e7
