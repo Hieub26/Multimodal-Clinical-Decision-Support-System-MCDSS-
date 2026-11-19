@@ -1,0 +1,87 @@
+{
+  "specificity": 0.9,
+  "half_A": 2551,
+  "half_B": 2483,
+  "classes": {
+    "Cardiomegaly": {
+      "positives_B": 85,
+      "densenet": {
+        "recall": 0.2,
+        "precision": 0.3617021276595745
+      },
+      "open_i_thresholds": {
+        "recall": 0.35294117647058826,
+        "precision": 0.24793388429752067
+      },
+      "site_thresholds": {
+        "recall": 0.5294117647058824,
+        "precision": 0.17045454545454544
+      }
+    },
+    "Effusion": {
+      "positives_B": 490,
+      "densenet": {
+        "recall": 0.5959183673469388,
+        "precision": 0.5572519083969466
+      },
+      "open_i_thresholds": {
+        "recall": 0.9142857142857143,
+        "precision": 0.3905841325196164
+      },
+      "site_thresholds": {
+        "recall": 0.689795918367347,
+        "precision": 0.5487012987012987
+      }
+    },
+    "Atelectasis": {
+      "positives_B": 398,
+      "densenet": {
+        "recall": 0.550251256281407,
+        "precision": 0.35842880523731585
+      },
+      "open_i_thresholds": {
+        "recall": 0.8417085427135679,
+        "precision": 0.23911491791577444
+      },
+      "site_thresholds": {
+        "recall": 0.5276381909547738,
+        "precision": 0.3442622950819672
+      }
+    },
+    "Edema": {
+      "positives_B": 91,
+      "densenet": {
+        "recall": 0.08791208791208792,
+        "precision": 0.07407407407407407
+      },
+      "open_i_thresholds": {
+        "recall": 0.8571428571428571,
+        "precision": 0.0663265306122449
+      },
+      "site_thresholds": {
+        "recall": 0.7362637362637363,
+        "precision": 0.08667529107373868
+      }
+    },
+    "Pneumonia": {
+      "positives_B": 54,
+      "densenet": {
+        "recall": 0.16666666666666666,
+        "precision": 0.05454545454545454
+      },
+      "open_i_thresholds": {
+        "recall": 0.6666666666666666,
+        "precision": 0.045112781954887216
+      },
+      "site_thresholds": {
+        "recall": 0.5555555555555556,
+        "precision": 0.05639097744360902
+      }
+    }
+  },
+  "normal_flagged_B": {
+    "densenet": 0.47934782608695653,
+    "open_i_thresholds": 0.5434782608695652,
+    "site_thresholds": 0.46304347826086956
+  }
+}
