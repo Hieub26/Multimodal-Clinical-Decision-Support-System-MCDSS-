@@ -1,0 +1,57 @@
+{
+  "specificity": 0.995,
+  "half_A": 7536,
+  "half_B": 7464,
+  "classes": {
+    "Cardiomegaly": {
+      "positives_B": 886,
+      "densenet": {
+        "recall": 0.17720090293453725,
+        "precision": 0.6709401709401709
+      },
+      "open_i_thresholds": {
+        "recall": 0.16252821670428894,
+        "precision": 0.9056603773584906
+      },
+      "site_thresholds": {
+        "recall": 0.24830699774266365,
+        "precision": 0.8148148148148148
+      }
+    },
+    "Effusion": {
+      "positives_B": 327,
+      "densenet": {
+        "recall": 0.636085626911315,
+        "precision": 0.7402135231316725
+      },
+      "open_i_thresholds": {
+        "recall": 0.7889908256880734,
+        "precision": 0.6615384615384615
+      },
+      "site_thresholds": {
+        "recall": 0.8470948012232415,
+        "precision": 0.5187265917602997
+      }
+    },
+    "Atelectasis": {
+      "positives_B": 33,
+      "densenet": {
+        "recall": 0.09090909090909091,
+        "precision": 0.00911854103343465
+      },
+      "open_i_thresholds": {
+        "recall": 0.15151515151515152,
+        "precision": 0.00998003992015968
+      },
+      "site_thresholds": {
+        "recall": 0.06060606060606061,
+        "precision": 0.006734006734006734
+      }
+    }
+  },
+  "normal_flagged_B": {
+    "densenet": 0.06026151222285389,
+    "open_i_thresholds": 0.046617396247868106,
+    "site_thresholds": 0.04851241235550502
+  }
+}
